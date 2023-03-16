@@ -80,12 +80,12 @@
       </div> -->
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
+      {{-- <p class="mb-1">
         <a href="forgot-password.html">I forgot my password</a>
       </p>
       <p class="mb-0">
         <a href="register.html" class="text-center">Register a new Admin</a>
-      </p>
+      </p> --}}
     </div>
     <!-- /.login-card-body -->
   </div>
@@ -96,7 +96,7 @@
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE App -->
+<!-- Admin App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>

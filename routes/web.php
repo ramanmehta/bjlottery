@@ -16,7 +16,7 @@ use App\Http\Controllers\admin\AuthController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/admin/login');
 });
 
 
@@ -24,7 +24,6 @@ Route::get('/', function () {
 Route::controller(AuthController::class)->group(function(){
     Route::get('/admin', 'index');
     Route::post('/admin/login','login')->name('admin.auth');
-    Route::get('/admin/register', 'register');
     
 });
 

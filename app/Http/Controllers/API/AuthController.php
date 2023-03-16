@@ -134,5 +134,6 @@ class AuthController extends Controller
         }
         
     }
+    // end forget password api method
 
 }

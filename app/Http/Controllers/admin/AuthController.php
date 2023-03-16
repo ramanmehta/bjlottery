@@ -47,8 +47,7 @@ class AuthController extends Controller
             return redirect('admin');
         } else {
             $id = $admin->id;
-            echo "<pre>";
-            $user = [$admin->id, $admin->name, $admin->phone, $admin->email];
+            $user = [$admin->id, $admin->name, $admin->phone, $admin->email,$admin->logo];
             //print_r($user);die;
             //$adminDetail = ['name' => $admin->name];
             $name = "smtekki";
@@ -56,7 +55,6 @@ class AuthController extends Controller
             $request->session()->put('ADMIN_ID', $id);
             $request->session()->put('ADMIN_USER', $user);
             return redirect('admin/dashboard');
-            //return redirect()->routADMIN_USERe('admin/dashboard')->with('name', $name);
         }   
     
     }
