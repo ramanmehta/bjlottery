@@ -13,4 +13,8 @@ class Role extends Model
         'role_title',
         'status',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

@@ -23,6 +23,12 @@ class AuthController extends Controller
             'username' => 'string|required|min:1|max:20|unique:users',
             'email' => 'string|required|email|max:100|unique:users',
             'phone' => 'required|numeric|digits:10',
+            'address_1' => 'string|required|min:1|max:200',
+            'address_2' => 'string|required|min:1|max:200',
+            'city' => 'string|required|min:1|max:50',
+            'state' => 'string|required|min:1|max:50',
+            'country' => 'string|required|min:1|max:50',
+            'zip' => 'string|required|min:1|max:50',
             'password' => 'string|required|min:6',
             'c_password' => 'string|required|same:password'
         ]);

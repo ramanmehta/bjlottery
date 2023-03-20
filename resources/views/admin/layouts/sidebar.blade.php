@@ -43,9 +43,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="./index3.html" class="nav-link">
+              <a href="/admin/viewUser" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Menu v3</p>
+                <p>Users</p>
               </a>
             </li>
           </ul>
