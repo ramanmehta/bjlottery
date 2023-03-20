@@ -32,7 +32,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {   
-        
+        // dd($request->all());
         $request->validate([
             'email' => 'bail|string|required|email|max:255',
             'password' => 'required'

@@ -58,7 +58,13 @@ if(Session::has('ADMIN_USER')){
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
-
+      {{-- <li class="nav-item">
+        <a href="/admin/logout" class="dropdown-item">
+          <i class='fas fa-sign-out-alt'></i>
+          Logout --}}
+          {{-- <span class="float-right text-muted text-sm"></span> --}}
+        {{-- </a>
+      </li> --}}
       {{-- Admin Account section --}}
       <li class="nav-item">
         <a class="nav-link d-flex" data-toggle="dropdown" href="#">

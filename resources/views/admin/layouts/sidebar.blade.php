@@ -16,6 +16,11 @@
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="/admin/dashboard" class="nav-link active">
+                Home
+            </a>
+          </li>
         <li class="nav-item menu-open">
           <a href="#" class="nav-link active">
             <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -26,15 +31,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="#" class="nav-link active">
+              <a href="/admin/viewRoles" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Menu 1</p>
+                <p>Roles</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="/admin/viewDailyRewards" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Menu v2</p>
+                <p>Daily Rewards</p>
               </a>
             </li>
             <li class="nav-item">
