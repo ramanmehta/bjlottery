@@ -45,14 +45,14 @@ dd($luckyDraw);
                   </div>
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form action="{{route('update.LuckyDraw')}}" method="post">              
+                  <form action="{{route('update.LuckyDraw',[encrypt($luckyDraw->id) ])}}" method="post">              
                     @csrf
                     
                     <div class="card-body">
                       <div class="form-row">
                         <div class="form-group col-md-12">
                           <label for="game_title">Game Title</label>
-                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" required disabled>
+                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" value="{{$luckyDraw->game_title}}" required disabled>
                         </div>
                         
                       </div>
@@ -62,8 +62,8 @@ dd($luckyDraw);
                           <label for="game_description">Game Description</label>
                         
                           
-                          <textarea id="game_description" value="$luckyDraw->game_description" name="game_description">
-                            
+                          <textarea id="game_description" name="game_description">
+                            {{$luckyDraw->game_description}}
                           </textarea>
                         
                         </div>
@@ -71,25 +71,25 @@ dd($luckyDraw);
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Upload Image</label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" required>
+                            <label for="winning_prize_amount">Game Image</label>
+                            <input type="file" class="form-control" name="game_image" id="game_image">
                         </div>
                         
                         <div class="form-group col-md-6">
                           <label for="winning_prize_amount">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" required>
+                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" value="{{$luckyDraw->winning_prize_amount}}" required>
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for="min_point">Minimum Points</label>
-                          <input type="number" class="form-control" id="min_point" placeholder="Enter minimum point" name="min_point" required>
+                          <input type="number" class="form-control" id="min_point" placeholder="Enter minimum point" name="min_point" value="{{$luckyDraw->min_point}}" required>
                         </div>
                         
                         <div class="form-group col-md-6">
                           <label for="max_point">Maximum Points</label>
-                          <input type="number" class="form-control" id="max_point" placeholder="Enter maximum point" name="max_point" required>
+                          <input type="number" class="form-control" id="max_point" placeholder="Enter maximum point" name="max_point" value="{{$luckyDraw->max_point}}" required>
                         </div>
                       </div>
                       
@@ -98,26 +98,15 @@ dd($luckyDraw);
                       <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for="start_date_time">Start Game Date</label>
-                          <input type="date" class="form-control" name="start_date_time" id="start_date_time">
-                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
                           
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div> --}}
+                          <input type="datetime-local" class="form-control" name="start_date_time" id="start_date_time" value="{{$luckyDraw->start_date_time}}">
+                          
                         </div>
                         
                         <div class="form-group col-md-6">
                           <label for="end_date_time">End Game Date</label>
-                          <input type="date" class="form-control" name="end_date_time" id="end_date_time">
-                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
+                          <input type="datetime-local" class="form-control" name="end_date_time" id="end_date_time" value="{{$luckyDraw->end_date_time}}">
                           
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div> --}}
                         </div>
                       </div>
 
@@ -127,12 +116,12 @@ dd($luckyDraw);
 
                         <div class="form-group col-md-6">
                           <label for="game_point">Game Points</label>
-                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
+                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" value="{{$luckyDraw->game_point}}" required>
                         </div>
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
-                            <select class="form-control" name="status" required>
+                            <select class="form-control" name="status" value="{{$luckyDraw->status}}" required>
                               
                               <option disabled>Select Status</option>
                               <option value="1">Active</option>

@@ -95,7 +95,7 @@
                     <td>
                       <a href="/admin/editLuckyDraw/{{encrypt($luckyDraws->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->name}}?')" href="/admin/deleteLuckyDraw/{{encrypt($luckyDraws->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="/admin/deleteLuckyDraw/{{encrypt($luckyDraws->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

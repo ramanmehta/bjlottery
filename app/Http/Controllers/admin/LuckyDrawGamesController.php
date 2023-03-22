@@ -34,8 +34,8 @@ class LuckyDrawGamesController extends Controller
     {
         //dd($request->all());
         $request->validate([
-            'game_title' => 'bail|string|required|max:255',
-            'game_description' => 'bail|string|required',
+            'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games',
+            //'game_description' => 'bail|string|required',
             'winning_prize_amount' => 'integer|required',
             'min_point' => 'integer|required',
             'max_point' => 'integer|required',
@@ -69,22 +69,20 @@ class LuckyDrawGamesController extends Controller
     public function edit($id)
     {
         $luckyDrawid = decrypt($id);
-        // var_dump($userid);die;
-        // $user = User::where('id',1)->first();
-        // dd($user);
+    
         $luckyDraw = LuckyDrawGames::findOrFail($luckyDrawid); 
-        // dd($luckyDraw);
+    
         return view('admin.lucky_draw.edit', ['luckyDraw'=>$luckyDraw]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //dd($id);
+        // dd($request->all());
         $request->validate([
-            'game_title' => 'bail|string|required|max:255',
+            // 'game_title' => 'bail|string|required|max:255',
             'game_description' => 'bail|string|required',
             'winning_prize_amount' => 'integer|required',
             'min_point' => 'integer|required',
@@ -95,27 +93,22 @@ class LuckyDrawGamesController extends Controller
             'status' => 'required'
         ]);
         $luckyDrawid = decrypt($id);
-        // var_dump($luckyDrawid);die;
-        $luckyDraw = LuckyDrawGames::where('id',$luckyDrawid)->first();
-        dd($luckyDraw);
+        
+        $luckyDraw  = LuckyDrawGames::findOrFail($luckyDrawid);
+        // $luckyDraw->game_title = $request->game_title;
+        $luckyDraw->game_description = $request->game_description;
+        $luckyDraw->game_image = $request->game_image;
+        $luckyDraw->winning_prize_amount = $request->winning_prize_amount ;
+        $luckyDraw->min_point = $request->min_point;
+        $luckyDraw->max_point = $request->max_point;
+        $luckyDraw->start_date_time = $request->start_date_time;
+        $luckyDraw->end_date_time = $request->end_date_time;
+        $luckyDraw->game_point = $request->game_point;
+        $luckyDraw->status = $request->status;
 
-        $user = User::findOrFail($userid);
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->role_id = $request->role;
-        $user->email = $request->phone;
-        $user->address_1 = $request->address_1;
-        $user->address_2 = $request->address_2;
-        $user->city = $request->city;
-        $user->state = $request->state;
-        $user->country = $request->country;
-        $user->zip = $request->zip;
-        $user->status = $request->status;
-        $user->country = $request->country;
-
-        $user->save();
-        $success = "User updated successfully";
-        return redirect('/admin/viewUser')->with('success',$success);
+        $luckyDraw->save();
+        $success = "Lucky draw updated successfully";
+        return redirect('/admin/viewLuckyDraw')->with('success',$success);
     }
 
     /**
@@ -123,12 +116,12 @@ class LuckyDrawGamesController extends Controller
      */
     public function destroy($id)
     {
-        $userid = (int)decrypt($id);
-        // dd($userid);
-        $deleteUser = $user = User::findOrFail($userid);;
-        $deleteUser->delete();
+        $luckyDrawid = decrypt($id);
+        // dd($luckyDrawid);
+        $deleteLuckyDraw  = LuckyDrawGames::findOrFail($luckyDrawid);
+        $deleteLuckyDraw->delete();
 
-        $error = "Role removed successfully";
-        return redirect('/admin/viewUser')->with('error',$error);
+        $error = "Luck Draw removed successfully";
+        return redirect('/admin/viewLuckyDraw')->with('error',$error);
     }
 }
