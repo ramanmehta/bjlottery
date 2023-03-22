@@ -11,25 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('username')->unique();
-            $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('roles');
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->string('address_1');
-            $table->string('address_2');
-            $table->string('city');
-            $table->string('state');
-            $table->string('country');
-            $table->string('zip');
+            $table->string('role_title')->UNI;
+            //$table->enum('status', array('0','1'))->default('0');
             $table->tinyInteger('status');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('logo')->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -39,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('roles');
     }
 };

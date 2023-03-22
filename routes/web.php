@@ -27,7 +27,6 @@ Route::get('/', function () {
 Route::controller(AuthController::class)->group(function(){
     Route::get('/admin', 'index');
     Route::post('/admin/login','login')->name('admin.auth');
-
     
 });
 
@@ -35,8 +34,8 @@ Route::controller(AuthController::class)->group(function(){
 // Group middleware
 
 Route::group(['middleware' => 'admin_auth'], function(){
-    Route::get('/admin/dashboard', [AuthController::class,'dashboard']);
-    Route::get('/admin/logout',[AuthController::class,'logout'])->name('logout');
+    Route::get('/admin/dashboard', [AuthController::class,'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/logout',[AuthController::class,'logout'])->name('admin.logout');
 
     // roles route
     Route::get('/admin/viewRoles', [RoleController::class,'index'])->name('viewRoles');
@@ -57,7 +56,7 @@ Route::group(['middleware' => 'admin_auth'], function(){
 
     // register user detail route
 
-    Route::get('/admin/viewUser', [UserController::class,'index']);
+    Route::get('/admin/viewUser', [UserController::class,'index'])->name('admin.users');
     // Route::get('/admin/createUser', [UserController::class,'create']);
     // Route::post('/admin/createUser', [UserController::class,'store'])->name('user.DailyReward');
     Route::get('/admin/editUser/{id}', [UserController::class,'edit']);
