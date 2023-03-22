@@ -1,6 +1,7 @@
 {{-- @php
     dd($user);
 @endphp --}}
+
 @extends('admin.layouts.app')
 
 @section('content')
@@ -12,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Users</h1>
+            <h1>Lucky Draw Games</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-              <li class="breadcrumb-item active">User</li>
+              <li class="breadcrumb-item active">Lucky Draw</li>
             </ol>
           </div>
         </div>
@@ -30,10 +31,10 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              {{-- <div class="card-header">
-                <h3 class="card-title">Users</h3>
-                <a href="/admin/createUsers"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Role</button></a>
-              </div> --}}
+              <div class="card-header">
+                <h3 class="card-title">Lucky Draw Games</h3>
+                <a href="/admin/createLuckyDraw"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Lucky Draw</button></a>
+              </div>
               
               
               <!-- /.card-header -->
@@ -58,37 +59,43 @@
                   <thead>
                   <tr>
                     <th>Id</th>
-                    <th>Users</th>
-                    <th>Role</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Country</th>
-                    <th>Logo</th>
+                    <th>Game Title</th>
+                    <th>Dame Description</th>
+                    <th>Game Image</th>
+                    <th>Winning Prize Amount</th>
+                    <th>Min Point</th>
+                    <th>Max Point</th>
+                    <th>Start Date Time </th>
+                    <th>End Date Time</th>
+                    <th>Game Point</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($user as $users)
+                    @foreach ($luckyDraw as $luckyDraws)
                   <tr>
                     <td>{{ $loop->index }}</td>
-                    <td>{{$users->name}}</td>
-                    <td>{{$users->role_title}}</td>
-                    <td>{{$users->email}}</td>
-                    <td>{{$users->phone}}</td>
-                    <td>{{$users->country}}</td>
-                    <td>{{$users->logo}}</td>
+                    <td>{{$luckyDraws->game_title}}</td>
+                    <td>{{$luckyDraws->game_description}}</td>
+                    <td>{{$luckyDraws->game_image}}</td>
+                    <td>{{$luckyDraws->winning_prize_amount}}</td>
+                    <td>{{$luckyDraws->min_point}}</td>
+                    <td>{{$luckyDraws->max_point}}</td>
+                    <td>{{$luckyDraws->start_date_time}}</td>
+                    <td>{{$luckyDraws->end_date_time}}</td>
+                    <td>{{$luckyDraws->game_point}}</td>
                     <td>
-                      @if ($users->status==1)
+                      @if ($luckyDraws->status==1)
                       <input type="button" class="btn btn-success" value="Active">
                       @else
                       <input type="button" class="btn btn-warning" value="Inactive">
                       @endif  
                      </td>
                     <td>
-                      <a href="/admin/editUser/{{encrypt($users->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="/admin/editLuckyDraw/{{encrypt($luckyDraws->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove user : {{$users->name}}?')" href="/admin/deleteUser/{{encrypt($users->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->name}}?')" href="/admin/deleteLuckyDraw/{{encrypt($luckyDraws->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>
@@ -111,6 +118,7 @@
     </section>
     <!-- /.content -->
   </div>
+  
   <!-- ./wrapper -->
 
     <!-- jQuery -->

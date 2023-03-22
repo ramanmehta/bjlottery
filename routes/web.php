@@ -5,7 +5,7 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\DailyRewardController;
 use App\Http\Controllers\admin\UserController;
-use App\Models\Role;
+use App\Http\Controllers\admin\LuckyDrawGamesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +62,15 @@ Route::group(['middleware' => 'admin_auth'], function(){
     // Route::post('/admin/createUser', [UserController::class,'store'])->name('user.DailyReward');
     Route::get('/admin/editUser/{id}', [UserController::class,'edit']);
     Route::post('/admin/updateUser/{id}', [UserController::class,'update'])->name('update.User');
-    // Route::get('/admin/deleteUser/{id}', [UserController::class,'destroy']);
+    Route::get('/admin/deleteUser/{id}', [UserController::class,'destroy']);
+
+    // lucky_draw_games route
+
+    Route::get('/admin/viewLuckyDraw', [LuckyDrawGamesController::class,'index']);
+    Route::get('/admin/createLuckyDraw', [LuckyDrawGamesController::class,'create']);
+    Route::post('/admin/createLuckyDraw', [LuckyDrawGamesController::class,'store'])->name('user.LuckyDraw');
+    Route::get('/admin/editLuckyDraw/{id}', [LuckyDrawGamesController::class,'edit']);
+    Route::post('/admin/updateLuckyDraw/{id}', [LuckyDrawGamesController::class,'update'])->name('update.LuckyDraw');
+    Route::get('/admin/deleteLuckyDraw/{id}', [LuckyDrawGamesController::class,'destroy']);
 });
 

@@ -73,11 +73,11 @@ class RoleController extends Controller
     {   
         $roleid = decrypt($id);
         $request->validate([
-            'role_title' => 'bail|string|required|max:255',
+            // 'role_title' => 'bail|string|required|max:255',
             'status' => 'required'
         ]);
         $role = Role::where('id', $roleid)->first();
-        $role->role_title = $request->role_title;
+        // $role->role_title = $request->role_title;
         $role->status = $request->status;
         $role->save();
         $success = "Role updated successfully";

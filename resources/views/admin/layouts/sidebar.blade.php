@@ -37,15 +37,21 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="/admin/viewUser" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Users</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="/admin/viewDailyRewards" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Daily Rewards</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="/admin/viewUser" class="nav-link">
+              <a href="/admin/viewLuckyDraw" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Users</p>
+                <p>Lucky Draw</p>
               </a>
             </li>
           </ul>

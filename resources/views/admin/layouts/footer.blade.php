@@ -43,6 +43,18 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
+    <!-- Summernote -->
+    <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+    <!-- date-range-picker -->
+    {{-- <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
+
+    {{-- <!-- CodeMirror -->
+<script src="../../plugins/codemirror/codemirror.js"></script>
+<script src="../../plugins/codemirror/mode/css/css.js"></script>
+<script src="../../plugins/codemirror/mode/xml/xml.js"></script>
+<script src="../../plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script> --}}
+
     <!-- AdminLTE App -->
     {{-- <script src="{{ asset('dist/js/adminlte.min.js') }}"></script> --}}
 
@@ -56,11 +68,22 @@
         $('#example2').DataTable({
           "paging": true,
           "lengthChange": false,
-          "searching": false,
+          "searching": true,
           "ordering": true,
           "info": true,
-          "autoWidth": false,
+          "autoWidth": true,
           "responsive": true,
         });
       });
     </script>
+
+<script>
+  $('#game_description').summernote({
+    placeholder: 'Game Description',
+    tabsize: 2,
+    height: 100
+  });
+</script>
+
+{{-- date picker --}}
+
