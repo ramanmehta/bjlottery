@@ -12,12 +12,12 @@ dd($user);
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>New Lucky Draw</h1>
+              <h1>New Mission</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                <li class="breadcrumb-item active">Lucky Draw Games</li>
+                <li class="breadcrumb-item active">Missions</li>
               </ol>
             </div>
           </div>
@@ -41,28 +41,28 @@ dd($user);
            
                 <div class="card card-primary">
                   <div class="card-header">
-                    <h3 class="card-title">Create New Game</h3>
+                    <h3 class="card-title">Create New Mission</h3>
                   </div>
                   <!-- /.card-header -->
-                  <!-- form start -->
-                  <form action="{{route('user.LuckyDraw')}}" method="post" enctype="multipart/form-data">
+                  <!-- form start-->
+                  <form action="{{route('user.Mission')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="card-body">
                       <div class="form-row">
                         <div class="form-group col-md-12">
-                          <label for="game_title">Game Title</label>
-                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" required>
+                          <label for="mission_title">Mission Title</label>
+                          <input type="text" class="form-control" id="mission_title" placeholder="Enter mission title" name="mission_title" required>
                         </div>
                         
                       </div>
                       {{-- text editor --}}
                       <div class="form-row">
                         <div class="form-group col-md-12">
-                          <label for="game_description">Game Description</label>
+                          <label for="game_description">Mission Description</label>
                         
                           
-                          <textarea id="game_description" name="game_description">
+                          <textarea id="game_description" name="mission_description">
                             
                           </textarea>
                         
@@ -71,25 +71,25 @@ dd($user);
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Game Image</label>
-                          <input type="file" class="form-control" name="game_image" id="game_image">
+                          <label for="winning_prize_amount">Mission Proof</label>
+                          <input type="file" class="form-control" name="mission_proof_type" id="mission_proof_type">
                         </div>
                         
                         <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" required>
+                          <label for="number_of_referals_required">Referals Required</label>
+                          <input type="number" class="form-control" id="number_of_referals_required" placeholder="Enter number of referal required" name="number_of_referals_required" required>
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="min_point">Minimum Points</label>
-                          <input type="number" class="form-control" id="min_point" placeholder="Enter minimum point" name="min_point" required>
+                          <label for="referal_unit_point">Rreferal Unit Point </label>
+                          <input type="number" class="form-control" id="referal_unit_point" placeholder="Enter referal point" name="referal_unit_point" required>
                         </div>
                         
                         <div class="form-group col-md-6">
-                          <label for="max_point">Maximum Points</label>
-                          <input type="number" class="form-control" id="max_point" placeholder="Enter maximum point" name="max_point" required>
+                          <label for="referal_code">Referal Code</label>
+                          <input type="number" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" required>
                         </div>
                       </div>
                       
@@ -97,8 +97,8 @@ dd($user);
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="start_date_time">Start Game Date</label>
-                          <input type="datetime-local" class="form-control" name="start_date_time" id="start_date_time">
+                          <label for="mission_start_date">Mission Start Date</label>
+                          <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date">
                           {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
                             <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
                           
@@ -109,8 +109,8 @@ dd($user);
                         </div>
                         
                         <div class="form-group col-md-6">
-                          <label for="end_date_time">End Game Date</label>
-                          <input type="datetime-local" class="form-control" name="end_date_time" id="end_date_time">
+                          <label for="mission_end_date">Mission End Date</label>
+                          <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date">
                           {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
                             <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
                           
@@ -125,10 +125,10 @@ dd($user);
                       
                       <div class="form-row">
 
-                        <div class="form-group col-md-6">
+                        {{-- <div class="form-group col-md-6">
                           <label for="game_point">Game Points</label>
                           <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>

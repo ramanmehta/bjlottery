@@ -45,7 +45,7 @@ dd($luckyDraw);
                   </div>
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form action="{{route('update.LuckyDraw',[encrypt($luckyDraw->id) ])}}" method="post">              
+                  <form action="{{route('update.LuckyDraw',[encrypt($luckyDraw->id) ])}}" method="post" enctype="multipart/form-data">              
                     @csrf
                     
                     <div class="card-body">

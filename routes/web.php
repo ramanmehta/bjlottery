@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\DailyRewardController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\LuckyDrawGamesController;
+use App\Http\Controllers\admin\MissionController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -72,5 +73,15 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::get('/admin/editLuckyDraw/{id}', [LuckyDrawGamesController::class,'edit']);
     Route::post('/admin/updateLuckyDraw/{id}', [LuckyDrawGamesController::class,'update'])->name('update.LuckyDraw');
     Route::get('/admin/deleteLuckyDraw/{id}', [LuckyDrawGamesController::class,'destroy']);
+
+    // Missions route
+
+    Route::get('/admin/viewMission', [MissionController::class,'index']);
+    Route::get('/admin/createMission', [MissionController::class,'create']);
+    Route::post('/admin/createMission', [MissionController::class,'store'])->name('user.Mission');
+    Route::get('/admin/editMission/{id}', [MissionController::class,'edit']);
+    Route::post('/admin/updateMission/{id}', [MissionController::class,'update'])->name('update.Mission');
+    Route::get('/admin/deleteMission/{id}', [MissionController::class,'destroy']);
+
 });
 
