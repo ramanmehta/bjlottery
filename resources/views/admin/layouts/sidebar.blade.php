@@ -25,11 +25,11 @@
               Users
             </a>
           </li>
-          <li class="nav-item menu-open">
+          {{-- <li class="nav-item menu-open">
             <a href="{{route('viewRoles')}}" class="nav-link @if($currentRoute == 'viewRoles') {{'active'}} @endif">
             Roles
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item menu-open">
             <a href="{{route('luckyDraw')}}" class="nav-link @if($currentRoute == 'luckyDraw') {{'active'}} @endif">
             Lucky Draw Games
