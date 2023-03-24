@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class ReferalsStats extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'user_id',
-        'title',
-        'description',
+        'reward_types',
+        'reward_points',
         'status',
-        'sent_at',
     ];
+
 }

@@ -26,37 +26,37 @@
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('viewRoles')}}" class="nav-link @if($currentRoute == 'viewRoles') {{'active'}} @endif">
+            Roles
+            </a>
+          </li>
+          <li class="nav-item menu-open">
+            <a href="{{route('luckyDraw')}}" class="nav-link @if($currentRoute == 'luckyDraw') {{'active'}} @endif">
             Lucky Draw Games
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-            Lucky Draw Games
-            </a>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('mission')}}" class="nav-link @if($currentRoute == 'mission') {{'active'}} @endif">
             Missions(Levels)
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('DailyRewards')}}" class="nav-link @if($currentRoute == 'DailyRewards') {{'active'}} @endif">
             Daily Rewards
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('referalstatus')}}" class="nav-link @if($currentRoute == 'referalstatus') {{'active'}} @endif">
             Referals Stats
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('settings')}}" class="nav-link @if($currentRoute == 'settings') {{'active'}} @endif">
             Settings
             </a>
           </li>
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
+            <a href="{{route('notifications')}}" class="nav-link @if($currentRoute == 'notifications') {{'active'}} @endif">
             Notifications
             </a>
           </li>

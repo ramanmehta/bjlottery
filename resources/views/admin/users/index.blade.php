@@ -86,9 +86,9 @@
                       @endif  
                      </td>
                     <td>
-                      <a href="/admin/editUser/{{encrypt($users->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="{{route('edituser',[encrypt($users->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove user : {{$users->name}}?')" href="/admin/deleteUser/{{encrypt($users->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove user : {{$users->name}}?')" href="{{route('removeUser',[encrypt($users->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

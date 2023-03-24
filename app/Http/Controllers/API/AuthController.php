@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use Illuminate\Http\Request;
 use Validator;
+// use Ramsey\Uuid\Rfc4122\Validator;
 use App\Models\User;
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 use Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -16,11 +18,12 @@ use Carbon\Carbon;
 class AuthController extends Controller
 {
     public function register(Request $request)
-    {
-        //validation
+    {   
+        
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
             'username' => 'string|required|min:1|max:20|unique:users',
+            'role_id' => 'integer|required|min:1|max:20',
             'email' => 'string|required|email|max:100|unique:users',
             'phone' => 'required|numeric|digits:10',
             'address_1' => 'string|required|min:1|max:200',
@@ -32,16 +35,18 @@ class AuthController extends Controller
             'password' => 'string|required|min:6',
             'c_password' => 'string|required|same:password'
         ]);
-
+       
         if ($validator->fails()) {
             $response = [
                 'success' => false,
                 'message' => $validator->errors()
             ];
+           
             return response()->json($response, 400);
         }
-
+        
         $input = $request->all();
+       
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
@@ -59,17 +64,18 @@ class AuthController extends Controller
 
 
     public function login(Request $request)
-    {
+    {   
+        
         $validator = Validator::make($request->all(), [
             'username' => 'string|required',
             'password' => 'string|required'
         ]);
-
+       
         if(Auth::attempt([
             'username' => $request->username,
             'password' => $request->password
             ])){
-            // var_dump($request->username);
+            var_dump($request->username);
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
             $success['name'] = $user->name;
@@ -93,25 +99,25 @@ class AuthController extends Controller
 
     // forget password api method
 
-    public function forgetPassword(Request $request){
-
+    public function forgetPassword(Request $request)
+    {
+        //dd("forgetPassword");
         $validator = Validator::make($request->all(), [
             'email' => 'string|required|email'
         ]);
-        $user = User::where('email', $request->email)->get();
-
-        if(count($user) > 0){
+        $user = User::where('email', $request->email)->first();
+        if($user){  
             $newPassword = Str::random(8);
-                 
+            // dd($user); die;
             $data['email'] = $request->email;
             $data['title'] = "Password Reset";
-            $data['body'] = "New password : ". $newPassword;
+            $data['body'] = "User Name : ". $user["username"]. " and" . " New password : ". $newPassword;
+            echo $data['body']; 
+            // $mail = Mail::send('forgetPasswordmail',['data'=>$data],function($message) use ($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
 
-            $mail = Mail::send('forgetPasswordmail',['data'=>$data],function($message) use ($data){
-                $message->to($data['email'])->subject($data['title']);
-            });
-
-            if($mail){
+            // if($mail){
 
                 $changePassword = bcrypt($newPassword);
                 $updatePassword = User::where('email', $request->email)
@@ -124,13 +130,13 @@ class AuthController extends Controller
                     'message' => 'Please check your mail to reset your password'
                 ];
                 return response()->json($response);
-            }else{
-                $response = [
-                    'success' => false,
-                    'message' => 'Mail not sent, try after some time'
-                ];
-                return response()->json($response);
-            }
+            // }else{
+            //     $response = [
+            //         'success' => false,
+            //         'message' => 'Mail not sent, try after some time'
+            //     ];
+            //     return response()->json($response);
+            // }
         }else{
             $response = [
                 'success' => false,

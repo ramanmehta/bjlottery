@@ -69,16 +69,38 @@ class AuthController extends Controller
         return redirect('admin');
     }
 
-    //function for register admins
-    public function register(){
-        $admin = new Admin();
-        $admin->name = "admin1";
-        $admin->email = "admin1@gmail.com";
-        $admin->phone = "9988998899";
-        $admin->password = Hash::make('12345');
-        $admin->save();
+    // create new admin view
 
-        return("set user");
+    public function create(){
+        // return view();
+    }
+
+    //function for register admins
+    public function register(Request $request){
+
+        // $request->validate([
+        //     'name' => 'string|required|min:1',
+        //     // 'role_id' => 'integer|required|min:1|max:20',
+        //     'email' => 'string|required|email|max:100|unique:admins',
+        //     'phone' => 'required|numeric|digits:10',            
+        //     'password' => 'string|required|min:6',
+        //     'c_password' => 'string|required|same:password'
+        // ]);
+
+        // $admin = Admin::create($request->all());
+
+        // $success = "Admin created successfully";
+
+        // return redirect()->route('')->with('')
+
+        // $admin = new Admin();
+        // $admin->name = "admin1";
+        // $admin->email = "admin1@gmail.com";
+        // $admin->phone = "9988998899";
+        // $admin->password = Hash::make('12345');
+        // $admin->save();
+
+        // return("set user");
 
     }
 

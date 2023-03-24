@@ -13,12 +13,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Lucky Draw Games</h1>
+            <h1>Notifications</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-              <li class="breadcrumb-item active">Lucky Draw</li>
+              <li class="breadcrumb-item active">Notifications</li>
             </ol>
           </div>
         </div>
@@ -32,8 +32,8 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Lucky Draw Games</h3>
-                <a href="{{route('createLuckyDraw')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Lucky Draw</button></a>
+                <h3 class="card-title">User Notifications</h3>
+                <a href="{{route('createNotifications')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i>New Notifications</button></a>
               </div>
               
               
@@ -59,43 +59,33 @@
                   <thead>
                   <tr>
                     <th>Id</th>
-                    <th>Game Title</th>
-                    <th>Dame Description</th>
-                    <th>Game Image</th>
-                    <th>Winning Prize Amount</th>
-                    <th>Min Point</th>
-                    <th>Max Point</th>
-                    <th>Start Date Time </th>
-                    <th>End Date Time</th>
-                    <th>Game Point</th>
+                    <th>User Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Sent At</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($luckyDraw as $luckyDraws)
+                    @foreach ($notification as $notifications)
                   <tr>
                     <td>{{ $loop->index }}</td>
-                    <td>{{$luckyDraws->game_title}}</td>
-                    <td>{{$luckyDraws->game_description}}</td>
-                    <td>{{$luckyDraws->game_image}}</td>
-                    <td>{{$luckyDraws->winning_prize_amount}}</td>
-                    <td>{{$luckyDraws->min_point}}</td>
-                    <td>{{$luckyDraws->max_point}}</td>
-                    <td>{{$luckyDraws->start_date_time}}</td>
-                    <td>{{$luckyDraws->end_date_time}}</td>
-                    <td>{{$luckyDraws->game_point}}</td>
+                    <td>{{$notifications->user_id}}</td>
+                    <td>{{$notifications->title}}</td>
+                    <td>{{$notifications->description}}</td>
+                    <td>{{$notifications->sent_at}}</td>
                     <td>
-                      @if ($luckyDraws->status==1)
+                      @if ($notifications->status==1)
                       <input type="button" class="btn btn-success" value="Active">
                       @else
                       <input type="button" class="btn btn-warning" value="Inactive">
                       @endif  
                      </td>
                     <td>
-                      <a href="{{route('editLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="{{route('editNotifications',[encrypt($notifications->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove lucky draw : {{$notifications->title}}?')" href="{{route('removeNotifications',[encrypt($notifications->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

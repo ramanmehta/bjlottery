@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // $table->unsignedBigInteger('role_id');
+            // $table->foreign('role_id')->references('id')->on('roles');
             $table->string('email')->unique();
             $table->string('phone');
             $table->timestamp('email_verified_at')->nullable();

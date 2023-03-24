@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Lucky Draw</h1>
+            <h1>Update Referals</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-              <li class="breadcrumb-item active">New Lucky Draw</li>
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
+              <li class="breadcrumb-item active">Edit Referals</li>
             </ol>
           </div>
         </div>
@@ -23,7 +23,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
+          <div class="row justify-content-center">
             <!-- left column -->
             <div class="col-md-6">
               <!-- general form elements -->
@@ -38,26 +38,39 @@
            
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Create Lucky Draw</h3>
+                  <h3 class="card-title">Update Referals</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('user.LuckyDraw')}}" method="post">
+                <form action="{{route('update.Referalstatus',[encrypt($referalstatus->id)])}}" method="post">
                   @csrf
                   <div class="card-body">
+                    <div class="col-sm-6">
                     <div class="form-group">
-                      <label for="roles">Lucky Draw</label>
-                      <input type="text" class="form-control" id="roles" placeholder="Enter role" name="role_title" required>
+                      <label for="reward_types">Reward Types</label>
+                      <input type="reward_types" class="form-control" id="reward_types" placeholder="Enter Referal Types" name="reward_types" value="{{$referalstatus->reward_types}}" required disabled>
                     </div>
-                    {{-- <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                    </div> --}}
+                  </div>
+                    <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="reward_points">Reward Points</label>
+                      <input type="reward_points" class="form-control" id="reward_points" placeholder="Enter Reward Pints" name="reward_points" value="{{$referalstatus->reward_points}}" required>
+                    </div>
+                  </div>
                     <div class="col-sm-6">
                       <!-- select -->
                       <div class="form-group">
                         <label>status</label>
                         <select class="form-control" name="status" required>
+                          @if($referalstatus->id) 
+                          <option value="{{$referalstatus->status}}" selected>
+                            @if ($referalstatus->status == 1)
+                                Active
+                            @else
+                              Inactive
+                            @endif
+                          </option>
+                          @endif
                           <option disabled>Select Status</option>
                           <option value="1">Active</option>
                           <option value="0">Inactive</option>

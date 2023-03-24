@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
               <li class="breadcrumb-item active">Edit Daily Reward</li>
             </ol>
           </div>
@@ -23,7 +23,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
+          <div class="row justify-content-center">
             <!-- left column -->
             <div class="col-md-6">
               <!-- general form elements -->

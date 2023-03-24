@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Role Update</h1>
+            <h1>Update Settings</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-              <li class="breadcrumb-item active">Edit Role</li>
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
+              <li class="breadcrumb-item active">Edit Settings</li>
             </ol>
           </div>
         </div>
@@ -38,37 +38,23 @@
            
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Role</h3>
+                  <h3 class="card-title">Edit Setting</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('update.role',[encrypt($role->id) ]) }}" method="post">              
+                <form action="{{route('update.Setting',[encrypt($setting->id)])}}" method="post">
                   @csrf
-                  
-                  {{-- <input type="hidden" name="id" value="{{encrypt($role->id)}}"> --}}
                   <div class="card-body">
-                    <div class="form-group">
-                      <label for="roles">Role</label>
-                      <input type="text" class="form-control" id="roles" name="role_title" value="{{$role->role_title}}" required disabled>
-                    </div>
                     <div class="col-sm-6">
-                      <!-- select -->
+                    <div class="form-group">
+                      <label for="keyType">Setting Name</label>
+                      <input type="text" class="form-control" id="keyType" placeholder="Enter name" name="key" value="{{$setting->key}}" required>
+                    </div>
+                  </div>
+                    <div class="col-sm-6">
                       <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" name="status" required>
-                          @if($role->id) 
-                          <option value="{{$role->status}}" selected>
-                            @if ($role->status == 1)
-                                Active
-                            @else
-                              Inactive
-                            @endif
-                          </option>
-                          @endif
-                          <option disabled>Select Status</option>
-                          <option value="1">Active</option>
-                          <option value="0">Inactive</option>
-                        </select>
+                        <label for="keyValue">File Name</label>
+                        <input type="text" class="form-control" id="keyValue" placeholder="Enter name" name="value" value="{{$setting->value}}" required>
                       </div>
                     </div>
                   </div>
@@ -76,7 +62,7 @@
 
                   <div class="card-footer">
                     <div class="col-4">
-                      <input type="submit" class="btn btn-primary btn-block" value="Update">
+                      <input type="submit" class="btn btn-primary btn-block" value="Save">
                     </div>
                   </div>
                 </form>

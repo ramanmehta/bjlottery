@@ -29,7 +29,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Roles</h3>
-                <a href="/admin/createRoles"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Role</button></a>
+                <a href="{{route('createRoles')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Role</button></a>
               </div>
               
               
@@ -73,9 +73,9 @@
                       @endif  
                      </td>
                     <td>
-                      <a href="/admin/editRoles/{{encrypt($roles->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="{{route('editRole',[encrypt($roles->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove role : {{$roles->role_title}}?')" href="/admin/deleteRoles/{{encrypt($roles->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove role : {{$roles->role_title}}?')" href="{{route('removeRole',[encrypt($roles->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

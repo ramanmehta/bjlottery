@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Role Update</h1>
+            <h1>New Referals</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-              <li class="breadcrumb-item active">Edit Role</li>
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
+              <li class="breadcrumb-item active">New Referals</li>
             </ol>
           </div>
         </div>
@@ -38,33 +38,30 @@
            
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Update Role</h3>
+                  <h3 class="card-title">Create Referals</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="{{route('update.role',[encrypt($role->id) ]) }}" method="post">              
+                <form action="{{route('user.Referalstatus')}}" method="post">
                   @csrf
-                  
-                  {{-- <input type="hidden" name="id" value="{{encrypt($role->id)}}"> --}}
                   <div class="card-body">
+                    <div class="col-sm-6">
                     <div class="form-group">
-                      <label for="roles">Role</label>
-                      <input type="text" class="form-control" id="roles" name="role_title" value="{{$role->role_title}}" required disabled>
+                      <label for="reward_types">Reward Types</label>
+                      <input type="reward_types" class="form-control" id="reward_types" placeholder="Enter Referal Types" name="reward_types" required>
+                    </div>
+                    </div>
+                    <div class="col-sm-6">
+                    <div class="form-group">
+                      <label for="reward_points">Reward Points</label>
+                      <input type="reward_points" class="form-control" id="reward_points" placeholder="Enter Reward Pints" name="reward_points" required>
+                    </div>
                     </div>
                     <div class="col-sm-6">
                       <!-- select -->
                       <div class="form-group">
-                        <label>Status</label>
+                        <label>status</label>
                         <select class="form-control" name="status" required>
-                          @if($role->id) 
-                          <option value="{{$role->status}}" selected>
-                            @if ($role->status == 1)
-                                Active
-                            @else
-                              Inactive
-                            @endif
-                          </option>
-                          @endif
                           <option disabled>Select Status</option>
                           <option value="1">Active</option>
                           <option value="0">Inactive</option>
@@ -76,7 +73,7 @@
 
                   <div class="card-footer">
                     <div class="col-4">
-                      <input type="submit" class="btn btn-primary btn-block" value="Update">
+                      <input type="submit" class="btn btn-primary btn-block" value="Save">
                     </div>
                   </div>
                 </form>

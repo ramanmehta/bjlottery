@@ -22,9 +22,18 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'role_id',
         'email',
         'phone',
+        'address_1',
+        'address_2',
+        'city',
+        'state',
+        'country',
+        'zip',
+        'status',
         'password',
+        'logo',
     ];
 
     // public function role(){
