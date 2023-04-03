@@ -70,7 +70,7 @@
                   <tbody>
                     @foreach ($notification as $notifications)
                   <tr>
-                    <td>{{ $loop->index }}</td>
+                    <td>{{$notifications->id}}</td>
                     <td>{{$notifications->user_id}}</td>
                     <td>{{$notifications->title}}</td>
                     <td>{{$notifications->description}}</td>

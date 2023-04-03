@@ -5,25 +5,52 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use Illuminate\Http\Request;
-use Validator;
-// use Ramsey\Uuid\Rfc4122\Validator;
-use App\Models\User;
-// use Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
 use Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
+// models 
+use App\Models\User;
+use App\Models\ReferalPoint;
+use App\Models\ReferalsStats;
+use App\Models\DailyReward;
+
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
-    {   
-        
+    public function register(Request $request, $ref = '')
+    {
+        if ($ref != '') {
+            $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
+            // dd($checkReferal);
+            if ($checkReferal == 1) {
+                $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+                $checkReferalPoint = $checkReferal->referal_point;
+                $referalTypeId = 9;
+                $getPoint = DailyReward::find($referalTypeId);
+                $referalPoint = $getPoint->reward_points;
+                $total_referal_point = $checkReferalPoint + $referalPoint;
+                $checkReferal->update([
+                    'referal_point' => $total_referal_point
+                ]);
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Referal code not exists'
+                ];
+                return response()->json($response, 400);
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
             'username' => 'string|required|min:1|max:20|unique:users',
-            'role_id' => 'integer|required|min:1|max:20',
+            // 'role_id' => 'integer|required|min:1|max:20',
             'email' => 'string|required|email|max:100|unique:users',
             'phone' => 'required|numeric|digits:10',
             'address_1' => 'string|required|min:1|max:200',
@@ -33,68 +60,142 @@ class AuthController extends Controller
             'country' => 'string|required|min:1|max:50',
             'zip' => 'string|required|min:1|max:50',
             'password' => 'string|required|min:6',
-            'c_password' => 'string|required|same:password'
+            'c_password' => 'string|required|same:password',
+            // 'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
         ]);
-       
+
         if ($validator->fails()) {
             $response = [
                 'success' => false,
+                'status' => 400,
                 'message' => $validator->errors()
             ];
-           
-            return response()->json($response, 400);
+
+            return response()->json($response);
         }
-        
+
         $input = $request->all();
-       
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
+        $user_id = $user->id;
+        $user_referal = Str::random(10);
+        $url = URL::to('/');
+        $referal_link = $url . '/api/referal-register/' . $user_referal;
+
+        $data = [
+            'user_id' => $user_id,
+            'referal_code' => $user_referal,
+            'referal_link' => $referal_link,
+            'referal_point' => 0
+        ];
+
+        $referal = ReferalPoint::create($data);
+
+        // referal status 
+        if ($ref != '') {
+            $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
+            if ($checkReferal == 1) {
+                $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+                $parentReferalId = $checkReferal->id;
+                $referalLink = $checkReferal->referal_link;
+                $referalCode = $checkReferal->referal_code;
+                $referalTypeId = 9;
+                $getReferalType = DailyReward::find($referalTypeId);
+                $referalType = $getReferalType->reward_types;
+                $data = [
+                    'user_id' => $user_id,
+                    'parent_user_id' => $parentReferalId,
+                    'referal_types' => $referalType,
+                    'referal_link' => $referalLink,
+                    'referal_code' => $referalCode
+                ]; 
+
+                $referalSatus = ReferalsStats::create($data);
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Referal code not exists'
+                ];
+
+                return response()->json($response, 400);
+            }
+        }
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['name'] = $user->name;
 
         $response = [
             'success' => true,
+            'status' => 200,
             'data' => $success,
             'message' => 'User register successfully'
         ];
 
-        return response()->json($response, 200);
+        return response()->json($response);
     }
 
 
     public function login(Request $request)
-    {   
-        
+    {
+
         $validator = Validator::make($request->all(), [
             'username' => 'string|required',
             'password' => 'string|required'
         ]);
-       
-        if(Auth::attempt([
+
+        if (Auth::attempt([
             'username' => $request->username,
             'password' => $request->password
-            ])){
-            var_dump($request->username);
+        ])) {
+            // var_dump($request->username);
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
-            $success['name'] = $user->name;
+            $success['name'] = $user;
 
             $response = [
-            'success' => true,
-            'data' => $success,
-            'message' => 'User login successfully'
+                'success' => true,
+                'status' => 200,
+                'data' => $success,
+                'message' => 'User login successfully'
             ];
-            return response()->json($response, 200);
-        }else{
+            return response()->json($response);
+        } else {
             $response = [
-            'success' => false,
-            'message' => 'username or password is incorrect'
+                'success' => false,
+                'status' => 400,
+                'message' => 'username or password is incorrect'
             ];
 
             return response()->json($response);
-
         }
+    }
+
+    // login with token
+
+    public function user(Request $request)
+    {
+        $response = [
+            'success' => true,
+            'status' => 200,
+            'data' => $request->user(),
+            'message' => 'User login successfully'
+        ];
+        return response()->json($response);
+    }
+
+
+    // logout with token
+
+    public function logout(Request $request)
+    {
+
+        $request->user()->currentAccessToken()->delete();
+        $response = [
+            'success' => true,
+            'status' => 200,
+            'message' => 'User logout successfully'
+        ];
+        return response()->json($response);
     }
 
     // forget password api method
@@ -106,30 +207,31 @@ class AuthController extends Controller
             'email' => 'string|required|email'
         ]);
         $user = User::where('email', $request->email)->first();
-        if($user){  
+        if ($user) {
             $newPassword = Str::random(8);
             // dd($user); die;
             $data['email'] = $request->email;
             $data['title'] = "Password Reset";
-            $data['body'] = "User Name : ". $user["username"]. " and" . " New password : ". $newPassword;
-            echo $data['body']; 
+            $data['body'] = "User Name : " . $user["username"] . " and" . " New password : " . $newPassword;
+            echo $data['body'];
             // $mail = Mail::send('forgetPasswordmail',['data'=>$data],function($message) use ($data){
             //     $message->to($data['email'])->subject($data['title']);
             // });
 
             // if($mail){
 
-                $changePassword = bcrypt($newPassword);
-                $updatePassword = User::where('email', $request->email)
+            $changePassword = bcrypt($newPassword);
+            $updatePassword = User::where('email', $request->email)
                 ->update([
-                    'password' => $changePassword, 
+                    'password' => $changePassword,
                 ]);
 
-                $response = [
-                    'success' => true,
-                    'message' => 'Please check your mail to reset your password'
-                ];
-                return response()->json($response);
+            $response = [
+                'success' => true,
+                'status' => 200,
+                'message' => 'Please check your mail to reset your password'
+            ];
+            return response()->json($response);
             // }else{
             //     $response = [
             //         'success' => false,
@@ -137,15 +239,104 @@ class AuthController extends Controller
             //     ];
             //     return response()->json($response);
             // }
-        }else{
+        } else {
             $response = [
                 'success' => false,
+                'status' => 400,
                 'message' => 'User not found'
             ];
             return response()->json($response);
         }
-        
     }
     // end forget password api method
 
+
+    // change password api method
+
+    public function changePassword(Request $request)
+    {
+        // dd(Auth::user());
+        $validator = Validator::make($request->all(), [
+            'oldPassword' => 'string|required|min:6',
+            'newPassword' => 'string|required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => $validator->errors()
+            ];
+
+            return response()->json($response);
+        }
+
+        $currentPasswordCheck = Hash::check($request->oldPassword, auth()->user()->password);
+
+        if ($currentPasswordCheck) {
+            $user = User::find(Auth::user()->id)->update([
+                'password' => Hash::make($request->newPassword)
+            ]);
+
+            $response = [
+                'success' => true,
+                'status' => 200,
+                'message' => 'Password has been changed successfully'
+            ];
+            return response()->json($response);
+        } else {
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => 'Old password is incorrect'
+            ];
+            return response()->json($response);
+        }
+    }
+
+    // change passwod from token
+
+    public function passwordChange(Request $request)
+    {
+        // return("here");
+        $validation = Validator::make($request->all(), [
+            'oldPassword' => 'string|required|min:6',
+            'newPassword' => 'string|required|min:6'
+        ]);
+
+        if ($validation->fails()) {
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => $validation->errors()
+            ];
+
+            return response()->json($response);
+        }
+
+        $user = $request->user();
+        // dd($user);
+        if (Hash::check($request->oldPassword, $user->password)) {
+            $newPassword = Hash::make($request->newPassword);
+            $user->update([
+                'password' => $newPassword
+            ]);
+
+            $response = [
+                'suceess' => true,
+                'status' => 200,
+                'message' => 'Password has been successfully changed'
+            ];
+
+            return response()->json($response);
+        } else {
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => 'Old password is incorrect'
+            ];
+
+            return response()->json($response);
+        }
+    }
 }

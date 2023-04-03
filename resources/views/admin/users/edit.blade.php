@@ -1,6 +1,6 @@
-{{-- @php
-dd($user);
-@endphp --}}
+
+@php
+@endphp
 @extends('admin.layouts.app')
 
 @section('content')
@@ -45,7 +45,7 @@ dd($user);
                   </div>
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form action="{{route('update.User',[encrypt($user->id) ]) }}" method="post">              
+                  <form action="{{route('update.User',[encrypt($user->id) ]) }}" method="post" enctype="multipart/form-data">              
                     @csrf
                     
                     <div class="card-body">
@@ -77,18 +77,9 @@ dd($user);
                           <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" name="status" required>
-                              @if($user->id) 
-                              <option value="{{$user->status}}" selected>
-                                @if ($user->status == 1)
-                                    Active
-                                @else
-                                  Inactive
-                                @endif
-                              </option>
-                              @endif
                               <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
+                              <option value="1" {{$user->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$user->status == 0 ? "selected" : ""}}>Inactive</option>
                             </select>
                           </div>
                         </div>
@@ -134,8 +125,30 @@ dd($user);
                         </div>
                         <div class="form-group col-md-6">
                           <label for="country">Country</label>
-                          <input type="text" class="form-control" id="country"placeholder="Enter country" name="country" value="{{$user->country}}" required>
+                          <select class="form-control"  name="country" id="country">
+                            {{-- if($user->id){
+                              <option value="{{$user->country}}" selected>{{$user->countries}}</option>
+                            } --}}
+                            @foreach($country as $countries)
+                            
+                            <option value="{{$countries->sortname}}" {{$countries->sortname == $user->country ? "selected" : ""}}>{{$countries->countries}}</option>
+
+                            @endforeach
+                          </select>
                         </div>
+
+                        <div class="form-group col-md-6">
+                          <label for="userimage">Upload Image</label>
+                          <input type="file" class="form-control" name="userimage" id="userimage">
+                        </div>
+                        @if($user->logo != "")
+			
+			                  <div class="form-group col-md-12">
+                          
+                          <img src="{{asset('storage/app/public/images/usersimage/'.$user->logo)}}" style="height: 50px;">
+                        </div>
+			
+			                  @endif
                       </div>
 
                     </div>

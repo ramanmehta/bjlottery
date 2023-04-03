@@ -24,6 +24,7 @@
 
 <!-- jQuery -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
 <!-- Bootstrap 4 -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
@@ -45,10 +46,14 @@
 
     <!-- Summernote -->
     <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
-
+    
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
     <!-- date-range-picker -->
-    {{-- <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
-
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- date-range-picker -->
+    {{-- <script src="../../plugins/daterangepicker/daterangepicker.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> --}}
     {{-- <!-- CodeMirror -->
 <script src="../../plugins/codemirror/codemirror.js"></script>
 <script src="../../plugins/codemirror/mode/css/css.js"></script>
@@ -84,6 +89,8 @@
     height: 100
   });
 </script>
+
+
 
 {{-- date picker --}}
 

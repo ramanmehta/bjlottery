@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Country;
 use DB;
 use Validator;
 
@@ -19,11 +20,15 @@ class UserController extends Controller
     {
         //$user = User::all();
         // $roles = Role::all();
-        $user = DB::table('users')
+         $user = DB::table('users')
                     ->join('roles','users.role_id', "=", 'roles.id')
                     ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.status','users.logo','roles.role_title')->get();
         
-        return view('admin.users.index',['user' => $user]);
+        
+
+         //echo "<pre>";
+        // print_r($country);die;
+        return view('admin.users.index')->with('user',$user);
     }
 
     /**
@@ -54,18 +59,18 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {
+    {   
         $userid = decrypt($id);
-        // var_dump($userid);die;
-        // $user = User::where('id',1)->first();
-        // dd($user);
+       
         $user = DB::table('users')
                     ->join('roles','users.role_id', "=", 'roles.id')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title')
+                    ->join('countries', 'users.country', "=", 'countries.sortname')
+                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title','countries.countries')
                     ->where('users.id', $userid)->first();
-
+                    
+        $country = DB::table('countries')->get();
         $roles = Role::where('status', 1)->get();    
-        return view('admin.users.edit', ['user'=>$user , 'roles' => $roles]);
+        return view('admin.users.edit', ['user'=>$user , 'roles' => $roles,'country'=>$country]);
     }
 
     /**
@@ -73,8 +78,14 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //dd($id);
-        $userid = decrypt($id);
+        // dd($request->file('userimage'));
+        $userid = decrypt($id);    
+        $image = $request->file('userimage');
+        if($image != null){
+            $randomNumber = rand();
+            $imageName = $randomNumber.$image->getClientOriginalName();  
+            $image->storeAs('public/images/usersimage',$imageName);
+        }
         $request->validate([
             'name' => 'bail|string|required|max:255',
             'username' => 'bail|string|required|max:255',
@@ -104,6 +115,12 @@ class UserController extends Controller
         $user->zip = $request->zip;
         $user->status = $request->status;
         $user->country = $request->country;
+        if ($image != null) {
+            $user->logo = $imageName;
+        }else{
+            $user->logo = "avatar.png";
+        }
+       
 
         $user->save();
         $success = "User updated successfully";
@@ -123,4 +140,5 @@ class UserController extends Controller
         $error = "Role removed successfully";
         return redirect('/admin/viewUser')->with('error',$error);
     }
+
 }

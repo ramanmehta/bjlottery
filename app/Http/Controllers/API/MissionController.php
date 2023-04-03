@@ -48,7 +48,6 @@ class MissionController extends Controller
      */
     public function show(string $id)
     {
- \
         $mission = Mission::find($id);
         if($mission){
             return response()->json([

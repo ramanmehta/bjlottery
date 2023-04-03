@@ -70,10 +70,23 @@ dd($luckyDraw);
                       </div>
 
                       <div class="form-row">
+
                         <div class="form-group col-md-6">
+
+                          <label>Date and time range:</label>
+
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-clock"></i></span>
+                            </div>
+                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange" value="{{$dateRange}}">
+                          </div>
+                          
+                        </div>
+                        {{-- <div class="form-group col-md-6">
                             <label for="winning_prize_amount">Game Image</label>
                             <input type="file" class="form-control" name="game_image" id="game_image">
-                        </div>
+                        </div> --}}
                         
                         <div class="form-group col-md-6">
                           <label for="winning_prize_amount">Winning Prize Amount </label>
@@ -95,7 +108,7 @@ dd($luckyDraw);
                       
                       {{-- date input --}}
 
-                      <div class="form-row">
+                      {{-- <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for="start_date_time">Start Game Date</label>
                           
@@ -108,7 +121,7 @@ dd($luckyDraw);
                           <input type="datetime-local" class="form-control" name="end_date_time" id="end_date_time" value="{{$luckyDraw->end_date_time}}">
                           
                         </div>
-                      </div>
+                      </div> --}}
 
                       {{-- end date input --}}
                       
@@ -118,18 +131,35 @@ dd($luckyDraw);
                           <label for="game_point">Game Points</label>
                           <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" value="{{$luckyDraw->game_point}}" required>
                         </div>
+
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
-                            <select class="form-control" name="status" value="{{$luckyDraw->status}}" required>
-                              
+                            <select class="form-control" name="status" required>
                               <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
+                              <option value="1" {{$luckyDraw->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$luckyDraw->status == 0 ? "selected" : ""}}>Inactive</option>
                             </select>
                           </div>
                         </div>
+
                       </div>
+
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                          <label for="winning_prize_amount">Game Image</label>
+                          <input type="file" class="form-control" name="game_image" id="game_image">
+                        </div>
+                      </div>
+                      @if($luckyDraw->game_image != "")
+			
+			                  <div class="form-group col-md-12">
+                          
+                          {{-- <img src="{{asset('storage/app/public/images/luckydraw/'.$luckyDraw->game_image)}}" style="height: 50px;"> --}}
+                          <img src="{{$imgPath.'/luckydraw/'.$luckyDraw->game_image}}" style="height: 50px;">
+                        </div>
+			
+			                  @endif
 
                     </div>
                     <!-- /.card-body -->
@@ -148,6 +178,29 @@ dd($luckyDraw);
           <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+        <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+
+        <!-- date-range-picker -->
+        <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+        <script>
+          
+
+        var today = new Date(); 
+    
+    
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            minDate:today,
+            // timePickerIncrement: 30,
+            locale: {
+              // format: 'MM/DD/YYYY hh:mm:ss'
+              format: 'YYYY-MM-DD H:mm'
+            }
+          });
+               
+    </script>
       </section>
       <!-- /.content -->
   </div>

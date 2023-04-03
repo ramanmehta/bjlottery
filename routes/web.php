@@ -27,6 +27,16 @@ Route::get('/', function () {
 });
 
 
+Route::get('/webapp/login',function(){
+    return view('webapp.login');
+});
+Route::get('/webapp/register',function(){
+    return view('webapp.register');
+});
+
+// Route::get('/webapp/registration',function(){
+//     return view('webapp.registration');
+// });
 
 Route::controller(AuthController::class)->group(function(){
     Route::get('/admin', 'index');
@@ -112,4 +122,6 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::post('/admin/updateReferalstatus/{id}', [ReferalsStatsController::class,'update'])->name('update.Referalstatus');
     Route::get('/admin/deleteReferalstatus/{id}', [ReferalsStatsController::class,'destroy'])->name('removeReferalstatus');
 });
+
+    
 

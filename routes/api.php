@@ -21,17 +21,25 @@ use App\Http\Controllers\API\ReferalsStatsController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->post('/passwordChange', [AuthController::class, 'passwordChange']);
 
 Route::controller(AuthController::class)->group(function(){
     Route::post('login','login');
     Route::post('register','register');
+    Route::post('referal-register/{ref}','register');
     Route::post('forgetPassword','forgetPassword');
-
-
+    Route::post('changePassword','changePassword');
 });
+
+
 
 Route::controller(RoleController::class)->group(function(){
     
@@ -45,6 +53,9 @@ Route::controller(DailyRewardController::class)->group(function(){
     Route::post('' , '');
     Route::post('' , '');
 });
+
+Route::post('dailyRewardPoints',[DailyRewardController::class,'dailyRewardPoints']);
+Route::post('weeklyRewardPoints',[DailyRewardController::class,'weeklyRewardPoints']);
 
 Route::controller(LuckyDrawGamesController::class)->group(function(){
     Route::get('luckydraw' , 'index');
@@ -75,6 +86,7 @@ Route::controller(ReferalsStatsController::class)->group(function(){
     Route::get('' , '');
     Route::post('' , '');
     Route::post('' , '');
+    
 
 });
 

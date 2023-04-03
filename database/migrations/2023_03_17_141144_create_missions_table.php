@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('missions', function (Blueprint $table) {
             $table->id();
             $table->string('mission_title');
-            $table->string('mission_description');
+            $table->text('mission_description');
             $table->string('mission_proof_type');
-            $table->integer('number_of_referals_required');
-            $table->integer('referal_unit_point');
-            $table->integer('referal_code')->unique();
-            $table->dateTime('mission_start_date');
-            $table->dateTime('mission_end_date');
+            $table->bigInteger('number_of_referals_required');
+            $table->bigInteger('referal_unit_point');
+            $table->string('referal_code')->unique();
+            $table->string('mission_start_date');
+            $table->string('mission_end_date');
             $table->tinyInteger('status');
             $table->timestamps();
         });

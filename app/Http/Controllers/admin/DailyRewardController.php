@@ -41,7 +41,9 @@ class DailyRewardController extends Controller
         ]);
         $role = DailyReward::create($request->all());
 
-        return redirect('/admin/viewDailyRewards');
+        $success = "New reward created successfully";
+
+        return redirect('/admin/viewDailyRewards')->with('success',$success);
     }
 
     /**

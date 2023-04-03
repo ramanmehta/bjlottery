@@ -68,13 +68,21 @@ dd($user);
                         
                         </div>
                       </div>
-
                       <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Game Image</label>
-                          <input type="file" class="form-control" name="game_image" id="game_image">
-                        </div>
-                        
+                     
+                            <div class="form-group col-md-6">
+
+                              <label>Date and time range:</label>
+
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                </div>
+                                <input type="text" class="form-control float-right" id="reservationtime" name="daterange">
+                              </div>
+                              
+                            </div>
+
                         <div class="form-group col-md-6">
                           <label for="winning_prize_amount">Winning Prize Amount </label>
                           <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" required>
@@ -93,42 +101,15 @@ dd($user);
                         </div>
                       </div>
                       
-                      {{-- date input --}}
+      
 
                       <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="start_date_time">Start Game Date</label>
-                          <input type="datetime-local" class="form-control" name="start_date_time" id="start_date_time">
-                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
-                          
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div> --}}
-                        </div>
-                        
-                        <div class="form-group col-md-6">
-                          <label for="end_date_time">End Game Date</label>
-                          <input type="datetime-local" class="form-control" name="end_date_time" id="end_date_time">
-                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
-                          
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div> --}}
-                        </div>
-                      </div>
-
-                      {{-- end date input --}}
-                      
-                      <div class="form-row">
-
+             
                         <div class="form-group col-md-6">
                           <label for="game_point">Game Points</label>
                           <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
                         </div>
+
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
@@ -140,14 +121,23 @@ dd($user);
                             </select>
                           </div>
                         </div>
+       
                       </div>
+                      
+
+                      <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="winning_prize_amount">Game Image</label>
+                        <input type="file" class="form-control" name="game_image" id="game_image">
+                      </div>
+                    </div>
 
                     </div>
                     <!-- /.card-body -->
 
                     <div class="card-footer">
                       <div class="col-4">
-                        <input type="submit" class="btn btn-primary btn-block" value="Update">
+                        <input type="submit" class="btn btn-primary btn-block" value="Save">
                       </div>
                     </div>
                   </form>
@@ -159,6 +149,31 @@ dd($user);
           <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
+        
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+        <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+
+        <!-- date-range-picker -->
+        <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+        <script>
+          
+
+        var today = new Date(); 
+    
+    
+          $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            minDate:today,
+            // timePickerIncrement: 30,
+            locale: {
+              // format: 'MM/DD/YYYY hh:mm:ss'
+              format: 'YYYY-MM-DD H:mm:ss'
+            }
+          });
+               
+    </script>
       </section>
       <!-- /.content -->
   </div>

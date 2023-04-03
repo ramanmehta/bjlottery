@@ -88,4 +88,6 @@ class ReferalsStatsController extends Controller
     {
         //
     }
+
+    
 }

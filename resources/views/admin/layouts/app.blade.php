@@ -24,8 +24,11 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script> --}}
 
   <!-- daterange picker -->
-  {{-- <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}"> --}}
-
+    <!-- daterange picker -->
+    {{-- <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css"> --}}
+  <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+  
+  
 </head>
   <body class="hold-transition sidebar-mini">
     <div class="wrapper">

@@ -40,7 +40,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -48,7 +48,7 @@
                 </div>
               @endif
               @if ($message = Session::get('error'))
-                <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -75,10 +75,12 @@
                   <tbody>
                     @foreach ($luckyDraw as $luckyDraws)
                   <tr>
-                    <td>{{ $loop->index }}</td>
+                    <td>{{$luckyDraws->id}}</td>
                     <td>{{$luckyDraws->game_title}}</td>
                     <td>{{$luckyDraws->game_description}}</td>
-                    <td>{{$luckyDraws->game_image}}</td>
+                    {{-- <td><img src="{{asset('storage/app/public/images/luckydraw/'.$luckyDraws->game_image)}}" style="height: 50px;" alt="User Image"></td> --}}
+                   
+                    <td><img src="{{$imgPath.'/luckydraw/'.$luckyDraws->game_image}}" style="height: 50px;" alt="User Image"></td>
                     <td>{{$luckyDraws->winning_prize_amount}}</td>
                     <td>{{$luckyDraws->min_point}}</td>
                     <td>{{$luckyDraws->max_point}}</td>

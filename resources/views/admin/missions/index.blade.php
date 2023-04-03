@@ -40,7 +40,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -48,7 +48,7 @@
                 </div>
               @endif
               @if ($message = Session::get('error'))
-                <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -74,7 +74,7 @@
                   <tbody>
                     @foreach ($mission as $missions)
                   <tr>
-                    <td>{{ $loop->index }}</td>
+                    <td>{{$missions->id}}</td>
                     <td>{{$missions->mission_title}}</td>
                     <td>{{$missions->mission_description}}</td>
                     <td>{{$missions->mission_proof_type}}</td>

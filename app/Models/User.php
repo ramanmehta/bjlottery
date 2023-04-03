@@ -31,7 +31,8 @@ class User extends Authenticatable
         'state',
         'country',
         'zip',
-        'status',
+        // 'referal_code',
+        // 'status',
         'password',
         'logo',
     ];

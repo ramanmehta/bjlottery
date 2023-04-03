@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('state');
             $table->string('country');
             $table->string('zip');
+            // $table->string('referal_code')->nullable();
             $table->tinyInteger('status');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('referals_stats', function (Blueprint $table) {
             $table->id();
-            $table->string('reward_types');
-            $table->bigInteger('reward_points');
-            $table->tinyInteger('status');
+            $table->bigInteger('user_id');
+            $table->bigInteger('parent_user_id');
+            $table->string('referal_types');
+            $table->string('referal_link');
+            $table->string('referal_code');
             $table->timestamps();
         });
     }

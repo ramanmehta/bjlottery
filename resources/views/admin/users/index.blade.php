@@ -39,7 +39,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -47,7 +47,7 @@
                 </div>
               @endif
               @if ($message = Session::get('error'))
-                <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
+                <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
                     <button type="button" class="close" data-dismiss="alert">
                         <i class="fa fa-times"></i>
                     </button>
@@ -77,7 +77,7 @@
                     <td>{{$users->email}}</td>
                     <td>{{$users->phone}}</td>
                     <td>{{$users->country}}</td>
-                    <td>{{$users->logo}}</td>
+                    <td><img src="{{asset('storage/app/public/images/usersimage/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
                     <td>
                       @if ($users->status==1)
                       <input type="button" class="btn btn-success" value="Active">
