@@ -20,11 +20,11 @@ class UserController extends Controller
     {
         //$user = User::all();
         // $roles = Role::all();
-         $user = DB::table('users')
-                    ->join('roles','users.role_id', "=", 'roles.id')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.status','users.logo','roles.role_title')->get();
+        //  $user = DB::table('users')
+                    // ->join('roles','users.role_id', "=", 'roles.id')
+                    // ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.status','users.logo','roles.role_title')->get();
         
-        
+        $user = User::all();
 
          //echo "<pre>";
         // print_r($country);die;
@@ -61,16 +61,16 @@ class UserController extends Controller
     public function edit($id)
     {   
         $userid = decrypt($id);
-       
+        
         $user = DB::table('users')
-                    ->join('roles','users.role_id', "=", 'roles.id')
+                    // ->join('roles','users.role_id', "=", 'roles.id')
                     ->join('countries', 'users.country', "=", 'countries.sortname')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title','countries.countries')
+                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','countries.countries')
                     ->where('users.id', $userid)->first();
                     
         $country = DB::table('countries')->get();
-        $roles = Role::where('status', 1)->get();    
-        return view('admin.users.edit', ['user'=>$user , 'roles' => $roles,'country'=>$country]);
+        // $roles = Role::where('status', 1)->get();    
+        return view('admin.users.edit', ['user'=>$user , 'country'=>$country]);
     }
 
     /**
@@ -89,7 +89,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'bail|string|required|max:255',
             'username' => 'bail|string|required|max:255',
-            'role' => 'required',
+            // 'role' => 'required',
             'email' => 'bail|string|required|email|max:255',
             'phone' => 'required|numeric|digits:10',
             'address_1' => 'string|required|min:1|max:200',
@@ -104,7 +104,7 @@ class UserController extends Controller
         $user = User::findOrFail($userid);
         $user->name = $request->name;
         $user->username = $request->username;
-        $user->role_id = $request->role;
+        // $user->role_id = $request->role;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->address_1 = $request->address_1;

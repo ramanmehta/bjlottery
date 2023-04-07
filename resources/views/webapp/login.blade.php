@@ -43,7 +43,6 @@
     <div class="row">
       <div class="col-md-4 draw-heading">
         <div class="result"></div>
-        {{-- <p class="result"></p> --}}
         <h4>Let's sign in , and redeem your daily claim .</h4>
       </div>
     </div>

@@ -40,9 +40,14 @@
             Missions(Levels)
             </a>
           </li>
-          <li class="nav-item menu-open">
+          {{-- <li class="nav-item menu-open">
             <a href="{{route('DailyRewards')}}" class="nav-link @if($currentRoute == 'DailyRewards') {{'active'}} @endif">
             Daily Rewards
+            </a>
+          </li> --}}
+          <li class="nav-item menu-open">
+            <a href="{{route('RewardType')}}" class="nav-link @if($currentRoute == 'RewardType') {{'active'}} @endif">
+            Reward Type
             </a>
           </li>
           <li class="nav-item menu-open">

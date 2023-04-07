@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\DailyRewardController;
+use App\Http\Controllers\admin\RewardTypeController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\LuckyDrawGamesController;
 use App\Http\Controllers\admin\MissionController;
@@ -59,14 +60,21 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::post('/admin/updateRoles/{id}', [RoleController::class,'update'])->name('update.role');
     Route::get('/admin/deleteRoles/{id}', [RoleController::class,'destroy'])->name('removeRole');
 
-    // daily_rewards  route
+    // rewards  route
 
-    Route::get('/admin/viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
-    Route::get('/admin/createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
-    Route::post('/admin/createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
-    Route::get('/admin/editDailyReward/{id}', [DailyRewardController::class,'edit'])->name('editDailyReward');
-    Route::post('/admin/updateDailyReward/{id}', [DailyRewardController::class,'update'])->name('update.DailyReward');
-    Route::get('/admin/deleteDailyReward/{id}', [DailyRewardController::class,'destroy'])->name('removeDailyReward');
+    // Route::get('/admin/viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
+    // Route::get('/admin/createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
+    // Route::post('/admin/createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
+    // Route::get('/admin/editDailyReward/{id}', [DailyRewardController::class,'edit'])->name('editDailyReward');
+    // Route::post('/admin/updateDailyReward/{id}', [DailyRewardController::class,'update'])->name('update.DailyReward');
+    // Route::get('/admin/deleteDailyReward/{id}', [DailyRewardController::class,'destroy'])->name('removeDailyReward');
+
+    Route::get('/admin/viewRewardType', [RewardTypeController::class,'index'])->name('RewardType');
+    Route::get('/admin/createRewardType', [RewardTypeController::class,'create'])->name('createRewardType');
+    Route::post('/admin/createRewardType', [RewardTypeController::class,'store'])->name('create.RewardType');
+    Route::get('/admin/editRewardType/{id}', [RewardTypeController::class,'edit'])->name('editRewardType');
+    Route::post('/admin/updateRewardType/{id}', [RewardTypeController::class,'update'])->name('update.RewardType');
+    Route::get('/admin/deleteRewardType/{id}', [RewardTypeController::class,'destroy'])->name('removeRewardType');
 
     // register user detail route
 
@@ -122,6 +130,10 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::post('/admin/updateReferalstatus/{id}', [ReferalsStatsController::class,'update'])->name('update.Referalstatus');
     Route::get('/admin/deleteReferalstatus/{id}', [ReferalsStatsController::class,'destroy'])->name('removeReferalstatus');
 });
+
+// test relationship
+
+    Route::get('/fortest/join', [\App\Http\Controllers\fortest\JoinController::class,'referalPoints']);
 
     
 

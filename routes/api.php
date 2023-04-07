@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\DailyRewardController;
+use App\Http\Controllers\API\RewardTypeController;
 use App\Http\Controllers\API\LuckyDrawGamesController;
 use App\Http\Controllers\API\MissionController;
 use App\Http\Controllers\API\NotificationController;
@@ -25,7 +26,7 @@ use App\Http\Controllers\API\ReferalsStatsController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
+Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
@@ -54,14 +55,27 @@ Route::controller(DailyRewardController::class)->group(function(){
     Route::post('' , '');
 });
 
-Route::post('dailyRewardPoints',[DailyRewardController::class,'dailyRewardPoints']);
-Route::post('weeklyRewardPoints',[DailyRewardController::class,'weeklyRewardPoints']);
+Route::controller(RewardTypeController::class)->group(function(){
+    Route::get('rewardtype' , 'index');
+    Route::post('getRewardType' , 'show');
+    Route::post('' , '');
+    Route::post('' , '');
+
+    // get reward point
+    ROute::post('dailyRewardPoints' , 'dailyRewardPoints'); 
+    ROute::post('weeklyRewardPoints' , 'weeklyRewardPoints'); 
+});
+
+// Route::post('dailyRewardPoints',[DailyRewardController::class,'dailyRewardPoints']);
+// Route::post('weeklyRewardPoints',[DailyRewardController::class,'weeklyRewardPoints']);
 
 Route::controller(LuckyDrawGamesController::class)->group(function(){
-    Route::get('luckydraw' , 'index');
+    Route::get('allluckydraws' , 'index');
     Route::get('luckydraw/{id}' , 'show');
     Route::post('' , '');
-    Route::post('' , '');
+    Route::post('getNumber' , 'getNumber');
+    Route::get('totalParticipant' , 'totalParticipant');
+    Route::post('userNumber' , 'userNumber');
 });
 
 Route::controller(MissionController::class)->group(function(){
@@ -69,7 +83,7 @@ Route::controller(MissionController::class)->group(function(){
     Route::get('mission/{id}' , 'show');
     Route::get('' , '');
     Route::post('' , '');
-    Route::post('' , '');
+    Route::post('userMission/{id}' , 'userMission');
 });
 
 Route::controller(NotificationController::class)->group(function(){

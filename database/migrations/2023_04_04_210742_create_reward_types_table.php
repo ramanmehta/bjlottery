@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('missions', function (Blueprint $table) {
+        Schema::create('reward_types', function (Blueprint $table) {
             $table->id();
-            $table->string('mission_title');
-            $table->text('mission_description');
-            $table->string('mission_proof_type');
-            $table->bigInteger('number_of_share');
-            $table->bigInteger('per_share_point');
-            $table->string('mission_start_date');
-            $table->string('mission_end_date');
+            $table->string('reward_type');
+            $table->string('reward_title');
+            $table->text('reward_description');
+            $table->integer('reward_points');
             $table->tinyInteger('status');
             $table->timestamps();
         });
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('missions');
+        Schema::dropIfExists('reward_types');
     }
 };

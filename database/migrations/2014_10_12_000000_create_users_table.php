@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('username')->unique();
-            $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('roles');
+            // $table->unsignedBigInteger('role_id');
+            // $table->foreign('role_id')->references('id')->on('roles');
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('address_1');
@@ -25,12 +25,16 @@ return new class extends Migration
             $table->string('state');
             $table->string('country');
             $table->string('zip');
-            // $table->string('referal_code')->nullable();
-            $table->tinyInteger('status');
+            // $table->tinyInteger('status')->default(1);
+            $table->enum('status', [0, 1])->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('logo')->nullable();
             $table->rememberToken();
+            $table->bigInteger('today_gained_point')->default(0);
+            $table->bigInteger('today_deduct_point')->default(0);
+            $table->bigInteger('total_point_available')->default(0);
+            $table->bigInteger('total_cash_available')->default(0);
             $table->timestamps();
         });
     }

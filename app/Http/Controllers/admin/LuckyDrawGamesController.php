@@ -26,7 +26,7 @@ class LuckyDrawGamesController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
+    {   
         return view('admin.lucky_draw.create');
     }
 
@@ -35,7 +35,7 @@ class LuckyDrawGamesController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        // dd($request->all());
         $data = $request->daterange; 
         $startdate=substr($data, 0, 19);
         $enddate = substr($data, strpos($data, "-" , 20) + 1);
@@ -51,17 +51,16 @@ class LuckyDrawGamesController extends Controller
             $imageName = $randomNumber.$image->getClientOriginalName();  
             //$image->storeAs('public/images/luckydraw',$imageName);
             $image->storeAs($this->filepath().'/luckydraw',$imageName);
-           
+        //    dd($image->storeAs($this->filepath().'/luckydraw',$imageName));
         }
 
         $request->validate([
             'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games',
             'game_description' => 'bail|string|required',
             'winning_prize_amount' => 'integer|required',
-            'min_point' => 'integer|required',
-            'max_point' => 'integer|required',
+            'minimum_prize_amount' => 'integer|required',
+            'points_per_ticket' => 'integer|required',
             'daterange' => 'required',
-            'game_point' => 'required',
             'game_image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
             'status' => 'required'
         ]);
@@ -70,15 +69,14 @@ class LuckyDrawGamesController extends Controller
             'game_title' => $request->game_title,
             'game_description'=>$request->game_description,
             'winning_prize_amount' => $request->winning_prize_amount,
-            'min_point' => $request->min_point,
-            'max_point' => $request->max_point,
+            'minimum_prize_amount' => $request->minimum_prize_amount,
+            'points_per_ticket' => $request->points_per_ticket,
             'start_date_time' =>$startdate ,
             'end_date_time' => $enddate,
-            'game_image' => $imageName,
-            'game_point' => $request->game_point,
+            'game_image' => '/luckydraw/'.$imageName,
             'status' =>$request->status
         ];
-        
+        // dd($luckyDrawData);
         $lucyDraw = LuckyDrawGames::create($luckyDrawData);
 
         $success = "New Lucky Draw created successfully";
@@ -106,7 +104,7 @@ class LuckyDrawGamesController extends Controller
         $startDate = $luckyDraw->start_date_time;
         $endDate = $luckyDraw->end_date_time;
         $dateRange = $startDate . ' - ' . $endDate;
-    
+        // dd()
         return view('admin.lucky_draw.edit', ['luckyDraw'=>$luckyDraw, 'imgPath'=>$imgPath, 'dateRange'=>$dateRange]);
     }
 
@@ -114,11 +112,11 @@ class LuckyDrawGamesController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
+    {   
         // dd($request->all());
         $data = $request->daterange;
         $startdate=substr($data, 0, 19);
-        $enddate = substr($data, strpos($data, "-") + 1);
+        $enddate = substr($data, strpos($data, "-", 20) + 1);
 
         
         $image = $request->file('game_image');
@@ -131,13 +129,12 @@ class LuckyDrawGamesController extends Controller
         }
 
         $request->validate([
-            // 'game_title' => 'bail|string|required|max:255',
+            'game_title' => 'bail|string|required|max:255',
             'game_description' => 'bail|string|required',
             'winning_prize_amount' => 'integer|required',
-            'min_point' => 'integer|required',
-            'max_point' => 'integer|required',
+            'minimum_prize_amount' => 'integer|required',
+            'points_per_ticket' => 'integer|required',
             'daterange' => 'required',
-            'game_point' => 'required',
             'game_image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
             'status' => 'required'
         ]);
@@ -150,11 +147,10 @@ class LuckyDrawGamesController extends Controller
             $luckyDraw->game_image = $imageName;
         }
         $luckyDraw->winning_prize_amount = $request->winning_prize_amount ;
-        $luckyDraw->min_point = $request->min_point;
-        $luckyDraw->max_point = $request->max_point;
+        $luckyDraw->minimum_prize_amount = $request->minimum_prize_amount;
+        $luckyDraw->points_per_ticket = $request->points_per_ticket;
         $luckyDraw->start_date_time = $startdate;
         $luckyDraw->end_date_time = $enddate;
-        $luckyDraw->game_point = $request->game_point;
         $luckyDraw->status = $request->status;
 
         $luckyDraw->save();

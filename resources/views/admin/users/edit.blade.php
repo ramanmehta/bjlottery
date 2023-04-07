@@ -60,7 +60,7 @@
                         </div>
                       </div>
                       <div class="form-row">
-                        <div class="form-group col-md-6">
+                        {{-- <div class="form-group col-md-6">
                           <label>Role</label>
                           <select class="form-control" name="role" required>
                             @if($user->id) 
@@ -72,7 +72,7 @@
                             <option value="{{$role->id}}">{{$role->role_title}}</option>
                             @endforeach
                           </select>
-                        </div>
+                        </div> --}}
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>

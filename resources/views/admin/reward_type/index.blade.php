@@ -1,7 +1,3 @@
-{{-- @php
-    dd($user);
-@endphp --}}
-
 @extends('admin.layouts.app')
 
 @section('content')
@@ -13,18 +9,17 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Lucky Draw Games</h1>
+            <h1>Reward Type</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-              <li class="breadcrumb-item active">Lucky Draw</li>
+              <li class="breadcrumb-item active">Reward Type</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -32,8 +27,8 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Lucky Draw Games</h3>
-                <a href="{{route('createLuckyDraw')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Lucky Draw</button></a>
+                <h3 class="card-title">All Rewards</h3>
+                <a href="{{route('createRewardType')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i>Add Reward Type</button></a>
               </div>
               
               
@@ -59,43 +54,33 @@
                   <thead>
                   <tr>
                     <th>Id</th>
-                    <th>Game Title</th>
-                    <th>Game Description</th>
-                    <th>Game Image</th>
-                    <th>Winning Prize Amount</th>
-                    <th>Minimum Prize Amount</th>
-                    <th>Points For Unit Ticket</th>
-                    <th>Start Date Time </th>
-                    <th>End Date Time</th>  
+                    <th>Reward Title</th>
+                    <th>Reward Type</th>
+                    <th>Reward Description</th>
+                    <th>Reward Point</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                    @foreach ($luckyDraw as $luckyDraws)
+                    @foreach ($rewardType as $rewardTypes)
                   <tr>
-                    <td>{{$luckyDraws->id}}</td>
-                    <td>{{$luckyDraws->game_title}}</td>
-                    <td>{{$luckyDraws->game_description}}</td>
-                    <td><img src="{{asset('storage/app/public/images/luckydraw/'.$luckyDraws->game_image)}}" style="height: 50px;" alt="User Image"></td>
-                   
-                    {{-- <td><img src="{{request()->getHttpHost()."/bjlottery".$luckyDraws->game_image}}" style="height: 50px;" alt="User Image"></td> --}}
-                    <td>{{$luckyDraws->winning_prize_amount}}</td>
-                    <td>{{$luckyDraws->minimum_prize_amount}}</td>
-                    <td>{{$luckyDraws->points_per_ticket}}</td>
-                    <td>{{$luckyDraws->start_date_time}}</td>
-                    <td>{{$luckyDraws->end_date_time}}</td>
+                    <td>{{$rewardTypes->id}}</td>
+                    <td>{{$rewardTypes->reward_title}}</td>
+                    <td>{{$rewardTypes->reward_type}}</td>
+                    <td>{{$rewardTypes->reward_description}}</td>
+                    <td>{{$rewardTypes->reward_points}}</td>
                     <td>
-                      @if ($luckyDraws->status==1)
+                      @if ($rewardTypes->status==1)
                       <input type="button" class="btn btn-success" value="Active">
                       @else
                       <input type="button" class="btn btn-warning" value="Inactive">
                       @endif  
                      </td>
                     <td>
-                      <a href="{{route('editLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="{{route('editRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a> </a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')" href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>
@@ -118,14 +103,6 @@
     </section>
     <!-- /.content -->
   </div>
-  
   <!-- ./wrapper -->
-
-    <!-- jQuery -->
-    {{-- <script src="../../plugins/jquery/jquery.min.js"></script> --}}
-    <!-- Bootstrap 4 -->
-    {{-- <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
-    <!-- DataTables  & Plugins -->
-    <!-- DataTables  & Plugins -->
     
 @endsection

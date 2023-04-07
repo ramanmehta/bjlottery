@@ -41,9 +41,8 @@ class MissionController extends Controller
             'mission_title' => 'bail|string|required|max:255|unique:missions',
             'mission_description' => 'bail|string|required',
             'mission_proof_type' => 'bail|string|required',
-            'number_of_referals_required' => 'integer|required',
-            'referal_unit_point' => 'integer|required',
-            'referal_code' => 'string|required|unique:missions',
+            'number_of_share' => 'integer|required',
+            'per_share_point' => 'integer|required',
             'daterange' => 'required',
             // 'mission_start_date' => 'required',
             // 'mission_end_date' => 'required',
@@ -57,9 +56,8 @@ class MissionController extends Controller
             'mission_title' => $request->mission_title,
             'mission_description'=>$request->mission_description,
             'mission_proof_type'=>$request->mission_proof_type,
-            'number_of_referals_required' => $request->number_of_referals_required,
-            'referal_unit_point' => $request->referal_unit_point,
-            'referal_code' => $request->referal_code,
+            'number_of_share' => $request->number_of_share,
+            'per_share_point' => $request->per_share_point,
             'mission_start_date' =>$startdate,
             'mission_end_date' => $enddate,
             'status' =>$request->status
@@ -107,9 +105,8 @@ class MissionController extends Controller
             // 'mission_title' => 'bail|string|required|max:255',
             'mission_description' => 'bail|string|required',
             'mission_proof_type' => 'bail|string|required',
-            'number_of_referals_required' => 'integer|required',
-            'referal_unit_point' => 'integer|required',
-            'referal_code' => 'string|required',
+            'number_of_share' => 'integer|required',
+            'per_share_point' => 'integer|required',
             // 'mission_start_date' => 'required',
             // 'mission_end_date' => 'required',
             'daterange' => 'required',
@@ -122,9 +119,8 @@ class MissionController extends Controller
         // $mission->game_title = $request->game_title;
         $mission->mission_description = $request->mission_description;
         $mission->mission_proof_type = $request->mission_proof_type;
-        $mission->number_of_referals_required = $request->number_of_referals_required ;
-        $mission->referal_unit_point = $request->referal_unit_point;
-        $mission->referal_code = $request->referal_code;
+        $mission->number_of_share = $request->number_of_share ;
+        $mission->per_share_point = $request->per_share_point;
         $mission->mission_start_date = $startdate;
         $mission->mission_end_date = $enddate;
         $mission->status = $request->status;

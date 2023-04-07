@@ -85,29 +85,15 @@ dd($user);
 
                         <div class="form-group col-md-6">
                           <label for="winning_prize_amount">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" required>
+                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter winning prize amount" name="winning_prize_amount" required>
                         </div>
                       </div>
 
                       <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="min_point">Minimum Points</label>
-                          <input type="number" class="form-control" id="min_point" placeholder="Enter minimum point" name="min_point" required>
-                        </div>
                         
                         <div class="form-group col-md-6">
-                          <label for="max_point">Maximum Points</label>
-                          <input type="number" class="form-control" id="max_point" placeholder="Enter maximum point" name="max_point" required>
-                        </div>
-                      </div>
-                      
-      
-
-                      <div class="form-row">
-             
-                        <div class="form-group col-md-6">
-                          <label for="game_point">Game Points</label>
-                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
+                          <label for="minimum_prize_amount">Minimum Prize Amount</label>
+                          <input type="number" class="form-control" id="minimum_prize_amount" placeholder="Enter maximum point" name="minimum_prize_amount" required>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -121,6 +107,20 @@ dd($user);
                             </select>
                           </div>
                         </div>
+                      </div>
+
+
+                      
+      
+
+                      <div class="form-row">
+             
+                        <div class="form-group col-md-6">
+                          <label for="points_per_ticket">Points Per Ticket</label>
+                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket" required>
+                        </div>
+
+                        
        
                       </div>
                       

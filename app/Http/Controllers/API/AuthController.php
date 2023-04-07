@@ -25,27 +25,27 @@ class AuthController extends Controller
 {
     public function register(Request $request, $ref = '')
     {
-        if ($ref != '') {
-            $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
-            // dd($checkReferal);
-            if ($checkReferal == 1) {
-                $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
-                $checkReferalPoint = $checkReferal->referal_point;
-                $referalTypeId = 9;
-                $getPoint = DailyReward::find($referalTypeId);
-                $referalPoint = $getPoint->reward_points;
-                $total_referal_point = $checkReferalPoint + $referalPoint;
-                $checkReferal->update([
-                    'referal_point' => $total_referal_point
-                ]);
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Referal code not exists'
-                ];
-                return response()->json($response, 400);
-            }
-        }
+        // if ($ref != '') {
+        //     $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
+        //     // dd($checkReferal);
+        //     if ($checkReferal == 1) {
+        //         $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+        //         $checkReferalPoint = $checkReferal->referal_point;
+        //         $referalTypeId = 9;
+        //         $getPoint = DailyReward::find($referalTypeId);
+        //         $referalPoint = $getPoint->reward_points;
+        //         $total_referal_point = $checkReferalPoint + $referalPoint;
+        //         $checkReferal->update([
+        //             'referal_point' => $total_referal_point
+        //         ]);
+        //     } else {
+        //         $response = [
+        //             'success' => false,
+        //             'message' => 'Referal code not exists'
+        //         ];
+        //         return response()->json($response, 400);
+        //     }
+        // }
 
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
@@ -61,7 +61,7 @@ class AuthController extends Controller
             'zip' => 'string|required|min:1|max:50',
             'password' => 'string|required|min:6',
             'c_password' => 'string|required|same:password',
-            // 'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
+            'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
         ]);
 
         if ($validator->fails()) {
@@ -78,49 +78,92 @@ class AuthController extends Controller
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
 
-        $user_id = $user->id;
-        $user_referal = Str::random(10);
-        $url = URL::to('/');
-        $referal_link = $url . '/api/referal-register/' . $user_referal;
+        // $user_id = $user->id;
+        // $user_referal = Str::random(10);
+        // $url = URL::to('/');
+        // $referal_link = $url . '/api/referal-register/' . $user_referal;
 
-        $data = [
-            'user_id' => $user_id,
-            'referal_code' => $user_referal,
-            'referal_link' => $referal_link,
-            'referal_point' => 0
-        ];
+        // $data = [
+        //     'user_id' => $user_id,
+        //     'referal_code' => $user_referal,
+        //     'referal_link' => $referal_link,
+        //     'referal_point' => 0
+        // ];
 
-        $referal = ReferalPoint::create($data);
+        // $referal = ReferalPoint::create($data);
 
         // referal status 
-        if ($ref != '') {
-            $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
-            if ($checkReferal == 1) {
-                $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
-                $parentReferalId = $checkReferal->id;
-                $referalLink = $checkReferal->referal_link;
-                $referalCode = $checkReferal->referal_code;
-                $referalTypeId = 9;
-                $getReferalType = DailyReward::find($referalTypeId);
-                $referalType = $getReferalType->reward_types;
-                $data = [
-                    'user_id' => $user_id,
-                    'parent_user_id' => $parentReferalId,
-                    'referal_types' => $referalType,
-                    'referal_link' => $referalLink,
-                    'referal_code' => $referalCode
-                ]; 
+        // if ($ref != '') {
+        //     $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
+        //     if ($checkReferal == 1) {
+        //         $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+        //         $parentReferalId = $checkReferal->id;
+        //         $referalLink = $checkReferal->referal_link;
+        //         $referalCode = $checkReferal->referal_code;
+        //         $referalTypeId = 9;
+        //         $getReferalType = DailyReward::find($referalTypeId);
+        //         $referalType = $getReferalType->reward_types;
+        //         $data = [
+        //             'user_id' => $user_id,
+        //             'parent_user_id' => $parentReferalId,
+        //             'referal_types' => $referalType,
+        //             'referal_link' => $referalLink,
+        //             'referal_code' => $referalCode
+        //         ]; 
 
-                $referalSatus = ReferalsStats::create($data);
-            } else {
-                $response = [
-                    'success' => false,
-                    'message' => 'Referal code not exists'
-                ];
+        //         $referalSatus = ReferalsStats::create($data);
 
-                return response()->json($response, 400);
-            }
-        }
+
+        //     } else {
+        //         $response = [
+        //             'success' => false,
+        //             'message' => 'Referal code not exists'
+        //         ];
+
+        //         return response()->json($response, 400);
+        //     }
+        // }
+
+        //update reward points aftre register 
+        // if($ref != ''){
+        //     $getReferalType = DailyReward::where('referal_type', 'referal')->first();
+
+        //     $todayPointGain = $getReferalType->point;
+        //     // $todayPointGain = 20;
+        //     $todayPointDeduct = 0;
+        //     $totalPoint = $getReferalType->point;
+        //     // $totalPoint = 20;
+        //     $totalCash = 0;
+            
+        //     $data = [
+        //         'today_gained_point' => $todayPointGain,
+        //         'today_deduct_point' => $todayPointDeduct,
+        //         'total_point_available' => $totalPoint
+        //     ];
+           
+
+        //     $updateUserPoint = $user->update($data);
+
+
+        // }else{
+
+        //     $getReferalType = DailyReward::where('referal_type', 'register')->first();
+
+        //     $todayPointGain = $getReferalType->point;
+        //     // $todayPointGain = 10; //static data
+        //     $todayPointDeduct = 0;
+        //     $totalPoint = $getReferalType->point;
+        //     // $totalPoint = 10; //static data
+        //     $totalCash = 0;
+
+        //     $data = [
+        //         'today_gained_point' => $todayPointGain,
+        //         'today_deduct_point' => $todayPointDeduct,
+        //         'total_point_available' => $totalPoint
+        //     ];
+           
+        //     $updateUserPoint = $user->update($data);
+        // }
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
         $success['name'] = $user->name;
 
@@ -150,7 +193,16 @@ class AuthController extends Controller
             // var_dump($request->username);
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
-            $success['name'] = $user;
+            $success['user'] = $user;
+
+            // dd($user->id);
+            // // $total_
+            // $user_id = $user->id
+            // $user_detail = DB::table('users')
+            //         ->join('roles','users.role_id', "=", 'roles.id')
+            //         ->join('countries', 'users.country', "=", 'countries.sortname')
+            //         ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title','countries.countries')
+            //         ->where('users.id', $userid)->first();
 
             $response = [
                 'success' => true,
@@ -210,15 +262,19 @@ class AuthController extends Controller
         if ($user) {
             $newPassword = Str::random(8);
             // dd($user); die;
-            $data['email'] = $request->email;
-            $data['title'] = "Password Reset";
-            $data['body'] = "User Name : " . $user["username"] . " and" . " New password : " . $newPassword;
-            echo $data['body'];
-            // $mail = Mail::send('forgetPasswordmail',['data'=>$data],function($message) use ($data){
-            //     $message->to($data['email'])->subject($data['title']);
-            // });
+            $data['title'] = "Password Reset : ";
+            $data['password'] = $newPassword;
+            $user['email'] = $request->email;
+            $user['subject'] = 'Your New Password';
 
-            // if($mail){
+            $senMail = Mail::send('mail', $data, function ($message) use ($user) {
+            
+                $message->to($user['email']);
+                $message->subject($user['subject']);
+                
+            });
+
+            if($senMail){
 
             $changePassword = bcrypt($newPassword);
             $updatePassword = User::where('email', $request->email)
@@ -232,13 +288,13 @@ class AuthController extends Controller
                 'message' => 'Please check your mail to reset your password'
             ];
             return response()->json($response);
-            // }else{
-            //     $response = [
-            //         'success' => false,
-            //         'message' => 'Mail not sent, try after some time'
-            //     ];
-            //     return response()->json($response);
-            // }
+            }else{
+                $response = [
+                    'success' => false,
+                    'message' => 'Mail not sent, try after some time'
+                ];
+                return response()->json($response);
+            }
         } else {
             $response = [
                 'success' => false,

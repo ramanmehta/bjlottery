@@ -62,9 +62,8 @@
                     <th>Mission Title</th>
                     <th>Mission Description</th>
                     <th>Mission Proof</th>
-                    <th>Number Of Referals Required</th>
-                    <th>Referal Unit Point</th>
-                    <th>Referal Code</th>
+                    <th>Number Of Share Required</th>
+                    <th>Per Share Point</th>
                     <th>Mission Start Date</th>
                     <th>Mission End Date</th>
                     <th>Status</th>
@@ -78,9 +77,8 @@
                     <td>{{$missions->mission_title}}</td>
                     <td>{{$missions->mission_description}}</td>
                     <td>{{$missions->mission_proof_type}}</td>
-                    <td>{{$missions->number_of_referals_required}}</td>
-                    <td>{{$missions->referal_unit_point}}</td>
-                    <td>{{$missions->referal_code}}</td>
+                    <td>{{$missions->number_of_share}}</td>
+                    <td>{{$missions->per_share_point}}</td>
                     <td>{{$missions->mission_start_date}}</td>
                     <td>{{$missions->mission_end_date}}</td>
                     <td>

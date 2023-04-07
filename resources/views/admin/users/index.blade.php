@@ -59,7 +59,7 @@
                   <tr>
                     <th>Id</th>
                     <th>Users</th>
-                    <th>Role</th>
+                    {{-- <th>Role</th> --}}
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Country</th>
@@ -73,11 +73,11 @@
                   <tr>
                     <td>{{ $loop->index }}</td>
                     <td>{{$users->name}}</td>
-                    <td>{{$users->role_title}}</td>
+                    {{-- <td>{{$users->role_title}}</td> --}}
                     <td>{{$users->email}}</td>
                     <td>{{$users->phone}}</td>
                     <td>{{$users->country}}</td>
-                    <td><img src="{{asset('storage/app/public/images/usersimage/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
+                    <td><img src="{{asset('storage/app/public/images/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
                     <td>
                       @if ($users->status==1)
                       <input type="button" class="btn btn-success" value="Active">

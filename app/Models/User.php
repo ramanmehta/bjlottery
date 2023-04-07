@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
-        'role_id',
+        // 'role_id',
         'email',
         'phone',
         'address_1',
@@ -35,6 +35,10 @@ class User extends Authenticatable
         // 'status',
         'password',
         'logo',
+        'today_gained_point',
+        'today_deduct_point',
+        'total_point_available',
+        'total_cash_available',
     ];
 
     // public function role(){
@@ -46,6 +50,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Role', 'role_id', 'role_id');
     }
 
+    public function referal_point(){
+        return $this->hasOne('App\Models\ReferalPoint');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

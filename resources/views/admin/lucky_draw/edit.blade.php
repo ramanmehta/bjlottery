@@ -52,7 +52,7 @@ dd($luckyDraw);
                       <div class="form-row">
                         <div class="form-group col-md-12">
                           <label for="game_title">Game Title</label>
-                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" value="{{$luckyDraw->game_title}}" required disabled>
+                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" value="{{$luckyDraw->game_title}}" required>
                         </div>
                         
                       </div>
@@ -94,15 +94,22 @@ dd($luckyDraw);
                         </div>
                       </div>
 
-                      <div class="form-row">
+                      <div class="form-row">                        
+
                         <div class="form-group col-md-6">
-                          <label for="min_point">Minimum Points</label>
-                          <input type="number" class="form-control" id="min_point" placeholder="Enter minimum point" name="min_point" value="{{$luckyDraw->min_point}}" required>
+                          <label for="minimum_prize_amount">Minimum Prize Amount</label>
+                          <input type="number" class="form-control" id="minimum_prize_amount" placeholder="Enter maximum point" name="minimum_prize_amount" value="{{$luckyDraw->minimum_prize_amount}}" required>
                         </div>
-                        
+
                         <div class="form-group col-md-6">
-                          <label for="max_point">Maximum Points</label>
-                          <input type="number" class="form-control" id="max_point" placeholder="Enter maximum point" name="max_point" value="{{$luckyDraw->max_point}}" required>
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                              <option disabled>Select Status</option>
+                              <option value="1" {{$luckyDraw->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$luckyDraw->status == 0 ? "selected" : ""}}>Inactive</option>
+                            </select>
+                          </div>
                         </div>
                       </div>
                       
@@ -128,20 +135,11 @@ dd($luckyDraw);
                       <div class="form-row">
 
                         <div class="form-group col-md-6">
-                          <label for="game_point">Game Points</label>
-                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" value="{{$luckyDraw->game_point}}" required>
+                          <label for="points_per_ticket">Points Per Ticket</label>
+                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket"  value="{{$luckyDraw->points_per_ticket}}" required>
                         </div>
 
-                        <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              <option disabled>Select Status</option>
-                              <option value="1" {{$luckyDraw->status == 1 ? "selected" : ""}}>Active</option>
-                              <option value="0" {{$luckyDraw->status == 0 ? "selected" : ""}}>Inactive</option>
-                            </select>
-                          </div>
-                        </div>
+                        
 
                       </div>
 
@@ -155,8 +153,8 @@ dd($luckyDraw);
 			
 			                  <div class="form-group col-md-12">
                           
-                          {{-- <img src="{{asset('storage/app/public/images/luckydraw/'.$luckyDraw->game_image)}}" style="height: 50px;"> --}}
-                          <img src="{{$imgPath.'/luckydraw/'.$luckyDraw->game_image}}" style="height: 50px;">
+                          <img src="{{asset('storage/app/public/images'.$luckyDraw->game_image)}}" style="height: 50px;">
+                          {{-- <img src="{{$this->fileurl.'/luckydraw/'.$luckyDraw->game_image}}" style="height: 50px;"> --}}
                         </div>
 			
 			                  @endif

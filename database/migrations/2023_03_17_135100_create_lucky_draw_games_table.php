@@ -17,12 +17,11 @@ return new class extends Migration
             $table->text('game_description');
             $table->string('game_image');
             $table->double('winning_prize_amount');
-            $table->integer('min_point');
-            $table->integer('max_point');
+            $table->double('minimum_prize_amount');
+            $table->bigInteger('points_per_ticket');
             $table->string('start_date_time');
             $table->string('end_date_time');
             $table->tinyInteger('status');
-            $table->integer('game_point');
             $table->timestamps();
         });
     }
