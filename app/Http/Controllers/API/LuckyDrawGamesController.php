@@ -7,6 +7,7 @@ use App\Models\LuckyDrawGames;
 use App\Models\LuckyDraw;
 use App\Models\User;
 use Illuminate\Http\Request;
+use DB;
 
 class LuckyDrawGamesController extends Controller
 {
@@ -111,7 +112,7 @@ class LuckyDrawGamesController extends Controller
         if($user && $game){
             $user_points = $user->total_point_available;
             $pointRequired = $game->points_per_ticket;
-            if($user_points > $pointRequired){
+            if($user_points >= $pointRequired){
                 $randomNumber = rand(100 , 9999);
                 $balancePoint = $user_points - $pointRequired;
                 $updateUserPoint = User::where('id', $user_id)->update([
@@ -197,6 +198,45 @@ class LuckyDrawGamesController extends Controller
         ];
         
         return response()->json($response);
+    }
+
+    public function participantUsername(Request $request)
+    {
+        $lotteryId = $request->lottery_id;
+       // dd($lotteryId);
+        $participant = LuckyDraw::where('id',$lotteryId)->distinct()->get('user_id');
+        
+        $totalParticipant = $participant->count();
+        if($totalParticipant > 0){
+            // $user = User::with(['luckydraw'])->find($participant)   ;
+            $userLottery = DB::table('users')
+            ->select('users.username')
+            ->join('lucky_draws','lucky_draws.user_id','=','users.id')
+            ->where('lucky_draws.lucky_draw_games_id',$lotteryId)
+            ->distinct()
+            ->get('user_id');
+
+            
+            $username = [];
+            foreach ($userLottery as $data) {
+                
+                $username[] = $data->username;  
+            }
+
+            $response = [
+                'success' => true,
+                'status' => 200,
+                'data' => $username
+            ];
+            return response()->json($response);
+        }else{
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => 'No record found'
+            ];
+            return response()->json($response);
+        }
     }
     
 }

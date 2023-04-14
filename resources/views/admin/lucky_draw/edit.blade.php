@@ -102,6 +102,11 @@ dd($luckyDraw);
                         </div>
 
                         <div class="form-group col-md-6">
+                          <label for="points_per_ticket">Points Per Ticket</label>
+                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket"  value="{{$luckyDraw->points_per_ticket}}" required>
+                        </div>
+
+                        {{-- <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" name="status" required>
@@ -110,7 +115,7 @@ dd($luckyDraw);
                               <option value="0" {{$luckyDraw->status == 0 ? "selected" : ""}}>Inactive</option>
                             </select>
                           </div>
-                        </div>
+                        </div> --}}
                       </div>
                       
                       {{-- date input --}}
@@ -134,10 +139,7 @@ dd($luckyDraw);
                       
                       <div class="form-row">
 
-                        <div class="form-group col-md-6">
-                          <label for="points_per_ticket">Points Per Ticket</label>
-                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket"  value="{{$luckyDraw->points_per_ticket}}" required>
-                        </div>
+                        
 
                         
 
@@ -194,7 +196,7 @@ dd($luckyDraw);
             // timePickerIncrement: 30,
             locale: {
               // format: 'MM/DD/YYYY hh:mm:ss'
-              format: 'YYYY-MM-DD H:mm'
+              format: 'YYYY-MM-DD H:mm:ss'
             }
           });
                

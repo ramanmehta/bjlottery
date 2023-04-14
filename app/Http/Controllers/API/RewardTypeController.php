@@ -12,22 +12,52 @@ use App\Models\RewardPoint;
 use Illuminate\Support\Carbon;
 use Carbon\CarbonPeriod;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class RewardTypeController extends Controller
 {
     public function index()
     {
+        $userId = auth('sanctum')->user()->id;
+        $todatStartDateTime = date('Y-m-d 00:00:00'); 
         $rewardType = RewardType::all();
-        if($rewardType->count() > 0){
-
+        $dayOfWeek = date('w', time()) - 1;
+        $weekStartDateTime = date('Y-m-d 00:00:00',strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
+        $todatEndDateTime = date('Y-m-d 23:59:59'); 
+        $rewardTypesArr = [];
+        foreach($rewardType as $value)
+        {
+            $reward_type_id=$value->id;
+            $getReward  = DB::table('reward_points')
+                        ->where('user_id',$userId)
+                        ->where('reward_type_id',$reward_type_id);
+            switch($value->reward_type){
+                case 'weeklyreward' : 
+                            $getReward = $getReward->whereDate('created_at','>=', $weekStartDateTime)->whereDate('created_at','<=', $todatEndDateTime);
+                    break;
+                default : 
+                        $getReward = $getReward->whereDate('created_at','>=', $weekStartDateTime)->whereDate('created_at','>=', $todatStartDateTime);
+            }
+            
+            $getReward = $getReward->count();
+                        
+            if($getReward > 0 ){
+                $value->claimed = 1;
+            }else{
+                $value->claimed = 0;
+            }
+            $rewardTypesArr[] = $value;
+            
+        }
+        
+        if(isset($rewardTypesArr) && !empty($rewardTypesArr)){
             $response = [
                 'success' => true,
                 'status' => 200,
-                'data' => $rewardType,
+                'data' => $rewardTypesArr,
             ];
             return response()->json($response);
         }else{
-            
             $response = [
                 'success' => false,
                 'status' => 404,
@@ -57,10 +87,8 @@ class RewardTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
-    {   
-        // dd($request->all());
-        $id = $request->id;
+    public function show($id)
+    {
         $rewardType = RewardType::find($id);
         // var_dump($dailyreward);
         if($rewardType){
@@ -114,16 +142,34 @@ class RewardTypeController extends Controller
         $reward = RewardType::find($rewardType_id);
         $rewardPoint = $reward->reward_points;
         $rewardType = $reward->reward_type;
-        // $todayTime = new DateTime()->timestamp;
-        // $formatDate  = $todayTime->format("Y-m-d");
         $todayTime = Carbon::now()->timestamp;
         $yesterday = Carbon::yesterday()->timestamp;
         $tomorrow = Carbon::tomorrow()->timestamp;
         
         if($users && $reward){
-            $rewardUser = RewardPoint::where('user_id', $request->user_id)->first();
-            if($rewardUser == ""){
-
+            
+            $todatStartDateTime = date('Y-m-d 00:00:00'); 
+            $todatEndDateTime = date('Y-m-d 23:59:59'); 
+            $todaydate = date('Y-m-d'); // '2023-04-08';
+            $dayOfWeek = date('w', strtotime($todaydate));
+            
+            switch($reward->reward_type){
+                case 'weeklyreward' : 
+                            if ($dayOfWeek != 6) {
+                              $response = [
+                                            'success' =>false,
+                                            'satus' => 400,
+                                            'message' => 'Today is not weekend.'
+                                        ];
+                                return response()->json($response);
+                              
+                            }
+                    break;
+            }
+            
+            $rewardUser = RewardPoint::where('user_id', $request->user_id)->where('reward_type_id', $rewardType_id)->whereDate('created_at', '>=', $todatStartDateTime)->whereDate('created_at', '<=', $todatEndDateTime)->first();
+            
+            if(empty($rewardUser)){
                 $data = [
                     'user_id' => $user_id,
                     'reward_type_id' => $rewardType_id,
@@ -137,58 +183,22 @@ class RewardTypeController extends Controller
                 $addTotal = $userPoints + $rewardPoint;
                 $users->total_point_available = $addTotal;
                 $updateUserPoint = $users->save();
-                // $updatePoint = $users
                 
                 $response = [
                     'success' => true,
                     'status' => 200,
                     'data' => $creteNew
                 ];
-
                 return response()->json($response);
-
             }
             else{
-                // if user already exist in Dailyrewardpoint table 
-                $rewardDate = $rewardUser->created_at;
-                $parseUserDate = Carbon::parse($rewardDate);
-                if($parseUserDate->isToday() && ((int)$yesterday < (int)$todayTime) && ((int)$tomorrow > (int)$todayTime)){
-                    $response = [
-                        'success' =>false,
-                        'satus' => 400,
-                        'message' => 'Today Daily Reward already claimed'
-                    ];
-                    
-                    return response()->json($response);
-
-                }else{
-
-                    $data = [
-                        'user_id' => $user_id,
-                        'reward_type_id' => $rewardType_id,
-                        'reward_type' => $rewardType,
-                        'reward_points' => $rewardPoint,
-                    ];
-    
-                    $creteNew = RewardPoint::create($data);
-
-                    $userPoints = $users->total_point_available;
-                    $addTotal = $userPoints + $rewardPoint;
-                    $users->total_point_available = $addTotal;
-                    $updateUserPoint = $users->save();
-
-                    $response = [
-                        'success' => true,
-                        'status' => 200,
-                        'data' => $creteNew
-                    ];
-    
-                    return response()->json($response);
-                }
-                
-                
-
-            }           
+                $response = [
+                    'success' =>false,
+                    'satus' => 400,
+                    'message' => $reward->reward_title.' already claimed'
+                ];
+                return response()->json($response);
+            }
         }else{
 
             $response = [
@@ -198,7 +208,6 @@ class RewardTypeController extends Controller
            
             return response()->json($response);
         }
-
     }
 
 

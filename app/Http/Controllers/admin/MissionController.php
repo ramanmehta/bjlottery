@@ -5,15 +5,33 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mission;
+use DB;
 
 class MissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $mission = Mission::all();
+        if($request->has('search')){
+
+            $search = $request->search;
+            // $user = User::search($request->search)->get();
+            $mission = DB::table('missions')
+                ->where('mission_title' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('mission_description' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('mission_proof_type' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('number_of_share' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('mission_start_date' , 'LIKE' , '%'.$search.'%')
+                ->paginate(2);
+                
+        }else{
+
+            $mission = Mission::orderBy('id', 'DESC')->paginate(2);
+
+        }
+        
         return view('admin.missions.index', compact('mission'));
     }
 
@@ -43,6 +61,7 @@ class MissionController extends Controller
             'mission_proof_type' => 'bail|string|required',
             'number_of_share' => 'integer|required',
             'per_share_point' => 'integer|required',
+            //'referal_code' => 'string|required|unique:missions',
             'daterange' => 'required',
             // 'mission_start_date' => 'required',
             // 'mission_end_date' => 'required',
@@ -58,6 +77,7 @@ class MissionController extends Controller
             'mission_proof_type'=>$request->mission_proof_type,
             'number_of_share' => $request->number_of_share,
             'per_share_point' => $request->per_share_point,
+            //'referal_code' => $request->referal_code,
             'mission_start_date' =>$startdate,
             'mission_end_date' => $enddate,
             'status' =>$request->status
@@ -75,6 +95,37 @@ class MissionController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+    public function missionStatus(Request $request , $id){
+        $mission_id = decrypt($id);
+        $mission = Mission::find($mission_id);
+        $status = $mission->status;
+
+        if($status == 1){
+           
+            $deactivate = $mission->status = '0';
+           
+            $mission->save();
+
+            $missionStatus = Mission::where('id', $mission_id)->update([
+                'status' => $deactivate
+            ]);
+            $success = "Mission deactivated successfully";
+            return redirect('/admin/viewMission')->with('success',$success);
+            
+        }else{
+            $activated = $mission->status = '1';
+           
+            $mission->save();
+
+            $missionStatus = Mission::where('id', $mission_id)->update([
+                'status' => $activated
+            ]);
+            $success = "Mission activated successfully";
+            return redirect('/admin/viewMission')->with('success',$success);
+        }
+        
     }
 
     /**
@@ -107,10 +158,10 @@ class MissionController extends Controller
             'mission_proof_type' => 'bail|string|required',
             'number_of_share' => 'integer|required',
             'per_share_point' => 'integer|required',
+            // 'referal_code' => 'string|required',
             // 'mission_start_date' => 'required',
             // 'mission_end_date' => 'required',
             'daterange' => 'required',
-            'status' => 'required'
         ]);
 
         $missionid = decrypt($id);
@@ -121,9 +172,9 @@ class MissionController extends Controller
         $mission->mission_proof_type = $request->mission_proof_type;
         $mission->number_of_share = $request->number_of_share ;
         $mission->per_share_point = $request->per_share_point;
+        //$mission->referal_code = $request->referal_code;
         $mission->mission_start_date = $startdate;
         $mission->mission_end_date = $enddate;
-        $mission->status = $request->status;
 
         $mission->save();
         $success = "Mission updated successfully";

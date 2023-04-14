@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('role_title')->UNI;
-            //$table->enum('status', array('0','1'))->default('0');
-            $table->tinyInteger('status');
-            $table->timestamps();
+        Schema::table('daily_rewards', function (Blueprint $table) {
+            $table->string('reward_types')->nullable()->change();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::table('daily_rewards', function (Blueprint $table) {
+            $table->string('reward_types')->nullable(false)->change();
+        });
     }
 };

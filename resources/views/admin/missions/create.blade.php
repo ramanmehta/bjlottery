@@ -42,6 +42,7 @@ dd($user);
                 <div class="card card-primary">
                   <div class="card-header">
                     <h3 class="card-title">Create New Mission</h3>
+                    <a class="float-sm-right" href=""><button type="button" class="btn btn-success">&nbsp;Back</button></a>
                   </div>
                   <!-- /.card-header -->
                   <!-- form start-->
@@ -77,36 +78,20 @@ dd($user);
                         
                         <div class="form-group col-md-6">
                           <label for="number_of_share">Number of Share Required</label>
-                          <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of share required" name="number_of_share" required>
+                          <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of referal required" name="number_of_share" required>
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="per_share_point">Rreferal Unit Point </label>
-                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter per share point" name="per_share_point" required>
+                          <label for="per_share_point">Per Share Point </label>
+                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter referal point" name="per_share_point" required>
                         </div>
                         
-                        {{-- <div class="form-group col-md-6">
-                          <label for="referal_code">Referal Code</label>
-                          <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" required>
-                        </div> --}}
-                        <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              
-                              <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {{-- date input --}}
-
-                      <div class="form-row">
+                        <!--<div class="form-group col-md-6">-->
+                        <!--  <label for="referal_code">Referal Code</label>-->
+                        <!--  <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" required>-->
+                        <!--</div>-->
                         <div class="form-group col-md-6">
 
                           <label>Date and time range:</label>
@@ -119,6 +104,12 @@ dd($user);
                           </div>
                           
                         </div>
+                      </div>
+                      
+                      {{-- date input --}}
+
+                      <div class="form-row">
+                        
                         {{-- <div class="form-group col-md-6">
                           <label for="mission_start_date">Mission Start Date</label>
                           <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date"> --}}
@@ -136,7 +127,17 @@ dd($user);
                           <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date">
                           
                         </div> --}}
-                        
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                              
+                              <option disabled>Select Status</option>
+                              <option value="1">Active</option>
+                              <option value="0">Inactive</option>
+                            </select>
+                          </div>
+                        </div>
                       </div>
 
                       {{-- end date input --}}
@@ -188,14 +189,14 @@ dd($user);
         var today = new Date(); 
     
     
-        $('#reservationtime').daterangepicker({
+          $('#reservationtime').daterangepicker({
             timePicker: true,
             timePicker24Hour: true,
             minDate:today,
             // timePickerIncrement: 30,
             locale: {
-              // format: 'MM/DD/YYYY hh:mm:ss'
-              format: 'YYYY-MM-DD H:mm'
+              // format: 'MM/DD/YYYY H:mm:ss'
+              format: 'YYYY/MM/DD H:mm:ss'
             }
           });
                

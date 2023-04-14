@@ -49,16 +49,15 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
-            'username' => 'string|required|min:1|max:20|unique:users',
-            // 'role_id' => 'integer|required|min:1|max:20',
+            'username' => 'nullable|string|min:1|max:20|unique:users',
             'email' => 'string|required|email|max:100|unique:users',
             'phone' => 'required|numeric|digits:10',
-            'address_1' => 'string|required|min:1|max:200',
-            'address_2' => 'string|required|min:1|max:200',
-            'city' => 'string|required|min:1|max:50',
-            'state' => 'string|required|min:1|max:50',
-            'country' => 'string|required|min:1|max:50',
-            'zip' => 'string|required|min:1|max:50',
+            'address_1' => 'nullable|string|min:1|max:200',
+            'address_2' => 'nullable|string|min:1|max:200',
+            'city' => 'nullable|string|min:1|max:50',
+            'state' => 'nullable|string|min:1|max:50',
+            'country' => 'nullable|string|min:1|max:50',
+            'zip' => 'nullable|string|min:1|max:50',
             'password' => 'string|required|min:6',
             'c_password' => 'string|required|same:password',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
@@ -76,6 +75,8 @@ class AuthController extends Controller
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['logo'] = "/usersimage/avatar.png";
+        // dd($input);
         $user = User::create($input);
 
         // $user_id = $user->id;
@@ -134,13 +135,13 @@ class AuthController extends Controller
         //     $totalPoint = $getReferalType->point;
         //     // $totalPoint = 20;
         //     $totalCash = 0;
-            
+
         //     $data = [
         //         'today_gained_point' => $todayPointGain,
         //         'today_deduct_point' => $todayPointDeduct,
         //         'total_point_available' => $totalPoint
         //     ];
-           
+
 
         //     $updateUserPoint = $user->update($data);
 
@@ -161,7 +162,7 @@ class AuthController extends Controller
         //         'today_deduct_point' => $todayPointDeduct,
         //         'total_point_available' => $totalPoint
         //     ];
-           
+
         //     $updateUserPoint = $user->update($data);
         // }
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
@@ -180,45 +181,107 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $username = $request->username;
+        $password = $request->password;
 
         $validator = Validator::make($request->all(), [
             'username' => 'string|required',
             'password' => 'string|required'
         ]);
 
-        if (Auth::attempt([
-            'username' => $request->username,
-            'password' => $request->password
-        ])) {
-            // var_dump($request->username);
-            $user = Auth::user();
-            $success['token'] = $user->createToken('MyApp')->plainTextToken;
-            $success['user'] = $user;
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $user1 = User::where('email', $username)->count();
+            if ($user1 > 0) {
+                $user = User::where('email', $username)->first();
+                if ($user->status == 1) {
+                    if (Auth::attempt([
+                        'email' => $request->username,
+                        'password' => $request->password
+                    ])) {
+                        $user = Auth::user();
+                        $success['token'] = $user->createToken('MyApp')->plainTextToken;
+                        $success['user'] = $user;
+                        $response = [
+                            'success' => true,
+                            'status' => 200,
+                            'data' => $success,
+                            'message' => 'User login successfully'
+                        ];
+                        return response()->json($response);
+                    } else {
+                        $response = [
+                            'success' => false,
+                            'status' => 400,
+                            'message' => 'username or password is incorrect'
+                        ];
 
-            // dd($user->id);
-            // // $total_
-            // $user_id = $user->id
-            // $user_detail = DB::table('users')
-            //         ->join('roles','users.role_id', "=", 'roles.id')
-            //         ->join('countries', 'users.country', "=", 'countries.sortname')
-            //         ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title','countries.countries')
-            //         ->where('users.id', $userid)->first();
+                        return response()->json($response);
+                    }
+                } else {
+                    $response = [
+                        'success' => false,
+                        'status' => 400,
+                        'message' => 'User is inactive. Contact Us'
+                    ];
 
-            $response = [
-                'success' => true,
-                'status' => 200,
-                'data' => $success,
-                'message' => 'User login successfully'
-            ];
-            return response()->json($response);
+                    return response()->json($response);
+                }
+            } else {
+                $response = [
+                    'success' => false,
+                    'status' => 400,
+                    'message' => 'Please register first'
+                ];
+                return response()->json($response);
+            }
         } else {
-            $response = [
-                'success' => false,
-                'status' => 400,
-                'message' => 'username or password is incorrect'
-            ];
 
-            return response()->json($response);
+            $user1 = User::where('username', $username)->count();
+            if ($user1 > 0) {
+                $user = User::where('username', $username)->first();
+                if ($user->status == 1) {
+                    if (Auth::attempt([
+                        'username' => $request->username,
+                        'password' => $request->password
+                    ])) {
+                        
+                        $user = Auth::user();
+                        $success['token'] = $user->createToken('MyApp')->plainTextToken;
+                        $success['user'] = $user;
+                        $response = [
+                            'success' => true,
+                            'status' => 200,
+                            'data' => $success,
+                            'message' => 'User login successfully'
+                        ];
+                        return response()->json($response);
+                    } else {
+                        $response = [
+                            'success' => false,
+                            'status' => 400,
+                            'message' => 'username or password is incorrect'
+                        ];
+
+                        return response()->json($response);
+                    }
+                } else {
+                    $response = [
+                        'success' => false,
+                        'status' => 400,
+                        'message' => 'User is inactive. Contact Us'
+                    ];
+
+                    return response()->json($response);
+                }
+            } else {
+
+                $response = [
+                    'success' => false,
+                    'status' => 400,
+                    'message' => 'User not found.'
+                ];
+                return response()->json($response);
+            }
         }
     }
 
@@ -268,27 +331,26 @@ class AuthController extends Controller
             $user['subject'] = 'Your New Password';
 
             $senMail = Mail::send('mail', $data, function ($message) use ($user) {
-            
+
                 $message->to($user['email']);
                 $message->subject($user['subject']);
-                
             });
 
-            if($senMail){
+            if ($senMail) {
 
-            $changePassword = bcrypt($newPassword);
-            $updatePassword = User::where('email', $request->email)
-                ->update([
-                    'password' => $changePassword,
-                ]);
+                $changePassword = bcrypt($newPassword);
+                $updatePassword = User::where('email', $request->email)
+                    ->update([
+                        'password' => $changePassword,
+                    ]);
 
-            $response = [
-                'success' => true,
-                'status' => 200,
-                'message' => 'Please check your mail to reset your password'
-            ];
-            return response()->json($response);
-            }else{
+                $response = [
+                    'success' => true,
+                    'status' => 200,
+                    'message' => 'Please check your mail to reset your password'
+                ];
+                return response()->json($response);
+            } else {
                 $response = [
                     'success' => false,
                     'message' => 'Mail not sent, try after some time'
@@ -390,6 +452,95 @@ class AuthController extends Controller
                 'success' => false,
                 'status' => 400,
                 'message' => 'Old password is incorrect'
+            ];
+
+            return response()->json($response);
+        }
+    }
+
+    public function userwalletap()
+    {
+        if (auth('sanctum')->check()) {
+            $userId = auth('sanctum')->user()->id;
+            $user = User::select(['total_point_available as total_ap', 'total_cash_available as total_wallet'])->where('id', $userId)->first();
+            if ($user) {
+                $response = [
+                    'suceess' => true,
+                    'status' => 200,
+                    'data' => $user
+                ];
+
+                return response()->json($response);
+            }
+        } else {
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => 'Invalid user'
+            ];
+
+            return response()->json($response);
+        }
+    }
+
+    public function redeemPoints()
+    {
+        if (auth('sanctum')->check()) {
+            $userId = auth('sanctum')->user()->id;
+
+            $user = User::find($userId);
+
+            $userPoint = $user->total_point_available;
+            // $userPoint = 77;
+            $minimunPointRequired = 4;
+            if ($userPoint >= $minimunPointRequired) {
+                // dd("here");
+                //lets 10 point = 1rs
+                $conversion = (int)$userPoint / (int)$minimunPointRequired;
+                $decuctPoint = (int)$conversion * (int)$minimunPointRequired;
+                $balancePoint = (int)$userPoint - (int)$decuctPoint;
+                $getCash = (int)$conversion;
+
+                // user data
+                $cashAvailable = $user->total_cash_available;
+                $updateCash = (int)$cashAvailable + (int)$getCash;
+
+                // $userPoint
+
+                $user->total_cash_available = $updateCash;
+                $user->total_point_available = $balancePoint;
+
+                $updateUserData = User::where('id', $userId)->update([
+                    'total_point_available' => $balancePoint,
+                    'total_cash_available' => $updateCash
+                ]);
+
+                $response = [
+                    'suceess' => true,
+                    'status' => 200,
+                    'message' => 'You successfully redeem your point'
+                ];
+
+                return response()->json($response);
+            } else {
+                // low balance
+                // dd("here");
+                $message = 'Low balance . Minimum required to redeem' . $minimunPointRequired;
+
+                $response = [
+                    'suceess' => false,
+                    'status' => 404,
+                    'message' => $message
+                ];
+
+                return response()->json($response);
+            }
+        } else {
+
+            $response = [
+                'success' => false,
+                'status' => 400,
+                'message' => 'Invalid user'
             ];
 
             return response()->json($response);

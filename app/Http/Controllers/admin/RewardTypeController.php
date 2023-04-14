@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
 use Validator;
+use DB;
 
 
 class RewardTypeController extends Controller
@@ -13,27 +14,36 @@ class RewardTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rewardType = RewardType::all();
+        if($request->has('search')){
+
+            $search = $request->search;
+          
+            $rewardType = DB::table('reward_types')
+                ->where('reward_type' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('reward_title' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('reward_description' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('reward_points' , 'LIKE' , '%'.$search.'%')
+                ->paginate(10);           
+        
+            }else{
+              
+                // $rewardType = RewardType::all();
+                $rewardType = RewardType::orderBy('id', 'DESC')->paginate(10);
+            
+            }
+        
     
         return view('admin.reward_type.index',['rewardType' => $rewardType]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.reward_type.create');
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'reward_title' => 'bail|string|required|max:255',
             'reward_type' => 'bail|string|required|max:255',
@@ -41,7 +51,6 @@ class RewardTypeController extends Controller
             'reward_points' => 'bail|integer|required',
             'status' => 'required'
         ]);
-        // dd($request->all());
         $newRewardType = RewardType::create($request->all());
 
         $success = "New reward created successfully";
@@ -49,14 +58,41 @@ class RewardTypeController extends Controller
         return redirect('/admin/viewRewardType')->with('success',$success);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    public function rewardStatus(Request $request , $id){
+        $reward_id = decrypt($id);
+        $reward = RewardType::find($reward_id);
+        $status = $reward->status;
+
+        if($status == 1){
+           
+            $deactivate = $reward->status = '0';
+           
+            $reward->save();
+
+            $rewardStatus = RewardType::where('id', $reward_id)->update([
+                'status' => $deactivate
+            ]);
+            $success = "Rewad deactivated successfully";
+            return redirect('/admin/viewRewardType')->with('success',$success);
+            
+        }else{
+            $activated = $reward->status = '1';
+           
+            $reward->save();
+
+            $rewardStatus = RewardType::where('id', $reward_id)->update([
+                'status' => $activated
+            ]);
+            $success = "Reward activated successfully";
+            return redirect('/admin/viewRewardType')->with('success',$success);
+        }
+        
     }
 
+    public function create()
+    {
+        return view('admin.reward_type.create');
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -81,15 +117,12 @@ class RewardTypeController extends Controller
             'reward_title' => 'bail|string|required|max:255',
             'reward_description' => 'bail|string|required',
             'reward_points' => 'bail|integer|required',
-            'status' => 'required'
         ]);
-        // dd($request->all());
         $rewardType = RewardType::where('id', $reward_id)->first();
         $rewardType->reward_type = $request->reward_type;
         $rewardType->reward_title = $request->reward_title;
         $rewardType->reward_description = $request->reward_description;
         $rewardType->reward_points = $request->reward_points;
-        $rewardType->status = $request->status;
         $rewardType->save();
         $success = "Reward updated successfully";
         return redirect('/admin/viewRewardType')->with('success',$success);

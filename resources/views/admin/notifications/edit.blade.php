@@ -80,7 +80,7 @@ dd($user);
                           <input type="datetime-local" class="form-control" name="sent_at" id="sent_at" value="{{$notification->sent_at}}">
                         </div>
                         <div class="form-group col-md-6">
-                          <div class="form-group">
+                          {{-- <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" name="status" required>
                               @if($notification->id) 
@@ -96,7 +96,7 @@ dd($user);
                               <option value="1">Active</option>
                               <option value="0">Inactive</option>
                             </select>
-                          </div>
+                          </div> --}}
                         </div>
                       </div>
 

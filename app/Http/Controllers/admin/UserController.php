@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\Country;
 use DB;
 use Validator;
+use App\Http\Traits\CommonTrait;
 
 
 class UserController extends Controller
@@ -16,43 +17,59 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //$user = User::all();
-        // $roles = Role::all();
-        //  $user = DB::table('users')
-                    // ->join('roles','users.role_id', "=", 'roles.id')
-                    // ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.status','users.logo','roles.role_title')->get();
+    public function index(Request $request)
+    {   
         
-        $user = User::all();
+        if($request->has('search')){
 
-         //echo "<pre>";
-        // print_r($country);die;
+            $search = $request->search;
+            $user = DB::table('users')
+                ->where('username' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('email' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('phone' , 'LIKE' , '%'.$search.'%')
+                ->orWhere('country' , 'LIKE' , '%'.$search.'%')
+                ->paginate(2);
+
+        }else{
+
+            $user = User::orderBy('id', 'DESC')->paginate(10);
+
+        }
+        
+       
         return view('admin.users.index')->with('user',$user);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function userStatus(Request $request , $id){
+        $userid = decrypt($id);
+        $user = User::find($userid);
+        $status = $user->status;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        if($status == 1){
+           
+            $deactivate = $user->status = '0';
+           
+            $user->save();
+
+            $userStatus = User::where('id', $userid)->update([
+                'status' => $deactivate
+            ]);
+            $success = "User deactivated successfully";
+            return redirect('/admin/viewUser')->with('success',$success);
+            
+        }else{
+            $activated = $user->status = '1';
+           
+            $user->save();
+
+            $userStatus = User::where('id', $userid)->update([
+                'status' => $activated
+            ]);
+            $success = "User activated successfully";
+            return redirect('/admin/viewUser')->with('success',$success);
+        }
+        
     }
 
     /**
@@ -60,51 +77,61 @@ class UserController extends Controller
      */
     public function edit($id)
     {   
+      
         $userid = decrypt($id);
-        
-        $user = DB::table('users')
-                    // ->join('roles','users.role_id', "=", 'roles.id')
-                    ->join('countries', 'users.country', "=", 'countries.sortname')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','countries.countries')
-                    ->where('users.id', $userid)->first();
-                    
+        $user = User::find($userid);     
+        // $user = DB::table('users')
+        //             ->join('countries', 'users.country', "=", 'countries.sortname')
+        //             ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','users.total_point_available','users.total_cash_available','users.password','countries.countries')
+        //             ->where('users.id', $userid)->first();
+          
         $country = DB::table('countries')->get();
-        // $roles = Role::where('status', 1)->get();    
-        return view('admin.users.edit', ['user'=>$user , 'country'=>$country]);
+        
+        return view('admin.users.edit')->with('user',$user)->with('country',$country);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        // dd($request->file('userimage'));
-        $userid = decrypt($id);    
+        
+        $userid = decrypt($id);  
+        $getUser = DB::table('users')->find($userid);  
         $image = $request->file('userimage');
+        $validArr = [
+                    'name' => 'bail|string|required|max:255',
+                    'username' => 'bail|string|required|max:255|unique:users,username,'.$userid,
+                    'email' => 'bail|string|required|email|max:255|unique:users,email,'.$userid,
+                    'phone' => 'required|numeric|digits:10',
+                    'address_1' => 'string|required|min:1|max:200',
+                    'address_2' => 'string|required|min:1|max:200',
+                    'city' => 'string|required|min:1|max:50',
+                    'state' => 'string|required|min:1|max:50',
+                    'country' => 'string|required|min:1|max:50',
+                    'zip' => 'string|required|min:1|max:50'
+                ];
+        
+                
+        $validErrArr = [];                
+        if($image != null){
+            $validArr['userimage'] = ['mimes:jpeg,jpg,png,gif|required'];
+            $validErrArr['userimage'] = ['required'=>'upload image is required','mimes'=>'Only images with extension jpeg,jpg,png,gif are allowed.'];
+        }
+        
+        $request->validate($validArr,$validErrArr);
+       
         if($image != null){
             $randomNumber = rand();
             $imageName = $randomNumber.$image->getClientOriginalName();  
             $image->storeAs('public/images/usersimage',$imageName);
         }
-        $request->validate([
-            'name' => 'bail|string|required|max:255',
-            'username' => 'bail|string|required|max:255',
-            // 'role' => 'required',
-            'email' => 'bail|string|required|email|max:255',
-            'phone' => 'required|numeric|digits:10',
-            'address_1' => 'string|required|min:1|max:200',
-            'address_2' => 'string|required|min:1|max:200',
-            'city' => 'string|required|min:1|max:50',
-            'state' => 'string|required|min:1|max:50',
-            'country' => 'string|required|min:1|max:50',
-            'zip' => 'string|required|min:1|max:50',
-            'status' => 'required'
-        ]);
-        //dd($request->all());
+        
+        
+        
         $user = User::findOrFail($userid);
         $user->name = $request->name;
         $user->username = $request->username;
-        // $user->role_id = $request->role;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->address_1 = $request->address_1;
@@ -113,17 +140,19 @@ class UserController extends Controller
         $user->state = $request->state;
         $user->country = $request->country;
         $user->zip = $request->zip;
-        $user->status = $request->status;
         $user->country = $request->country;
-        if ($image != null) {
-            $user->logo = $imageName;
+        if (!empty($image)) {
+            ($user->logo = '/usersimage/'.$imageName);
         }else{
-            $user->logo = "avatar.png";
+            if(!empty($getUser->logo)){
+                ($user->logo = $getUser->logo);
+            }else{
+                ($user->logo = "/usersimage/avatar.png");
+            }
         }
-       
-
+        
         $user->save();
-        $success = "User updated successfully";
+        $success = "$user->name profile updated successfully";
         return redirect('/admin/viewUser')->with('success',$success);
     }
 
@@ -133,12 +162,83 @@ class UserController extends Controller
     public function destroy($id)
     {
         $userid = (int)decrypt($id);
-        // dd($userid);
-        $deleteUser = $user = User::findOrFail($userid);;
+        $deleteUser = User::findOrFail($userid);
         $deleteUser->delete();
 
-        $error = "Role removed successfully";
+        $error = "User removed successfully";
         return redirect('/admin/viewUser')->with('error',$error);
     }
+
+    public function userAppoint(Request $request, $id)
+    {
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+
+        return view('admin.users.editappoint')->with('user',$user);
+
+    }
+
+    public function updateAppoint(Request $request, $id)
+    {   
+        $request->validate([
+            'affilatepoint' => 'required|numeric',
+        ]);
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+
+        $user = User::findOrFail($userid);
+        $user->total_point_available = $request->affilatepoint;
+        
+        $user->save();
+        $success = "$user->name affilate point updated successfully";
+        return redirect('/admin/viewUser')->with('success',$success);
+
+    }
+
+    public function editWallet(Request $request, $id){
+        
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+        return view('admin.users.editwallet')->with('user',$user);
+    }
+
+    public function updateWallet(Request $request, $id)
+    {
+        $request->validate([
+            'wallet' => 'required|numeric',
+        ]);
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+        $user->total_cash_available = $request->wallet;
+        
+        $user->save();
+        $success = "$user->name wallet updated successfully";
+        return redirect('/admin/viewUser')->with('success',$success);
+    }
+
+    public function changePassword(Request $reques, $id){
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+
+        return view('admin.users.resetpassword')->with('user',$user);
+        
+    }
+    public function passwordReset(Request $request, $id)
+    {   
+        
+        $request->validate([
+            'password' => 'string|required|min:6',
+            'ConfirmPassword' => 'string|required|same:password',
+        ]);
+
+        $userid = (int)decrypt($id);
+        $user = User::findOrFail($userid);
+        $user->password = bcrypt($request->password);
+        
+        $user->save();
+        $success = "$user->name password reset successfully";
+        return redirect('/admin/viewUser')->with('success',$success);
+    }
+
 
 }

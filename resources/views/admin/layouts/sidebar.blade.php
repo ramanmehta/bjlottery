@@ -32,7 +32,7 @@
           </li> --}}
           <li class="nav-item menu-open">
             <a href="{{route('luckyDraw')}}" class="nav-link @if($currentRoute == 'luckyDraw') {{'active'}} @endif">
-            Lucky Draw Games
+            Lottery List
             </a>
           </li>
           <li class="nav-item menu-open">
@@ -50,11 +50,11 @@
             Reward Type
             </a>
           </li>
-          <li class="nav-item menu-open">
+          {{-- <li class="nav-item menu-open">
             <a href="{{route('referalstatus')}}" class="nav-link @if($currentRoute == 'referalstatus') {{'active'}} @endif">
             Referals Stats
             </a>
-          </li>
+          </li> --}}
           <li class="nav-item menu-open">
             <a href="{{route('settings')}}" class="nav-link @if($currentRoute == 'settings') {{'active'}} @endif">
             Settings
