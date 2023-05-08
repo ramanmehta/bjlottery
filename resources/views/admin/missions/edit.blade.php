@@ -80,11 +80,24 @@ dd($mission);
                           <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of referal required" name="number_of_share" value="{{$mission->number_of_share}}" required>
                         </div>
                       </div>
-
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="per_share_point">Per Share Point </label>
-                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter referal point" name="per_share_point" value="{{$mission->per_share_point}}" required>
+                          <label for="banner_image">Banner Image</label>
+                          <input type="file" class="form-control" id="banner_image" name="banner_image" value=""/>
+                          <br>
+                          <img src="{{asset('storage/app/public/images/'.$mission->banner_image)}}" style="height: 50px;" alt="User Image">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label for="per_share_point">Per Share Point </label>
+                            <input type="number" class="form-control" id="per_share_point" placeholder="Enter referal point" name="per_share_point" value="{{$mission->per_share_point}}" required>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          
                         </div>
                         
                         {{-- <div class="form-group col-md-6">
@@ -93,69 +106,20 @@ dd($mission);
                         </div> --}}
 
 
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" style="display:none;">
 
                           <label>Date and time range:</label>
   
-                          <div class="input-group">
+                          <div class="input-group" style="display:none;">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-clock"></i></span>
                             </div>
-                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange">
+                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange" value="2023/05/08 20:20:42 - 2023/05/08 23:59:59">
                           </div>
                           
                         </div>
                       </div>
-
-                      
-                      
-                      {{-- date input --}}
-
-                      <div class="form-row">
-                        {{-- <div class="form-group col-md-6">
-                          <label for="mission_start_date">Mission Start Date</label>
-                          
-                          <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date" value="{{$mission->mission_start_date}}">
-                          
-                        </div>
-                        
-                        <div class="form-group col-md-6">
-                          <label for="mission_end_date">Mission End Date</label>
-                          <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date" value="{{$mission->mission_end_date}}">
-                          
-                        </div> --}}
-
-                        
-
-
-                        {{-- <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              <option disabled>Select Status</option>
-                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
-                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
-                            </select>
-                          </div>
-                        </div> --}}
-                      </div>
-
-                      {{-- end date input --}}
-                      
-                      {{-- <div class="form-row">
-
-                        <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              <option disabled>Select Status</option>
-                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
-                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div> --}}
-
+                           
                     </div>
                     <!-- /.card-body -->
 

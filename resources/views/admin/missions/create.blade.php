@@ -30,16 +30,15 @@ dd($user);
           <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-
-                <ul>
-                  @foreach ($errors->all() as $error)
-                  <button type="button" class="btn btn-warning toastsDefaultWarning">
-                    {{ $error }}
-                  </button>
-                  @endforeach
-                </ul>
-           
                 <div class="card card-primary">
+                  @foreach ($errors->all() as $error)
+                      <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
+                          <button type="button" class="close" data-dismiss="alert">
+                              <i class="fa fa-times"></i>
+                          </button>
+                          <strong></strong> {{ $error }} 
+                      </div>
+                  @endforeach
                   <div class="card-header">
                     <h3 class="card-title">Create New Mission</h3>
                   </div>
@@ -53,19 +52,12 @@ dd($user);
                         <div class="form-group col-md-12">
                           <label for="mission_title">Mission Title</label>
                           <input type="text" class="form-control" id="mission_title" placeholder="Enter mission title" name="mission_title" required>
-                        </div>
-                        
+                        </div>                        
                       </div>
-                      {{-- text editor --}}
                       <div class="form-row">
                         <div class="form-group col-md-12">
                           <label for="game_description">Mission Description</label>
-                        
-                          
-                          <textarea id="game_description" name="mission_description">
-                            
-                          </textarea>
-                        
+                          <textarea id="game_description" name="mission_description"></textarea>
                         </div>
                       </div>
 
@@ -91,10 +83,18 @@ dd($user);
                         <!--  <label for="referal_code">Referal Code</label>-->
                         <!--  <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" required>-->
                         <!--</div>-->
-                        <div class="form-group col-md-6">
-
+                        <div class="form-group col-md-6" >
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>                              
+                              <option disabled>Select Status</option>
+                              <option value="1">Active</option>
+                              <option value="0">Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6" style="display:none;">
                           <label>Date and time range:</label>
-
                           <div class="input-group">
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-clock"></i></span>
@@ -108,57 +108,22 @@ dd($user);
                       {{-- date input --}}
 
                       <div class="form-row">
-                        
-                        {{-- <div class="form-group col-md-6">
-                          <label for="mission_start_date">Mission Start Date</label>
-                          <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date"> --}}
-                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
-                          
-                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                          </div> --}}
-                        {{-- </div> --}}
-                        
-                        {{-- <div class="form-group col-md-6">
-                          <label for="mission_end_date">Mission End Date</label>
-                          <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date">
-                          
-                        </div> --}}
                         <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              
-                              <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
-                            </select>
-                          </div>
+                          
                         </div>
                       </div>
 
                       {{-- end date input --}}
                       
-                      {{-- <div class="form-row"> --}}
-
-                        {{-- <div class="form-group col-md-6">
-                          <label for="game_point">Game Points</label>
-                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
-                        </div> --}}
-                        {{-- <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              
-                              <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
-                            </select>
-                          </div>
-                        </div> --}}
-                      {{-- </div> --}}
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="banner_image">Banner Image</label>
+                          <input type="file" class="form-control" id="banner_image" name="banner_image" value=""/>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <div class="form-group"></div>
+                        </div>
+                      </div>
 
                     </div>
                     <!-- /.card-body -->

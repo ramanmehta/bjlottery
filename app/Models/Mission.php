@@ -18,6 +18,7 @@ class Mission extends Model
         'mission_start_date',
         'mission_end_date',
         'status',
+        'banner_image'
     ];
 
     /**

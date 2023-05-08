@@ -24,11 +24,11 @@ class MissionController extends Controller
                 ->orWhere('mission_proof_type' , 'LIKE' , '%'.$search.'%')
                 ->orWhere('number_of_share' , 'LIKE' , '%'.$search.'%')
                 ->orWhere('mission_start_date' , 'LIKE' , '%'.$search.'%')
-                ->paginate(2);
+                ->paginate(10);
                 
         }else{
 
-            $mission = Mission::orderBy('id', 'DESC')->paginate(2);
+            $mission = Mission::orderBy('id', 'DESC')->paginate(10);
 
         }
         
@@ -54,22 +54,52 @@ class MissionController extends Controller
         $startdate=substr($data, 0, 19);
         $enddate = substr($data, strpos($data, "-") + 1);
         // dd($enddate );
+        $image = $request->file('banner_image');
+        if($image != null){
+            $validate = [
+                'mission_title' => 'bail|string|required|max:255|unique:missions',
+                'mission_description' => 'bail|string|required',
+                'mission_proof_type' => 'bail|string|required',
+                'number_of_share' => 'integer|required',
+                'per_share_point' => 'integer|required',
+                //'referal_code' => 'string|required|unique:missions',
+                // 'daterange' => 'required',
+                // 'mission_start_date' => 'required',
+                // 'mission_end_date' => 'required',
+                'status' => 'required',
+                'banner_image' => 'mimes:jpeg,jpg,png,gif',
+            ];
+        }else{
+            $validate = [
+                'mission_title' => 'bail|string|required|max:255|unique:missions',
+                'mission_description' => 'bail|string|required',
+                'mission_proof_type' => 'bail|string|required',
+                'number_of_share' => 'integer|required',
+                'per_share_point' => 'integer|required',
+                //'referal_code' => 'string|required|unique:missions',
+                // 'daterange' => 'required',
+                // 'mission_start_date' => 'required',
+                // 'mission_end_date' => 'required',
+                'status' => 'required'
+            ];
+        }
 
-         $request->validate([
-            'mission_title' => 'bail|string|required|max:255|unique:missions',
-            'mission_description' => 'bail|string|required',
-            'mission_proof_type' => 'bail|string|required',
-            'number_of_share' => 'integer|required',
-            'per_share_point' => 'integer|required',
-            //'referal_code' => 'string|required|unique:missions',
-            'daterange' => 'required',
-            // 'mission_start_date' => 'required',
-            // 'mission_end_date' => 'required',
-            'status' => 'required'
-        ]);
+        $request->validate($validate);
 
         // $imageName = time().'.'.$request->image->extension(); 
         // $request->image->move(public_path('images'), $imageName);
+        // If the validation passes, move the uploaded file to the public folder and generate a unique name for it
+        if($image != null){
+            $randomNumber = rand();
+            $imageName = time() . '.' . $request->banner_image->extension();
+            $image->storeAs('public/images/missions',$imageName);
+        }
+        
+
+        // Save the image path to the database
+        
+        $imagePath = 'storage/images/' . $imageName;
+
 
         $missionData = [
             'mission_title' => $request->mission_title,
@@ -78,13 +108,24 @@ class MissionController extends Controller
             'number_of_share' => $request->number_of_share,
             'per_share_point' => $request->per_share_point,
             //'referal_code' => $request->referal_code,
-            'mission_start_date' =>$startdate,
-            'mission_end_date' => $enddate,
+            // 'mission_start_date' =>$startdate,
+            // 'mission_end_date' => $enddate,
+
             'status' =>$request->status
         ];
         
         $mission = Mission::create($missionData);
 
+        if (!empty($image)) {
+            $mission->banner_image = '/missions/'.$imageName;
+        }else{
+            if(!empty($mission->banner_image)){
+                $mission->banner_image = $mission->banner_image;
+            }else{
+                $mission->banner_image = "/missions/mission.png";
+            }
+        }
+        $mission->save();
         $success = "New Mission created successfully";
         return redirect('/admin/viewMission')->with('success',$success);
     }
@@ -152,17 +193,37 @@ class MissionController extends Controller
         $data = $request->daterange;
         $startdate=substr($data, 0, 19);
         $enddate = substr($data, strpos($data, "-") + 1);
-        $request->validate([
-            // 'mission_title' => 'bail|string|required|max:255',
-            'mission_description' => 'bail|string|required',
-            'mission_proof_type' => 'bail|string|required',
-            'number_of_share' => 'integer|required',
-            'per_share_point' => 'integer|required',
-            // 'referal_code' => 'string|required',
-            // 'mission_start_date' => 'required',
-            // 'mission_end_date' => 'required',
-            'daterange' => 'required',
-        ]);
+        $image = $request->file('banner_image');
+        if($image != null){
+            $validate = [
+                // 'mission_title' => 'bail|string|required|max:255|unique:missions',
+                'mission_description' => 'bail|string|required',
+                'mission_proof_type' => 'bail|string|required',
+                'number_of_share' => 'integer|required',
+                'per_share_point' => 'integer|required',
+                //'referal_code' => 'string|required|unique:missions',
+                // 'daterange' => 'required',
+                // 'mission_start_date' => 'required',
+                // 'mission_end_date' => 'required',
+                // 'status' => 'required',
+                'banner_image' => 'mimes:jpeg,jpg,png,gif',
+            ];
+        }else{
+            $validate = [
+                // 'mission_title' => 'bail|string|required|max:255|unique:missions',
+                'mission_description' => 'bail|string|required',
+                'mission_proof_type' => 'bail|string|required',
+                'number_of_share' => 'integer|required',
+                'per_share_point' => 'integer|required',
+                //'referal_code' => 'string|required|unique:missions',
+                // 'daterange' => 'required',
+                // 'mission_start_date' => 'required',
+                // 'mission_end_date' => 'required',
+                // 'status' => 'required'
+            ];
+        }
+
+        $request->validate($validate);
 
         $missionid = decrypt($id);
         
@@ -173,8 +234,22 @@ class MissionController extends Controller
         $mission->number_of_share = $request->number_of_share ;
         $mission->per_share_point = $request->per_share_point;
         //$mission->referal_code = $request->referal_code;
-        $mission->mission_start_date = $startdate;
-        $mission->mission_end_date = $enddate;
+        // $mission->mission_start_date = $startdate;
+        // $mission->mission_end_date = $enddate;
+
+        
+        if($image != null){
+            $randomNumber = rand();
+            $imageName = time() . '.' . $request->banner_image->extension();
+            $image->storeAs('public/images/missions',$imageName);
+            $mission->banner_image = '/missions/'.$imageName;
+        }else{
+            if(!empty($mission->banner_image)){
+                $mission->banner_image = $mission->banner_image;
+            }else{
+                $mission->banner_image = "/missions/mission.png";
+            }
+        }
 
         $mission->save();
         $success = "Mission updated successfully";
