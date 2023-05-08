@@ -13,6 +13,7 @@ class RewardPoint extends Model
         'reward_type_id',
         'reward_type',
         'reward_points',
-        'status'
+        'status',
+        'referal_type'
     ];
 }

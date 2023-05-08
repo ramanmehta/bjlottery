@@ -55,7 +55,7 @@ class AuthController extends Controller
             $request->session()->put('ADMIN_ID', $id);
             $request->session()->put('ADMIN_USER', $user);
             return redirect('admin/dashboard');
-        }   
+        }
     
     }
 

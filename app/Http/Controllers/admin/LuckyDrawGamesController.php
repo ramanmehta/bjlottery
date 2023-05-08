@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\admin;
+
 use App\Http\Traits\CommonTrait;
 use App\Http\Controllers\Controller;
+use App\Models\LuckyDraw;
 use App\Models\LuckyDrawGames;
+use App\Models\LuckyDrawWinner;
 use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 use Illuminate\Support\Carbon;
@@ -11,37 +14,36 @@ use DB;
 
 
 class LuckyDrawGamesController extends Controller
-{   
+{
     use CommonTrait;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        if($request->has('search')){
+        if ($request->has('search')) {
 
             $search = $request->search;
             $luckyDraw = DB::table('lucky_draw_games')
-                ->where('game_title' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('game_description' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('winning_prize_amount' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('minimum_prize_amount' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('points_per_ticket' , 'LIKE' , '%'.$search.'%')
+                ->where('game_title', 'LIKE', '%' . $search . '%')
+                ->orWhere('game_description', 'LIKE', '%' . $search . '%')
+                ->orWhere('winning_prize_amount', 'LIKE', '%' . $search . '%')
+                ->orWhere('minimum_prize_amount', 'LIKE', '%' . $search . '%')
+                ->orWhere('points_per_ticket', 'LIKE', '%' . $search . '%')
                 ->paginate(10);
-
-        }else{
+        } else {
             $luckyDraw = LuckyDrawGames::orderBy('id', 'DESC')->paginate(10);;
-
         }
         $imgPath = $this->fileurl();
-        return view('admin.lucky_draw.index',['luckyDraw' => $luckyDraw , 'imgPath' => $imgPath]);
+
+        return view('admin.lucky_draw.index', ['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         return view('admin.lucky_draw.create');
     }
 
@@ -50,23 +52,22 @@ class LuckyDrawGamesController extends Controller
      */
     public function store(Request $request)
     {
-    //   dd($request->all());
-        $data = $request->daterange; 
-        $startdate=substr($data, 0, 19);
-        $enddate = substr($data, strpos($data, "-" , 19) + 1);
+        //   dd($request->all());
+        $data = $request->daterange;
+        $startdate = substr($data, 0, 19);
+        $enddate = substr($data, strpos($data, "-", 19) + 1);
 
         // $startdate1 = strtotime($startdate);
         // $enddate1 = strtotime($enddate);
-    
+
         // dd("sdtart date new : " . $startdate1 . "       end date new : " . $enddate1);
-        
+
         $image = $request->file('game_image');
-        if($image != null){
+        if ($image != null) {
             $randomNumber = rand();
-            $imageName = $randomNumber.$image->getClientOriginalName();  
+            $imageName = $randomNumber . $image->getClientOriginalName();
             //$image->storeAs('public/images/luckydraw',$imageName);
-            $image->storeAs($this->filepath().'/luckydraw',$imageName);
-       
+            $image->storeAs($this->filepath() . '/luckydraw', $imageName);
         }
 
         $request->validate([
@@ -81,17 +82,17 @@ class LuckyDrawGamesController extends Controller
         ]);
         $luckyDrawData = [
             'game_title' => $request->game_title,
-            'game_description'=>$request->game_description,
+            'game_description' => $request->game_description,
             'winning_prize_amount' => $request->winning_prize_amount,
             'minimum_prize_amount' => $request->minimum_prize_amount,
             'points_per_ticket' => $request->points_per_ticket,
-            'start_date_time' =>$startdate ,
+            'start_date_time' => $startdate,
             'end_date_time' => $enddate,
-            'status' =>$request->status,
+            'status' => $request->status,
             // if($request->file('game_image') != ""){
             // $luckyDraw->game_image = $imageName;
             // 'game_image' => '/luckydraw/'.$imageName;
-             'game_image' => $request->file('game_image') != "" ? '/luckydraw/'.$imageName : "",
+            'game_image' => $request->file('game_image') != "" ? '/luckydraw/' . $imageName : "",
             //  $user->status == 1 ? "selected" : ""
             // }
         ];
@@ -99,39 +100,37 @@ class LuckyDrawGamesController extends Controller
         $lucyDraw = LuckyDrawGames::create($luckyDrawData);
 
         $success = "New Lucky Draw created successfully";
-        return redirect('/admin/viewLuckyDraw')->with('success',$success);
-
+        return redirect('/admin/viewLuckyDraw')->with('success', $success);
     }
 
-    public function lotteryStatus(Request $request , $id){
+    public function lotteryStatus(Request $request, $id)
+    {
         $lottery_id = decrypt($id);
         $lottery = LuckyDrawGames::find($lottery_id);
         $status = $lottery->status;
 
-        if($status == 1){
-           
+        if ($status == 1) {
+
             $deactivate = $lottery->status = '0';
-           
+
             $lottery->save();
 
             $lotteryStatus = LuckyDrawGames::where('id', $lottery_id)->update([
                 'status' => $deactivate
             ]);
             $success = "Lucky Draw game deactivated successfully";
-            return redirect('/admin/viewLuckyDraw')->with('success',$success);
-            
-        }else{
+            return redirect('/admin/viewLuckyDraw')->with('success', $success);
+        } else {
             $activated = $lottery->status = '1';
-           
+
             $lottery->save();
 
             $lotteryStatus = LuckyDrawGames::where('id', $lottery_id)->update([
                 'status' => $activated
             ]);
             $success = "Lucky Draw activated successfully";
-            return redirect('/admin/viewLuckyDraw')->with('success',$success);
+            return redirect('/admin/viewLuckyDraw')->with('success', $success);
         }
-        
     }
 
     /**
@@ -148,35 +147,35 @@ class LuckyDrawGamesController extends Controller
     public function edit($id)
     {
         $luckyDrawid = decrypt($id);
-    
-        $luckyDraw = LuckyDrawGames::findOrFail($luckyDrawid); 
+
+        $luckyDraw = LuckyDrawGames::findOrFail($luckyDrawid);
         $imgPath = $this->fileurl();
         $startDate = $luckyDraw->start_date_time;
         $endDate = $luckyDraw->end_date_time;
-   
-        $dateRange = $startDate.' - '.$endDate;
-        
-        return view('admin.lucky_draw.edit', ['luckyDraw'=>$luckyDraw, 'imgPath'=>$imgPath, 'dateRange'=>$dateRange]);
+
+        $dateRange = $startDate . ' - ' . $endDate;
+
+        return view('admin.lucky_draw.edit', ['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath, 'dateRange' => $dateRange]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {   
-       // dd($request->all());
+    {
+        // dd($request->all());
         $data = $request->daterange;
-        $startdate=substr($data, 0, 19);
+        $startdate = substr($data, 0, 19);
         $enddate = substr($data, strpos($data, "-", 19) + 1);
 
         $luckyDrawid = decrypt($id);
         $luckyDraw = DB::table('lucky_draw_games')->find($luckyDrawid);
         $image = $request->file('game_image');
-        
+
         // unique:users,username,'.$userid
 
         $validArr = [
-            'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games,game_title,'.$luckyDrawid,
+            'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games,game_title,' . $luckyDrawid,
             'game_description' => 'bail|string|required',
             'winning_prize_amount' => 'integer|required',
             'minimum_prize_amount' => 'integer|required',
@@ -184,10 +183,10 @@ class LuckyDrawGamesController extends Controller
             'daterange' => 'required',
         ];
 
-        $validErrArr = [];                
-        if($image != null){
+        $validErrArr = [];
+        if ($image != null) {
             $validArr['game_image'] = ['mimes:jpeg,jpg,png,gif|required|max:5000|dimensions:min_width=10,min_height=10,max_width=3000,max_height=3000'];
-            $validErrArr['game_image'] = ['required'=>'upload image is required','mimes'=>'Only images with extension jpeg,jpg,png,gif are allowed.','max'=>'Maximaun image size 5 MB','dimensions'=>'The image has invalid dimension'];
+            $validErrArr['game_image'] = ['required' => 'upload image is required', 'mimes' => 'Only images with extension jpeg,jpg,png,gif are allowed.', 'max' => 'Maximaun image size 5 MB', 'dimensions' => 'The image has invalid dimension'];
         }
 
         // $request->validate([
@@ -199,39 +198,38 @@ class LuckyDrawGamesController extends Controller
         //     'daterange' => 'required',
         //     'game_image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
         // ]);
-        
-        if($image != null){
+
+        if ($image != null) {
             $randomNumber = rand();
-            $imageName = $randomNumber.$image->getClientOriginalName();  
+            $imageName = $randomNumber . $image->getClientOriginalName();
             //$image->storeAs('public/images/luckydraw',$imageName);
-            $image->storeAs($this->filepath().'/luckydraw',$imageName);
-           
+            $image->storeAs($this->filepath() . '/luckydraw', $imageName);
         }
 
-        
+
         // $luckyDraw->game_title = $request->game_title;
-        
-        if($request->file('game_image') != ""){
+
+        if ($request->file('game_image') != "") {
             $luckyDraw->game_image = $imageName;
         }
 
-        $request->validate($validArr,$validErrArr);
+        $request->validate($validArr, $validErrArr);
 
         $luckyDraw  = LuckyDrawGames::findOrFail($luckyDrawid);
         $luckyDraw->game_title = $request->game_title;
         $luckyDraw->game_description = $request->game_description;
-        $luckyDraw->winning_prize_amount = $request->winning_prize_amount ;
+        $luckyDraw->winning_prize_amount = $request->winning_prize_amount;
         $luckyDraw->minimum_prize_amount = $request->minimum_prize_amount;
         $luckyDraw->points_per_ticket = $request->points_per_ticket;
         $luckyDraw->start_date_time = $startdate;
         $luckyDraw->end_date_time = $enddate;
         if ($image != null) {
-            $luckyDraw->game_image = '/luckydraw/'.$imageName;
+            $luckyDraw->game_image = '/luckydraw/' . $imageName;
         }
 
         $luckyDraw->save();
         $success = "Lucky draw updated successfully";
-        return redirect('/admin/viewLuckyDraw')->with('success',$success);
+        return redirect('/admin/viewLuckyDraw')->with('success', $success);
     }
 
     /**
@@ -245,6 +243,74 @@ class LuckyDrawGamesController extends Controller
         $deleteLuckyDraw->delete();
 
         $error = "Luck Draw removed successfully";
-        return redirect('/admin/viewLuckyDraw')->with('error',$error);
+        return redirect('/admin/viewLuckyDraw')->with('error', $error);
+    }
+
+    public function luckyWinnerList($id)
+    {
+        $luckyDrawid = decrypt($id);
+
+        $data  = LuckyDrawGames::findOrFail($luckyDrawid);
+
+        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
+
+        return view('admin.lucky_draw.lucky_winner_list', compact('data', 'claims'));
+    }
+
+    public function addPrice($id)
+    {
+        $luckyDrawid = decrypt($id);
+
+        $data  = LuckyDrawGames::findOrFail($luckyDrawid);
+
+        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
+
+        return view('admin.lucky_draw.add_price', compact('data', 'claims'));
+    }
+
+    public function addPriceStore(Request $request)
+    {
+        $validated = $request->validate([
+            'lottery_id' => 'required',
+            'ticket_no' => 'required|array',
+            'ticket_no.*' => 'required',
+            'ticket_no.*' => 'required',
+            'prize_name.*' => 'required|array',
+            'prize_name.*' => 'required|min:3|max:150|string',
+            'prize_image.*' => 'required|array',
+            'prize_image.*' => 'required|image|mimes:png,jpeg,gif,jpg',
+        ]);
+
+        foreach ($validated['ticket_no'] as $key => $value) {
+
+            $draw  = LuckyDraw::where('ticket_number', $value)->where('lucky_draw_games_id', $validated['lottery_id'])->first();
+
+            $data['user_id'] = $draw->user_id;
+            $data['lottery_id'] = $validated['lottery_id'];
+            $data['lucky_draw_id'] = $draw->id;
+            $data['ticket_no'] = $value;
+            $data['prize_name'] = $validated['prize_name'][$key];
+
+            $data['prize_image'] = rand() . $validated['prize_image'][$key]->getClientOriginalName();
+            $validated['prize_image'][$key]->storeAs('public/images/luckey_winner', $data['prize_image']);
+
+            LuckyDrawWinner::create($data);
+        }
+
+        return redirect()->back()->with('success', 'Ticket Added Successfully');
+    }
+
+    public function addPriceEdit($id)
+    {
+        dd('pending');
+    }
+
+    public function addPriceDestroy($lId,$id)
+    {
+        $id = decrypt($id);
+
+       LuckyDrawWinner::destroy($id);
+
+        return redirect()->route('add.price',encrypt($lId) )->with('error', 'Ticket Deleted successfully');
     }
 }

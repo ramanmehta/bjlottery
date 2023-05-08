@@ -110,6 +110,12 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::get('/admin/deleteLuckyDraw/{id}', [LuckyDrawGamesController::class,'destroy'])->name('removeLuckyDraw');
     Route::get('/admin/luckyDrawsStatus/{id}', [LuckyDrawGamesController::class,'lotteryStatus'])->name('luckyDrawsStatus');
 
+    Route::get('admin/add-price/{id}', [LuckyDrawGamesController::class,'luckyWinnerList'])->name('add.price');
+    Route::get('admin/add-price-form/{id}', [LuckyDrawGamesController::class,'addPrice'])->name('add.price.form');
+    Route::post('admin/add-price', [LuckyDrawGamesController::class,'addPriceStore'])->name('add.price.post');
+    Route::get('admin/add-price/edit/{id}', [LuckyDrawGamesController::class,'addPriceEdit'])->name('add.price.edit');
+    Route::get('admin/add-price/destroy/{lottery_id}/{id}', [LuckyDrawGamesController::class,'addPriceDestroy'])->name('add.price.destroy');
+
     // Missions route
 
     Route::get('/admin/viewMission', [MissionController::class,'index'])->name('mission');

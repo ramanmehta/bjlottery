@@ -100,20 +100,29 @@ class LuckyDrawGamesController extends Controller
     }
 
     public function getNumber(Request $request){
+
         $data = $request->all();
         $user_id = $request->user_id;
         $game_id = $request->game_id;
 
         $user = User::find($user_id);
+
         $currentDate = date('Y-m-d',time());
+
         $game = LuckyDrawGames::where('id',$game_id)->where('end_date_time', '<', $currentDate)->first();
        
         if($user && $game){
+
             $user_points = $user->total_point_available;
+
             $pointRequired = $game->points_per_ticket;
+
             if($user_points >= $pointRequired){
+
                 $randomNumber = rand(100 , 9999);
+
                 $balancePoint = $user_points - $pointRequired;
+
                 $updateUserPoint = User::where('id', $user_id)->update([
                     'total_point_available' => $balancePoint
                 ]);

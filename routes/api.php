@@ -10,6 +10,7 @@ use App\Http\Controllers\API\LuckyDrawGamesController;
 use App\Http\Controllers\API\MissionController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ReferalsStatsController;
+use App\Http\Controllers\API\LuckeyWinnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,11 +27,23 @@ use App\Http\Controllers\API\ReferalsStatsController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
+Route::middleware('auth:sanctum')->group(function(){
 
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+    Route::post('/user',[AuthController::class, 'user']);
+    Route::post('/logout',[AuthController::class, 'logout']);
+    Route::post('/passwordChange',[AuthController::class, 'passwordChange']);
+    //Route::post('/profile-update',[AuthController::class, 'updateUser']);
+    Route::post('/profile-update',[AuthController::class, 'profileUpdate']);
+    Route::get('lotter-prize/{id?}',[LuckeyWinnerController::class,'lotterPrizeWinner']);
+});
 
-Route::middleware('auth:sanctum')->post('/passwordChange', [AuthController::class, 'passwordChange']);
+// Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
+
+// Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+// Route::middleware('auth:sanctum')->post('/passwordChange', [AuthController::class, 'passwordChange']);
+
+// Route::middleware('auth:sanctum')->post('/profile-update', [AuthController::class, 'updateUser']);
 
 Route::controller(AuthController::class)->group(function(){
     Route::post('login','login');
@@ -41,8 +54,6 @@ Route::controller(AuthController::class)->group(function(){
     Route::get('userwalletap', 'userwalletap');
     Route::get('redeemPoints', 'redeemPoints');
 });
-
-
 
 Route::controller(RoleController::class)->group(function(){
     
@@ -100,15 +111,10 @@ Route::controller(NotificationController::class)->group(function(){
     Route::get('' , '');
 });
 
-
 Route::controller(ReferalsStatsController::class)->group(function(){
     Route::get('referalsStats' , 'index');
     Route::get('referalsStats/{id}' , 'show');
     Route::post('getYourHIstory' , 'getYourHIstory');
     Route::post('' , '');
     Route::post('' , '');
-    
-
 });
-
-

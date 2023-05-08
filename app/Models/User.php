@@ -33,6 +33,7 @@ class User extends Authenticatable
         'country',
         'zip',
         'referal_code',
+        'referal_type',
         // 'status',
         'password',
         'logo',
