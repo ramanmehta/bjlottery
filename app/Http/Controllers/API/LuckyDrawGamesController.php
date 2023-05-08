@@ -105,10 +105,9 @@ class LuckyDrawGamesController extends Controller
         $game_id = $request->game_id;
 
         $user = User::find($user_id);
+        $currentDate = date('Y-m-d',time());
+        $game = LuckyDrawGames::where('id',$game_id)->where('end_date_time', '<', $currentDate)->first();
        
-
-        $game = LuckyDrawGames::find($game_id);
-        
         if($user && $game){
             $user_points = $user->total_point_available;
             $pointRequired = $game->points_per_ticket;
@@ -210,13 +209,14 @@ class LuckyDrawGamesController extends Controller
         if($totalParticipant > 0){
             // $user = User::with(['luckydraw'])->find($participant)   ;
             $userLottery = DB::table('users')
-            ->select('users.username')
+            ->select('users.username','users.logo')
             ->join('lucky_draws','lucky_draws.user_id','=','users.id')
             ->where('lucky_draws.lucky_draw_games_id',$lotteryId)
             ->distinct()
-            ->get('user_id');
+            // ->groupBy('lucky_draws.user_id')
+            ->get('user_id'); // 
 
-            
+            // dd($userLottery);
             $username = [];
             foreach ($userLottery as $data) {
                 $user_name = $data->username;
@@ -225,13 +225,14 @@ class LuckyDrawGamesController extends Controller
                     $first_two = substr($user_name, 0, 2); // Get first two characters
                     $last_six = substr($user_name, -3); // Get last six characters
                 }else{
-                    $first_two = substr($user_name, 0, 2);
-                    $last_six = substr($user_name, -2); 
+                    $first_two = substr($user_name, 0, 1);
+                    $last_six = substr($user_name, -1); 
                 }
                 $midCharacter = "*******";
                 $fullname = $first_two. $midCharacter . $last_six;
-                
-                $username[] = $fullname;  
+                $user_image_url = asset('storage/app/public/images');
+
+                $username[] = ['user_image'=>$user_image_url.$data->logo,'username'=>$fullname];  
             }
 
             $response = [
