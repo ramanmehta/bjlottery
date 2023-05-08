@@ -14,6 +14,8 @@ class ReferalPoint extends Model
         'referal_code',
         'referal_link',
         'referal_point',
+        'referal_type',
+        'refered_by'
     ];
 
     public function user()

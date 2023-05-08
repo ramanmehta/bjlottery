@@ -11,8 +11,7 @@ use App\Http\Controllers\admin\MissionController;
 use App\Http\Controllers\admin\NotificationController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\ReferalsStatsController;
-use App\Http\Controllers\admin\MissionLevelController;
-use App\Http\Controllers\admin\MissionSubmissionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -120,17 +119,6 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::get('/admin/deleteMission/{id}', [MissionController::class,'destroy'])->name('removeMission');
     Route::get('/admin/missionStatus/{id}', [MissionController::class,'missionStatus'])->name('missionStatus');
 
-     // levels route    
-    Route::get('/admin/levels/{id}', [MissionLevelController::class,'index'])->name('levels');
-    Route::get('/admin/createLevels', [MissionLevelController::class,'create'])->name('createlevels');    
-    Route::post('/admin/createLevels', [MissionLevelController::class,'store'])->name('createlevels');
-    Route::get('/admin/deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class,'destroy'])->name('removeLevelMission');
-    Route::get('/admin/editMissionLevel/{id}', [MissionLevelController::class,'edit'])->name('editMissionLevel');
-    Route::post('/admin/updateMissionLevel/{id}', [MissionLevelController::class,'update'])->name('editMissionLevel.id');  
-    
-    // Mission Submissions 
-    
-    Route::get('/admin/mission-submissions', [MissionSubmissionController::class,'index'])->name('mission-submissions.index');   
     // Settings route
 
     Route::get('/admin/viewSetting', [SettingController::class,'index'])->name('settings');

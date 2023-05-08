@@ -1,5 +1,5 @@
 {{-- @php
-dd($luckyDraw);
+dd($mission);
 @endphp --}}
 @extends('admin.layouts.app')
 
@@ -12,12 +12,12 @@ dd($luckyDraw);
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Update Lucky Draw</h1>
+              <h1>Update Mission</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                <li class="breadcrumb-item active">Update Lucky Draw</li>
+                <li class="breadcrumb-item active">Update Mission</li>
               </ol>
             </div>
           </div>
@@ -41,35 +41,83 @@ dd($luckyDraw);
            
                 <div class="card card-primary">
                   <div class="card-header">
-                    <h3 class="card-title">Edit Game</h3>
+                    <h3 class="card-title">Edit Mission</h3>
                   </div>
                   <!-- /.card-header -->
                   <!-- form start -->
-                  <form action="{{route('update.LuckyDraw',[encrypt($luckyDraw->id) ])}}" method="post" enctype="multipart/form-data">              
+                  <form action="{{route('update.Mission',[encrypt($mission->id) ])}}" method="post" enctype="multipart/form-data">              
                     @csrf
                     
                     <div class="card-body">
                       <div class="form-row">
                         <div class="form-group col-md-12">
-                          <label for="game_title">Game Title</label>
-                          <input type="text" class="form-control" id="game_title" placeholder="Enter game title" name="game_title" value="{{$luckyDraw->game_title}}" required>
+                          <label for="mission_title">Mission Title</label>
+                          <input type="text" class="form-control" id="mission_title" placeholder="Enter mission title" name="mission_title" value="{{$mission->mission_title}}" required disabled>
                         </div>
                         
                       </div>
                       {{-- text editor --}}
                       <div class="form-row">
                         <div class="form-group col-md-12">
-                          <label for="game_description">Game Description</label>
+                          <label for="game_description">Mission Description</label>
                         
                           
-                          <textarea id="game_description" name="game_description">
-                            {{$luckyDraw->game_description}}
+                          <textarea id="game_description" name="mission_description">
+                            {{$mission->mission_description}}
                           </textarea>
                         
                         </div>
                       </div>
 
                       <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="mission_proof_type">Mission Proof Type</label>
+                            <input type="text" class="form-control" name="mission_proof_type" id="mission_proof_type" value="{{$mission->mission_proof_type}}">
+                        </div>
+                        
+                        <div class="form-group col-md-6">
+                          <label for="number_of_share">Number of Share Required</label>
+                          <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of share required" name="number_of_share" value="{{$mission->number_of_share}}" required>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="per_share_point">Per Share Points</label>
+                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter per share point" name="per_share_point" value="{{$mission->per_share_point}}" required>
+                        </div>
+                        
+                        {{-- <div class="form-group col-md-6">
+                          <label for="referal_code">Referal Code</label>
+                          <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" value="{{$mission->referal_code}}" required>
+                        </div> --}}
+                        <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                              <option disabled>Select Status</option>
+                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {{-- date input --}}
+
+                      <div class="form-row">
+                        {{-- <div class="form-group col-md-6">
+                          <label for="mission_start_date">Mission Start Date</label>
+                          
+                          <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date" value="{{$mission->mission_start_date}}">
+                          
+                        </div>
+                        
+                        <div class="form-group col-md-6">
+                          <label for="mission_end_date">Mission End Date</label>
+                          <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date" value="{{$mission->mission_end_date}}">
+                          
+                        </div> --}}
 
                         <div class="form-group col-md-6">
 
@@ -79,87 +127,30 @@ dd($luckyDraw);
                             <div class="input-group-prepend">
                               <span class="input-group-text"><i class="far fa-clock"></i></span>
                             </div>
-                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange" value="{{$dateRange}}">
+                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange">
                           </div>
                           
                         </div>
-                        {{-- <div class="form-group col-md-6">
-                            <label for="winning_prize_amount">Game Image</label>
-                            <input type="file" class="form-control" name="game_image" id="game_image">
-                        </div> --}}
+
+
                         
-                        <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter game title" name="winning_prize_amount" value="{{$luckyDraw->winning_prize_amount}}" min="0" required>
-                        </div>
                       </div>
 
-                      <div class="form-row">                        
+                      {{-- end date input --}}
+                      
+                      {{-- <div class="form-row">
 
                         <div class="form-group col-md-6">
-                          <label for="minimum_prize_amount">Minimum Prize Amount</label>
-                          <input type="number" class="form-control" id="minimum_prize_amount" placeholder="Enter maximum point" name="minimum_prize_amount" value="{{$luckyDraw->minimum_prize_amount}}" min="0" required>
-                        </div>
-
-                        <div class="form-group col-md-6">
-                          <label for="points_per_ticket">Points Per Ticket</label>
-                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket"  value="{{$luckyDraw->points_per_ticket}}" min="0" required>
-                        </div>
-
-                        {{-- <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" name="status" required>
                               <option disabled>Select Status</option>
-                              <option value="1" {{$luckyDraw->status == 1 ? "selected" : ""}}>Active</option>
-                              <option value="0" {{$luckyDraw->status == 0 ? "selected" : ""}}>Inactive</option>
+                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
                             </select>
                           </div>
-                        </div> --}}
-                      </div>
-                      
-                      {{-- date input --}}
-
-                      {{-- <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="start_date_time">Start Game Date</label>
-                          
-                          <input type="datetime-local" class="form-control" name="start_date_time" id="start_date_time" value="{{$luckyDraw->start_date_time}}">
-                          
-                        </div>
-                        
-                        <div class="form-group col-md-6">
-                          <label for="end_date_time">End Game Date</label>
-                          <input type="datetime-local" class="form-control" name="end_date_time" id="end_date_time" value="{{$luckyDraw->end_date_time}}">
-                          
                         </div>
                       </div> --}}
-
-                      {{-- end date input --}}
-                      
-                      <div class="form-row">
-
-                        
-
-                        
-
-                      </div>
-
-                      <div class="row">
-                        <div class="form-group col-md-6">
-                          <label for="winning_prize_amount">Game Image</label>
-                          <input type="file" class="form-control" name="game_image" id="game_image">
-                        </div>
-                      </div>
-                      @if($luckyDraw->game_image != "")
-			
-			                  <div class="form-group col-md-12">
-                          
-                          <img src="{{asset('storage/app/public/images'.$luckyDraw->game_image)}}" style="height: 50px;">
-                          {{-- <img src="{{$this->fileurl.'/luckydraw/'.$luckyDraw->game_image}}" style="height: 50px;"> --}}
-                        </div>
-			
-			                  @endif
 
                     </div>
                     <!-- /.card-body -->
@@ -178,6 +169,7 @@ dd($luckyDraw);
           <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
+       
         <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
         <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
 
@@ -196,11 +188,12 @@ dd($luckyDraw);
             // timePickerIncrement: 30,
             locale: {
               // format: 'MM/DD/YYYY hh:mm:ss'
-              format: 'YYYY-MM-DD H:mm:ss'
+              format: 'YYYY-MM-DD H:mm'
             }
           });
                
     </script>
+    
       </section>
       <!-- /.content -->
   </div>

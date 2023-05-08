@@ -89,9 +89,9 @@
                     <td>{{$notifications->sent_at}}</td>
                     <td>
                       @if ($notifications->status==1)
-                      <a onclick="return confirm('Are you sure deactivate notification : {{$notifications->title}}?')" href="{{route('notificationStatus',[encrypt($notifications->id)])}}"><input type="button" class="btn btn-success" value="Active"></a>
+                      <input type="button" class="btn btn-success" value="Active">
                       @else
-                      <a onclick="return confirm('Are you sure activate notification : {{$notifications->title}}?')"  href="{{route('notificationStatus',[encrypt($notifications->id)])}}"><input type="button" class="btn btn-warning" value="Inactive"></a>
+                      <input type="button" class="btn btn-warning" value="Inactive">
                       @endif  
                      </td>
                     <td>

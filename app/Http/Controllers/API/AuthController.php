@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Mail;
@@ -14,42 +15,25 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
+use DB;
 // models 
 use App\Models\User;
 use App\Models\ReferalPoint;
 use App\Models\ReferalsStats;
 use App\Models\DailyReward;
-
+use App\Models\RewardType;
+use App\Http\Traits\CommonTrait;
 
 class AuthController extends Controller
 {
+    use CommonTrait;
     public function register(Request $request, $ref = '')
     {
-        // if ($ref != '') {
-        //     $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
-        //     // dd($checkReferal);
-        //     if ($checkReferal == 1) {
-        //         $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
-        //         $checkReferalPoint = $checkReferal->referal_point;
-        //         $referalTypeId = 9;
-        //         $getPoint = DailyReward::find($referalTypeId);
-        //         $referalPoint = $getPoint->reward_points;
-        //         $total_referal_point = $checkReferalPoint + $referalPoint;
-        //         $checkReferal->update([
-        //             'referal_point' => $total_referal_point
-        //         ]);
-        //     } else {
-        //         $response = [
-        //             'success' => false,
-        //             'message' => 'Referal code not exists'
-        //         ];
-        //         return response()->json($response, 400);
-        //     }
-        // }
-
+        
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
             'username' => 'nullable|string|min:1|max:20|unique:users',
+            // 'role_id' => 'integer|required|min:1|max:20',
             'email' => 'string|required|email|max:100|unique:users',
             'phone' => 'required|numeric|digits:10',
             'address_1' => 'nullable|string|min:1|max:200',
@@ -58,7 +42,15 @@ class AuthController extends Controller
             'state' => 'nullable|string|min:1|max:50',
             'country' => 'nullable|string|min:1|max:50',
             'zip' => 'nullable|string|min:1|max:50',
-            'password' => 'string|required|min:6',
+            'referal_code'=>'nullable|string|min:6|max:6',
+            // 'password' => 'string|required|min:6',
+            'password' => [
+                'required',
+                Password::min(size: 6)
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+            ],
             'c_password' => 'string|required|same:password',
             'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
         ]);
@@ -66,55 +58,107 @@ class AuthController extends Controller
         if ($validator->fails()) {
             $response = [
                 'success' => false,
-                'status' => 400,
+                'status' => 404,
                 'message' => $validator->errors()
             ];
 
             return response()->json($response);
         }
-
+        $ref = isset($request->all()['referal_code']) && !empty($request->all()['referal_code']) ? $request->all()['referal_code'] : '';
+        // referal code validation
+        $refered_by = '';
+        if($ref){
+            $refralCheck = User::checkReferralCode($request->all()['referal_code']);
+            
+            if(!$refralCheck){ // no referal code exists
+                $response = [
+                    'success' => false,
+                    'status' => 404,
+                    'message' => 'Invalid referal code!'
+                    ];
+    
+                return response()->json($response);
+            }else{
+                // echo "here";
+                //$refererData = User::where('referal_code', $ref)->first();
+                $refered_by = $refralCheck->id;
+                
+                // $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
+                // dd($checkReferal);
+                // if ($checkReferal == 1) {
+                //     $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+                //     $checkReferalPoint = $checkReferal->referal_point;
+                //     $getPoint = RewardType::where('reward_type', 'referal')->first();
+                //     $referalPoint = $getPoint->reward_points;
+                //     $total_referal_point = $checkReferalPoint + $referalPoint;
+                //     $checkReferal->update([
+                //         'referal_point' => $total_referal_point
+                //     ]);
+                // } else {
+                //     $response = [
+                //         'success' => false,
+                //         'message' => 'Referal code not exists'
+                //     ];
+                //     return response()->json($response, 400);
+                // }
+            }
+        }
+        
         $input = $request->all();
+        // dd($input);
+        $user_referal = $this->referalCode(); // Str::random(10);
         $input['password'] = bcrypt($input['password']);
         $input['logo'] = "/usersimage/avatar.png";
-        // dd($input);
+        $input['referal_code'] = $user_referal;
+        if(isset($refered_by) && !empty($refered_by)){
+            $input['refered_by'] =  $refered_by;
+        }
+        
+        
+        
         $user = User::create($input);
 
-        // $user_id = $user->id;
-        // $user_referal = Str::random(10);
-        // $url = URL::to('/');
-        // $referal_link = $url . '/api/referal-register/' . $user_referal;
-
-        // $data = [
-        //     'user_id' => $user_id,
-        //     'referal_code' => $user_referal,
-        //     'referal_link' => $referal_link,
-        //     'referal_point' => 0
-        // ];
-
-        // $referal = ReferalPoint::create($data);
-
+        $user_id = $user->id;
+        
+        $url = URL::to('/');
+        $referal_link = $url . '/api/referal-register/' . $user_referal;
+        // RewardType
+        // $getReferal = RewardType::where('reward_type' , 'referal')->first();
+        // $referalPoint = $getReferal->reward_points;
+        $referalPoint = 0;
+        $referalType = "referal";
+        $data = [
+            'user_id' => $user_id,
+            'referal_code' => $user_referal,
+            'referal_link' => $referal_link,
+            'referal_point' => $referalPoint,
+            'referal_type' => $referalType
+        ];
+        
+        if(isset($refered_by) && !empty($refered_by)){
+            $data['refered_by'] = $refered_by;
+        }
+    
+        $referal = ReferalPoint::create($data);
         // referal status 
-        // if ($ref != '') {
-        //     $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
-        //     if ($checkReferal == 1) {
-        //         $checkReferal = ReferalPoint::where('referal_code', $ref)->first();
+        // if ($user_referal != '') {
+        //     $countReferal = ReferalPoint::where('referal_code', $user_referal)->count();
+        //     if ($countReferal == 1) {
+        //         $checkReferal = ReferalPoint::where('referal_code', $user_referal)->first();
         //         $parentReferalId = $checkReferal->id;
         //         $referalLink = $checkReferal->referal_link;
         //         $referalCode = $checkReferal->referal_code;
-        //         $referalTypeId = 9;
-        //         $getReferalType = DailyReward::find($referalTypeId);
-        //         $referalType = $getReferalType->reward_types;
+        //         // $getReferalType = RewardType::where('reward_type' , 'referal')->first();
+                
         //         $data = [
         //             'user_id' => $user_id,
         //             'parent_user_id' => $parentReferalId,
         //             'referal_types' => $referalType,
         //             'referal_link' => $referalLink,
         //             'referal_code' => $referalCode
-        //         ]; 
+        //         ];
 
         //         $referalSatus = ReferalsStats::create($data);
-
-
         //     } else {
         //         $response = [
         //             'success' => false,
@@ -124,49 +168,11 @@ class AuthController extends Controller
         //         return response()->json($response, 400);
         //     }
         // }
-
-        //update reward points aftre register 
-        // if($ref != ''){
-        //     $getReferalType = DailyReward::where('referal_type', 'referal')->first();
-
-        //     $todayPointGain = $getReferalType->point;
-        //     // $todayPointGain = 20;
-        //     $todayPointDeduct = 0;
-        //     $totalPoint = $getReferalType->point;
-        //     // $totalPoint = 20;
-        //     $totalCash = 0;
-
-        //     $data = [
-        //         'today_gained_point' => $todayPointGain,
-        //         'today_deduct_point' => $todayPointDeduct,
-        //         'total_point_available' => $totalPoint
-        //     ];
-
-
-        //     $updateUserPoint = $user->update($data);
-
-
-        // }else{
-
-        //     $getReferalType = DailyReward::where('referal_type', 'register')->first();
-
-        //     $todayPointGain = $getReferalType->point;
-        //     // $todayPointGain = 10; //static data
-        //     $todayPointDeduct = 0;
-        //     $totalPoint = $getReferalType->point;
-        //     // $totalPoint = 10; //static data
-        //     $totalCash = 0;
-
-        //     $data = [
-        //         'today_gained_point' => $todayPointGain,
-        //         'today_deduct_point' => $todayPointDeduct,
-        //         'total_point_available' => $totalPoint
-        //     ];
-
-        //     $updateUserPoint = $user->update($data);
-        // }
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
-        $success['name'] = $user->name;
+        
+        $userData = User::where(['id'=>$user_id])->first();
+        $success['user'] = $userData;
+        // $success['name'] = $user->name;
 
         $response = [
             'success' => true,
@@ -244,7 +250,7 @@ class AuthController extends Controller
                         'username' => $request->username,
                         'password' => $request->password
                     ])) {
-                        
+
                         $user = Auth::user();
                         $success['token'] = $user->createToken('MyApp')->plainTextToken;
                         $success['user'] = $user;
@@ -278,7 +284,7 @@ class AuthController extends Controller
                 $response = [
                     'success' => false,
                     'status' => 400,
-                    'message' => 'User not found.'
+                    'message' => 'Please register first'
                 ];
                 return response()->json($response);
             }
@@ -539,7 +545,114 @@ class AuthController extends Controller
 
             $response = [
                 'success' => false,
-                'status' => 400,
+                'status' => 404,
+                'message' => 'Invalid user'
+            ];
+
+            return response()->json($response);
+        }
+    }
+
+
+    public function updateUser(Request $request)
+    {
+        // dd("here");
+        if (auth('sanctum')->check()) {
+            $userid = auth('sanctum')->user()->id;
+
+            $getUser = DB::table('users')->find($userid);
+            $image = $request->file('userimage');
+            // $validArr = [
+            //     'name' => 'bail|string|required|max:255',
+            //     'username' => 'bail|string|required|max:255|unique:users,username,' . $userid,
+            //     'email' => 'bail|string|required|email|max:255|unique:users,email,' . $userid,
+            //     'countryCode' => 'bail|required',
+            //     'phone' => 'required|digits_between:6,12',
+            //     'address_1' => 'string|required|min:1|max:200',
+            //     'address_2' => 'string|required|min:1|max:200',
+            //     'city' => 'string|required|min:1|max:50',
+            //     'state' => 'string|required|min:1|max:50',
+            //     'country' => 'string|required|min:1|max:50',
+            //     'zip' => 'string|required|min:1|max:50'
+            // ];
+
+
+            // $validErrArr = [];
+            // if ($image != null) {
+            //     $validArr['userimage'] = ['mimes:jpeg,jpg,png,gif|required'];
+            //     $validErrArr['userimage'] = ['required' => 'upload image is required', 'mimes' => 'Only images with extension jpeg,jpg,png,gif are allowed.'];
+            // }
+
+            // $validator = $request->validate($validArr, $validErrArr);
+
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'string|required|min:1',
+                'username' => 'required|string|min:1|max:20|unique:users,username,'.$userid,
+                'email' => 'string|required|email|max:100|unique:users,email,'.$userid,
+                'phone' => 'required|numeric|digits:10',
+                'address_1' => 'nullable|string|min:1|max:200',
+                'address_2' => 'nullable|string|min:1|max:200',
+                'city' => 'nullable|string|min:1|max:50',
+                'state' => 'nullable|string|min:1|max:50',
+                'country' => 'nullable|string|min:1|max:50',
+                'zip' => 'nullable|string|min:1|max:50',
+                'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
+            ]);
+
+            if ($validator->fails()) {
+                $response = [
+                    'success' => false,
+                    'status' => 404,
+                    'message' => $validator->errors()
+                ];
+    
+                return response()->json($response);
+            }
+
+            if ($image != null) {
+                $randomNumber = rand();
+                $imageName = $randomNumber . $image->getClientOriginalName();
+                $image->storeAs('public/images/usersimage', $imageName);
+            }
+
+            $phone = '+' . $request->countryCode . '-' . $request->phone;
+
+            $user = User::findOrFail($userid);
+            $user->name = $request->name;
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->phone = $phone;
+            $user->address_1 = $request->address_1;
+            $user->address_2 = $request->address_2;
+            $user->city = $request->city;
+            $user->state = $request->state;
+            $user->country = $request->country;
+            $user->zip = $request->zip;
+            $user->country = $request->country;
+            if (!empty($image)) {
+                ($user->logo = '/usersimage/' . $imageName);
+            } else {
+                if (!empty($getUser->logo)) {
+                    ($user->logo = $getUser->logo);
+                } else {
+                    ($user->logo = "/usersimage/avatar.png");
+                }
+            }
+
+            $user->save();
+
+            $response = [
+                'suceess' => true,
+                'status' => 200,
+                'message' => 'Your profile updated successfully'
+            ];
+
+            return response()->json($response);
+        }else{
+            $response = [
+                'suceess' => false,
+                'status' => 404,
                 'message' => 'Invalid user'
             ];
 

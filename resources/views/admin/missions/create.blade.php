@@ -42,7 +42,6 @@ dd($user);
                 <div class="card card-primary">
                   <div class="card-header">
                     <h3 class="card-title">Create New Mission</h3>
-                    <a class="float-sm-right" href=""><button type="button" class="btn btn-success">&nbsp;Back</button></a>
                   </div>
                   <!-- /.card-header -->
                   <!-- form start-->

@@ -1,7 +1,3 @@
-{{-- @php
-    dd($user);
-@endphp --}}
-
 @extends('admin.layouts.app')
 
 @section('content')
@@ -37,7 +33,27 @@
                 <a href="{{route('createLuckyDraw')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Lucky Draw</button></a>
               </div>
               
-              <div class="row mb-2">
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <strong></strong> {{ $message }}
+                </div>
+                @endif
+                @if ($message = Session::get('error'))
+                  <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
+                      <button type="button" class="close" data-dismiss="alert">
+                          <i class="fa fa-times"></i>
+                      </button>
+                      <strong></strong> {{ $message }}
+                  </div>
+                @endif
+                
+                <div class="row mb-2">
                 <div class="col-sm-6">
                   {{-- <h1>Users</h1> --}}
                 </div>
@@ -52,24 +68,6 @@
                 </form>
                 </div>
               </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <strong></strong> {{ $message }}
-                </div>
-                @endif
-                @if ($message = Session::get('error'))
-                  <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
-                      <button type="button" class="close" data-dismiss="alert">
-                          <i class="fa fa-times"></i>
-                      </button>
-                      <strong></strong> {{ $message }}
-                  </div>
-                @endif
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
@@ -110,7 +108,7 @@
                     <td>
                       <a href="{{route('editLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}" ><button style="margin-top:5px;" type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>
@@ -120,8 +118,8 @@
                 </table>
               </div>
               <div class="row">
-                <div class="col-md-10"></div>
-                <div class="col-md-2">
+                <div class="col-md-9"></div>
+                <div class="col-md-3">
                     <p class="text-sm text-gray-700 leading-5">
                       {!! __('Showing') !!}
                       <span class="font-medium">{{ $luckyDraw->firstItem() }}</span>

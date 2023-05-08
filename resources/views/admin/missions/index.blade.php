@@ -70,15 +70,12 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    {{-- <th>Id</th> --}}
                     <th>Mission Title</th>
                     <th>Mission Description</th>
                     <th>Mission Proof Type</th>
-                    <th>Number Of Share Required</th>
-                    <th>Share Unit Point</th>
-                    <!--<th>Referal Code</th>-->
-                    <th>Mission Start Date</th>
-                    <th>Mission End Date</th>
+                    <!-- <th>Number of Share Required</th> -->
+                    <th>Each Share Point</th>
+                    <th>Levels</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -86,15 +83,12 @@
                   <tbody>
                     @foreach ($mission as $missions)
                   <tr>
-                    {{-- <td>{{$missions->id}}</td> --}}
                     <td>{{$missions->mission_title}}</td>
                     <td>{{$missions->mission_description}}</td>
                     <td>{{$missions->mission_proof_type}}</td>
-                    <td>{{$missions->number_of_share}}</td>
+                    <!-- <td>{{$missions->number_of_share}}</td> -->
                     <td>{{$missions->per_share_point}}</td>
-                    {{-- <td>{{$missions->referal_code}}</td> --}}
-                    <td>{{$missions->mission_start_date}}</td>
-                    <td>{{$missions->mission_end_date}}</td>
+                    <td><a href="{{route('levels',[encrypt($missions->id)])}}"><button type="button" class="btn btn-success">&nbsp;Levels</button></a></td>
                     <td>
                       @if ($missions->status==1)
                       <a onclick="return confirm('Are you sure deactivate Mission : {{$missions->mission_title}}?')" href="{{route('missionStatus',[encrypt($missions->id)])}}"><input type="button" class="btn btn-success" value="Active"></a>
@@ -105,8 +99,7 @@
                     <td>
                       <a href="{{route('editMission',[encrypt($missions->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove misssion: {{$missions->mission_title}}?')" href="{{route('removeMission',[encrypt($missions->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
-
+                      <a onclick="return confirm('Are you sure remove misssion: {{$missions->mission_title}}?')" href="{{route('removeMission',[encrypt($missions->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
                     </td>
                   </tr>
                   @endforeach

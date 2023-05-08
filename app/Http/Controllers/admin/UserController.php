@@ -10,6 +10,7 @@ use App\Models\Country;
 use DB;
 use Validator;
 use App\Http\Traits\CommonTrait;
+use Illuminate\Validation\Rules\Password;
 
 
 class UserController extends Controller
@@ -25,10 +26,11 @@ class UserController extends Controller
             $search = $request->search;
             $user = DB::table('users')
                 ->where('username' , 'LIKE' , '%'.$search.'%')
+                ->orwhere('name' , 'LIKE' , '%'.$search.'%')
                 ->orWhere('email' , 'LIKE' , '%'.$search.'%')
                 ->orWhere('phone' , 'LIKE' , '%'.$search.'%')
                 ->orWhere('country' , 'LIKE' , '%'.$search.'%')
-                ->paginate(2);
+                ->paginate(10);
 
         }else{
 
@@ -84,10 +86,17 @@ class UserController extends Controller
         //             ->join('countries', 'users.country', "=", 'countries.sortname')
         //             ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','users.total_point_available','users.total_cash_available','users.password','countries.countries')
         //             ->where('users.id', $userid)->first();
+
+        $phone = $user->phone;
+        
+        $code = substr( $phone, 0, strrpos( $phone, '-' ) );
+        $countryCode = substr($code, 1);
+        // dd($countryCode);
+        $phone = substr( $phone, strrpos( $phone, '-' )+1 );
           
         $country = DB::table('countries')->get();
         
-        return view('admin.users.edit')->with('user',$user)->with('country',$country);
+        return view('admin.users.edit')->with('user',$user)->with('country',$country)->with('countryCode',$countryCode)->with('phone',$phone);
     }
 
     /**
@@ -103,7 +112,8 @@ class UserController extends Controller
                     'name' => 'bail|string|required|max:255',
                     'username' => 'bail|string|required|max:255|unique:users,username,'.$userid,
                     'email' => 'bail|string|required|email|max:255|unique:users,email,'.$userid,
-                    'phone' => 'required|numeric|digits:10',
+                    'countryCode' => 'bail|required',
+                    'phone' => 'required|digits_between:6,12',
                     'address_1' => 'string|required|min:1|max:200',
                     'address_2' => 'string|required|min:1|max:200',
                     'city' => 'string|required|min:1|max:50',
@@ -127,13 +137,13 @@ class UserController extends Controller
             $image->storeAs('public/images/usersimage',$imageName);
         }
         
-        
+        $phone = '+'.$request->countryCode. '-' . $request->phone;
         
         $user = User::findOrFail($userid);
         $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
-        $user->phone = $request->phone;
+        $user->phone = $phone;
         $user->address_1 = $request->address_1;
         $user->address_2 = $request->address_2;
         $user->city = $request->city;
@@ -227,7 +237,13 @@ class UserController extends Controller
     {   
         
         $request->validate([
-            'password' => 'string|required|min:6',
+            'password' => [
+                'required',
+                Password::min(size:6)
+                ->letters()
+                ->numbers()
+                ->symbols()
+            ],
             'ConfirmPassword' => 'string|required|same:password',
         ]);
 

@@ -38,6 +38,14 @@ class RewardTypeController extends Controller
         return view('admin.reward_type.index',['rewardType' => $rewardType]);
     }
 
+    /**
+     * Created new resource.
+     */
+
+    public function create()
+    {
+        return view('admin.reward_type.create');
+    }
     
     /**
      * Store a newly created resource in storage.
@@ -46,12 +54,26 @@ class RewardTypeController extends Controller
     {
         $request->validate([
             'reward_title' => 'bail|string|required|max:255',
-            'reward_type' => 'bail|string|required|max:255',
+            'reward_type' => 'bail|string|required|max:255|unique:reward_types',
             'reward_description' => 'bail|string|required',
-            'reward_points' => 'bail|integer|required',
+            'reward_points' => 'bail|integer|required|min:1',
             'status' => 'required'
         ]);
-        $newRewardType = RewardType::create($request->all());
+
+        $reward_title = ucwords(trim($request->reward_title));
+
+        $reward = strtolower(trim($request->reward_type));
+        $reward_type = str_replace(' ', '', $reward);
+
+        $data = [
+            'reward_title' => $reward_title,    
+            'reward_type' => $reward_type,
+            'reward_description' => $request->reward_description,
+            'reward_points' => $request->reward_points,
+            'status' => $request->status
+        ];
+
+        $newRewardType = RewardType::create($data);
 
         $success = "New reward created successfully";
 
@@ -89,10 +111,7 @@ class RewardTypeController extends Controller
         
     }
 
-    public function create()
-    {
-        return view('admin.reward_type.create');
-    }
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -113,10 +132,10 @@ class RewardTypeController extends Controller
         $reward_id = decrypt($id);
         
         $request->validate([
-            'reward_type' => 'bail|string|required|max:255',
+            'reward_type' => 'bail|string|required|max:255|unique:reward_types,reward_type,'.$reward_id,
             'reward_title' => 'bail|string|required|max:255',
             'reward_description' => 'bail|string|required',
-            'reward_points' => 'bail|integer|required',
+            'reward_points' => 'bail|integer|required|min:1',
         ]);
         $rewardType = RewardType::where('id', $reward_id)->first();
         $rewardType->reward_type = $request->reward_type;

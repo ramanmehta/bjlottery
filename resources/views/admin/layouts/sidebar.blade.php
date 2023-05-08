@@ -25,14 +25,15 @@
               Users
             </a>
           </li>
-          {{-- <li class="nav-item menu-open">
-            <a href="{{route('viewRoles')}}" class="nav-link @if($currentRoute == 'viewRoles') {{'active'}} @endif">
-            Roles
-            </a>
-          </li> --}}
           <li class="nav-item menu-open">
             <a href="{{route('luckyDraw')}}" class="nav-link @if($currentRoute == 'luckyDraw') {{'active'}} @endif">
             Lottery List
+            </a>
+          </li>
+         
+          <li class="nav-item menu-open">
+            <a href="{{route('RewardType')}}" class="nav-link @if($currentRoute == 'RewardType') {{'active'}} @endif">
+            Reward Type
             </a>
           </li>
           <li class="nav-item menu-open">
@@ -40,29 +41,9 @@
             Missions(Levels)
             </a>
           </li>
-          {{-- <li class="nav-item menu-open">
-            <a href="{{route('DailyRewards')}}" class="nav-link @if($currentRoute == 'DailyRewards') {{'active'}} @endif">
-            Daily Rewards
-            </a>
-          </li> --}}
           <li class="nav-item menu-open">
-            <a href="{{route('RewardType')}}" class="nav-link @if($currentRoute == 'RewardType') {{'active'}} @endif">
-            Reward Type
-            </a>
-          </li>
-          {{-- <li class="nav-item menu-open">
-            <a href="{{route('referalstatus')}}" class="nav-link @if($currentRoute == 'referalstatus') {{'active'}} @endif">
-            Referals Stats
-            </a>
-          </li> --}}
-          <li class="nav-item menu-open">
-            <a href="{{route('settings')}}" class="nav-link @if($currentRoute == 'settings') {{'active'}} @endif">
-            Settings
-            </a>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="{{route('notifications')}}" class="nav-link @if($currentRoute == 'notifications') {{'active'}} @endif">
-            Notifications
+            <a href="{{route('mission-submissions.index')}}" class="nav-link @if($currentRoute == 'mission-submissions.index') {{'active'}} @endif">
+            Missions Submission
             </a>
           </li>
       </ul>

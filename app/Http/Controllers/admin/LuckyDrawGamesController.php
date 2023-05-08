@@ -72,14 +72,13 @@ class LuckyDrawGamesController extends Controller
         $request->validate([
             'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games',
             'game_description' => 'bail|string|required',
-            'winning_prize_amount' => 'integer|required',
-            'minimum_prize_amount' => 'integer|required',
-            'points_per_ticket' => 'integer|required',
+            'winning_prize_amount' => 'bail|integer|required|min:0',
+            'minimum_prize_amount' => 'bail|integer|required|min:0',
+            'points_per_ticket' => 'bail|integer|required|min:0',
             'daterange' => 'required',
             'game_image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:5000|dimensions:min_width=10,min_height=10,max_width=3000,max_height=3000',
             'status' => 'required'
         ]);
-
         $luckyDrawData = [
             'game_title' => $request->game_title,
             'game_description'=>$request->game_description,
@@ -187,8 +186,8 @@ class LuckyDrawGamesController extends Controller
 
         $validErrArr = [];                
         if($image != null){
-            $validArr['game_image'] = ['mimes:jpeg,jpg,png,gif|required|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000'];
-            $validErrArr['game_image'] = ['required'=>'upload image is required','mimes'=>'Only images with extension jpeg,jpg,png,gif are allowed.','dimensions'=>'The image has invalid dimension'];
+            $validArr['game_image'] = ['mimes:jpeg,jpg,png,gif|required|max:5000|dimensions:min_width=10,min_height=10,max_width=3000,max_height=3000'];
+            $validErrArr['game_image'] = ['required'=>'upload image is required','mimes'=>'Only images with extension jpeg,jpg,png,gif are allowed.','max'=>'Maximaun image size 5 MB','dimensions'=>'The image has invalid dimension'];
         }
 
         // $request->validate([

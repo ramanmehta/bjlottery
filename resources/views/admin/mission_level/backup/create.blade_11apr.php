@@ -1,3 +1,6 @@
+{{-- @php
+dd($user);
+@endphp --}}
 @extends('admin.layouts.app')
 
 @section('content')
@@ -9,12 +12,12 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Rewards</h1>
+              <h1>New Mission</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                <li class="breadcrumb-item active">New Reward</li>
+                <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                <li class="breadcrumb-item active">Missions</li>
               </ol>
             </div>
           </div>
@@ -38,33 +41,28 @@
            
                 <div class="card card-primary">
                   <div class="card-header">
-                    <h3 class="card-title">Create Reward</h3>
+                    <h3 class="card-title">Create New Mission</h3>
                   </div>
                   <!-- /.card-header -->
                   <!-- form start-->
-                  <form action="{{route('create.RewardType')}}" method="post">
+                  <form action="{{route('user.Mission')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="card-body">
                       <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="reward_title">Reward Title</label>
-                          <input type="text" class="form-control" id="reward_title" placeholder="Enter reward title" name="reward_title" required>
+                        <div class="form-group col-md-12">
+                          <label for="mission_title">Mission Title</label>
+                          <input type="text" class="form-control" id="mission_title" placeholder="Enter mission title" name="mission_title" required>
                         </div>
                         
-                        <div class="form-group col-md-6">
-                          <label for="reward_type">Reward Type</label>
-                          <input type="text" class="form-control" id="reward_type" placeholder="Enter reward type" name="reward_type" required>
-                        </div>
-
                       </div>
                       {{-- text editor --}}
                       <div class="form-row">
                         <div class="form-group col-md-12">
-                          <label for="game_description">Reward Description</label>
+                          <label for="game_description">Mission Description</label>
                         
                           
-                          <textarea id="game_description" name="reward_description">
+                          <textarea id="game_description" name="mission_description">
                             
                           </textarea>
                         
@@ -73,10 +71,26 @@
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="reward_points">Reward Point </label>
-                          <input type="number" class="form-control" id="reward_points" placeholder="Enter reward point" name="reward_points" min="1" required>
+                          <label for="mission_proof_type">Mission Proof Type</label>
+                          <input type="text" class="form-control" name="mission_proof_type" id="mission_proof_type">
                         </div>
                         
+                        <div class="form-group col-md-6">
+                          <label for="number_of_share">Number of Share Required</label>
+                          <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of share required" name="number_of_share" required>
+                        </div>
+                      </div>
+
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="per_share_point">Rreferal Unit Point </label>
+                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter per share point" name="per_share_point" required>
+                        </div>
+                        
+                        {{-- <div class="form-group col-md-6">
+                          <label for="referal_code">Referal Code</label>
+                          <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" required>
+                        </div> --}}
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
@@ -92,7 +106,7 @@
                       
                       {{-- date input --}}
 
-                      {{-- <div class="form-row">
+                      <div class="form-row">
                         <div class="form-group col-md-6">
 
                           <label>Date and time range:</label>
@@ -105,11 +119,46 @@
                           </div>
                           
                         </div>
+                        {{-- <div class="form-group col-md-6">
+                          <label for="mission_start_date">Mission Start Date</label>
+                          <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date"> --}}
+                          {{-- <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="start_date_time" data-target="#reservationdate"/>
+                          
+                            <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                          </div> --}}
+                        {{-- </div> --}}
                         
+                        {{-- <div class="form-group col-md-6">
+                          <label for="mission_end_date">Mission End Date</label>
+                          <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date">
+                          
+                        </div> --}}
                         
-                      </div> --}}
+                      </div>
 
+                      {{-- end date input --}}
                       
+                      {{-- <div class="form-row"> --}}
+
+                        {{-- <div class="form-group col-md-6">
+                          <label for="game_point">Game Points</label>
+                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" required>
+                        </div> --}}
+                        {{-- <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                              
+                              <option disabled>Select Status</option>
+                              <option value="1">Active</option>
+                              <option value="0">Inactive</option>
+                            </select>
+                          </div>
+                        </div> --}}
+                      {{-- </div> --}}
 
                     </div>
                     <!-- /.card-body -->

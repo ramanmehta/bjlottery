@@ -88,11 +88,6 @@
     tabsize: 2,
     height: 100
   });
-  $('#level_description').summernote({
-    placeholder: 'Game Level Description',
-    tabsize: 2,
-    height: 100
-  });
 </script>
 
 

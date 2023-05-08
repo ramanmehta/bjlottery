@@ -31,6 +31,25 @@
                 <a href="{{route('createRewardType')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i>Add Reward Type</button></a>
               </div>
               
+              
+              <!-- /.card-header -->
+              <div class="card-body">
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <strong></strong> {{ $message }}
+                </div>
+              @endif
+              @if ($message = Session::get('error'))
+                <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <strong></strong> {{ $message }}
+                </div>
+              @endif
               <div class="row mb-2">
                 <div class="col-sm-6">
                   {{-- <h1>Users</h1> --}}
@@ -46,28 +65,10 @@
                 </form>
                 </div>
               </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <strong></strong> {{ $message }}
-                </div>
-              @endif
-              @if ($message = Session::get('error'))
-                <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <strong></strong> {{ $message }}
-                </div>
-              @endif
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>Id</th>
+                    <!--<th>Id</th>-->
                     <th>Reward Title</th>
                     <th>Reward Type</th>
                     <th>Reward Description</th>
@@ -79,7 +80,7 @@
                   <tbody>
                     @foreach ($rewardType as $rewardTypes)
                   <tr>
-                    <td>{{$rewardTypes->id}}</td>
+                    <!--<td>{{$rewardTypes->id}}</td>-->
                     <td>{{$rewardTypes->reward_title}}</td>
                     <td>{{$rewardTypes->reward_type}}</td>
                     <td>{{$rewardTypes->reward_description}}</td>
@@ -94,7 +95,7 @@
                     <td>
                       <a href="{{route('editRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a> </a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')" href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')" href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button style="margin-top:5px;" type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

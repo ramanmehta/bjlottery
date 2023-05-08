@@ -104,7 +104,7 @@ Route::controller(NotificationController::class)->group(function(){
 Route::controller(ReferalsStatsController::class)->group(function(){
     Route::get('referalsStats' , 'index');
     Route::get('referalsStats/{id}' , 'show');
-    Route::post('getYourHIstory' , 'getYourHIstory');
+    Route::get('' , '');
     Route::post('' , '');
     Route::post('' , '');
     

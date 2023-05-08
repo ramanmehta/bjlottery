@@ -32,7 +32,7 @@ class User extends Authenticatable
         'state',
         'country',
         'zip',
-        // 'referal_code',
+        'referal_code',
         // 'status',
         'password',
         'logo',
@@ -40,6 +40,7 @@ class User extends Authenticatable
         'today_deduct_point',
         'total_point_available',
         'total_cash_available',
+        'refered_by'
     ];
 
     public function luckydraw(){
@@ -72,4 +73,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public static function checkReferralCode($code) {
+        
+        // Check if the code already exists in the database
+        $existingCode = User::where('referal_code', $code)->count();
+       
+        if ($existingCode > 0) {
+          return User::where('referal_code', $code)->first();
+        }
+      
+        // If all checks pass, the code is valid
+        return false;
+    }
+    
 }

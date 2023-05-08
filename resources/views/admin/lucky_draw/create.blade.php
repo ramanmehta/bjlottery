@@ -85,7 +85,7 @@ dd($user);
 
                         <div class="form-group col-md-6">
                           <label for="winning_prize_amount">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter winning prize amount" name="winning_prize_amount" required>
+                          <input type="number" class="form-control" id="winning_prize_amount" placeholder="Enter winning prize amount" name="winning_prize_amount" min="0" required>
                         </div>
                       </div>
 
@@ -93,7 +93,7 @@ dd($user);
                         
                         <div class="form-group col-md-6">
                           <label for="minimum_prize_amount">Minimum Prize Amount</label>
-                          <input type="number" class="form-control" id="minimum_prize_amount" placeholder="Enter maximum point" name="minimum_prize_amount" required>
+                          <input type="number" class="form-control" id="minimum_prize_amount" placeholder="Enter maximum point" name="minimum_prize_amount" min="0" required>
                         </div>
 
                         <div class="form-group col-md-6">
@@ -117,7 +117,7 @@ dd($user);
              
                         <div class="form-group col-md-6">
                           <label for="points_per_ticket">Points Per Ticket</label>
-                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket" required>
+                          <input type="number" class="form-control" id="points_per_ticket" placeholder="Enter points for one ticket" name="points_per_ticket" min="0" required>
                         </div>
 
                         

@@ -70,10 +70,9 @@
                   <tr>
                     <!--<th>Id</th>-->
                     <th>Name</th>
-                    {{-- <th>Role</th> --}}
                     <th>Email</th>
                     <th>Phone</th>
-                    {{-- <th>Country</th> --}}
+                    <th>Referal Code</th>
                     <th>User Image</th>
                     <th>AP Points</th>
                     <th>Wallet</th>
@@ -88,7 +87,7 @@
                     <td>{{$users->name}}</td>
                     <td>{{$users->email}}</td>
                     <td>{{$users->phone}}</td>
-                    {{-- <td>{{$users->country}}</td> --}}
+                    <td>{{$users->referal_code}}</td>
                     <td><img src="{{asset('storage/app/public/images/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
                     <td>
                       {{$users->total_point_available}}

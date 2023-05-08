@@ -19,4 +19,12 @@ class Mission extends Model
         'mission_end_date',
         'status',
     ];
+
+    /**
+     * Get the mission levels for the mission.
+     */
+    public function missionLevels()
+    {
+        return $this->hasMany(MissionLevel::class);
+    }
 }

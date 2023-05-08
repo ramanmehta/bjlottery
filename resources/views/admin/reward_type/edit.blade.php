@@ -74,20 +74,8 @@
                       <div class="form-row">
                         <div class="form-group col-md-6">
                           <label for="reward_points">Reward Point </label>
-                          <input type="number" class="form-control" id="reward_points" placeholder="Enter reward point" name="reward_points" value="{{$rewardType->reward_points}}" required>
+                          <input type="number" class="form-control" id="reward_points" placeholder="Enter reward point" name="reward_points" min="1" value="{{$rewardType->reward_points}}" required>
                         </div>
-                        
-                        {{-- <div class="form-group col-md-6">
-                          <div class="form-group">
-                            <label>Status</label>
-                            <select class="form-control" name="status" required>
-                              
-                              <option disabled>Select Status</option>
-                              <option value="1" {{$rewardType->status == 1 ? "selected" : ""}}>Active</option>
-                              <option value="0" {{$rewardType->status == 0 ? "selected" : ""}}>Inactive</option>
-                            </select>
-                          </div>
-                        </div> --}}
                       </div>
                       
                                          
