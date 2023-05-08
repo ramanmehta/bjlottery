@@ -56,6 +56,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
+            
             $response = [
                 'success' => false,
                 'status' => 404,
@@ -67,6 +68,7 @@ class AuthController extends Controller
         $ref = isset($request->all()['referal_code']) && !empty($request->all()['referal_code']) ? $request->all()['referal_code'] : '';
         // referal code validation
         $refered_by = '';
+        
         if($ref){
             $refralCheck = User::checkReferralCode($request->all()['referal_code']);
             
@@ -113,10 +115,8 @@ class AuthController extends Controller
         if(isset($refered_by) && !empty($refered_by)){
             $input['refered_by'] =  $refered_by;
         }
-        
-        
-        
         $user = User::create($input);
+        
 
         $user_id = $user->id;
         
@@ -556,107 +556,143 @@ class AuthController extends Controller
 
     public function updateUser(Request $request)
     {
-        // dd("here");
-        if (auth('sanctum')->check()) {
-            $userid = auth('sanctum')->user()->id;
+        $userid = auth('sanctum')->user()->id;
+        
+        $validator = Validator::make($request->all(), [
+            'name' => 'string|required|min:1',
+            'username' => 'required|string|min:1|max:20|unique:users,username,'.$userid,
+            'email' => 'string|required|email|max:100|unique:users,email,'.$userid,
+            'phone' => 'required|numeric|digits:10',
+            'address_1' => 'nullable|string|min:1|max:200',
+            'address_2' => 'nullable|string|min:1|max:200',
+            'city' => 'nullable|string|min:1|max:50',
+            'state' => 'nullable|string|min:1|max:50',
+            'country' => 'nullable|string|min:1|max:50',
+            'zip' => 'nullable|string|min:1|max:50',
+            'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
+        ]);
 
-            $getUser = DB::table('users')->find($userid);
-            $image = $request->file('userimage');
-            // $validArr = [
-            //     'name' => 'bail|string|required|max:255',
-            //     'username' => 'bail|string|required|max:255|unique:users,username,' . $userid,
-            //     'email' => 'bail|string|required|email|max:255|unique:users,email,' . $userid,
-            //     'countryCode' => 'bail|required',
-            //     'phone' => 'required|digits_between:6,12',
-            //     'address_1' => 'string|required|min:1|max:200',
-            //     'address_2' => 'string|required|min:1|max:200',
-            //     'city' => 'string|required|min:1|max:50',
-            //     'state' => 'string|required|min:1|max:50',
-            //     'country' => 'string|required|min:1|max:50',
-            //     'zip' => 'string|required|min:1|max:50'
-            // ];
-
-
-            // $validErrArr = [];
-            // if ($image != null) {
-            //     $validArr['userimage'] = ['mimes:jpeg,jpg,png,gif|required'];
-            //     $validErrArr['userimage'] = ['required' => 'upload image is required', 'mimes' => 'Only images with extension jpeg,jpg,png,gif are allowed.'];
-            // }
-
-            // $validator = $request->validate($validArr, $validErrArr);
-
-
-            $validator = Validator::make($request->all(), [
-                'name' => 'string|required|min:1',
-                'username' => 'required|string|min:1|max:20|unique:users,username,'.$userid,
-                'email' => 'string|required|email|max:100|unique:users,email,'.$userid,
-                'phone' => 'required|numeric|digits:10',
-                'address_1' => 'nullable|string|min:1|max:200',
-                'address_2' => 'nullable|string|min:1|max:200',
-                'city' => 'nullable|string|min:1|max:50',
-                'state' => 'nullable|string|min:1|max:50',
-                'country' => 'nullable|string|min:1|max:50',
-                'zip' => 'nullable|string|min:1|max:50',
-                'logo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048|dimensions:min_width=10,min_height=10,max_width=1000,max_height=1000',
-            ]);
-
-            if ($validator->fails()) {
-                $response = [
-                    'success' => false,
-                    'status' => 404,
-                    'message' => $validator->errors()
-                ];
-    
-                return response()->json($response);
-            }
-
-            if ($image != null) {
-                $randomNumber = rand();
-                $imageName = $randomNumber . $image->getClientOriginalName();
-                $image->storeAs('public/images/usersimage', $imageName);
-            }
-
-            $phone = '+' . $request->countryCode . '-' . $request->phone;
-
-            $user = User::findOrFail($userid);
-            $user->name = $request->name;
-            $user->username = $request->username;
-            $user->email = $request->email;
-            $user->phone = $phone;
-            $user->address_1 = $request->address_1;
-            $user->address_2 = $request->address_2;
-            $user->city = $request->city;
-            $user->state = $request->state;
-            $user->country = $request->country;
-            $user->zip = $request->zip;
-            $user->country = $request->country;
-            if (!empty($image)) {
-                ($user->logo = '/usersimage/' . $imageName);
-            } else {
-                if (!empty($getUser->logo)) {
-                    ($user->logo = $getUser->logo);
-                } else {
-                    ($user->logo = "/usersimage/avatar.png");
-                }
-            }
-
-            $user->save();
-
+        if ($validator->fails()) {
             $response = [
-                'suceess' => true,
-                'status' => 200,
-                'message' => 'Your profile updated successfully'
-            ];
-
-            return response()->json($response);
-        }else{
-            $response = [
-                'suceess' => false,
+                'success' => false,
                 'status' => 404,
-                'message' => 'Invalid user'
+                'message' => $validator->errors()
             ];
 
             return response()->json($response);
         }
+
+        $getUser = DB::table('users')->find($userid);
+        $image = $request->file('userimage');
+
+        if ($image != null) {
+            $randomNumber = rand();
+            $imageName = $randomNumber . $image->getClientOriginalName();
+            $image->storeAs('public/images/usersimage', $imageName);
+        }
+
+        $phone = '+' . $request->countryCode . '-' . $request->phone;
+
+        $user = User::findOrFail($userid);
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->phone = $phone;
+        $user->address_1 = $request->address_1;
+        $user->address_2 = $request->address_2;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->country = $request->country;
+        $user->zip = $request->zip;
+        $user->country = $request->country;
+        if (!empty($image)) {
+            ($user->logo = '/usersimage/' . $imageName);
+        } else {
+            if (!empty($getUser->logo)) {
+                ($user->logo = $getUser->logo);
+            } else {
+                ($user->logo = "/usersimage/avatar.png");
+            }
+        }
+
+        $user->save();
+
+        $response = [
+            'suceess' => true,
+            'status' => 200,
+            'message' => 'Your profile updated successfully'
+        ];
+
+        return response()->json($response);
+    }
+
+    public function profileUpdate(Request $request)
+    {
+        $validated = Validator::make($request->all(),[
+            'logo' => 'nullable|image',
+            'name' => 'required|max:150',
+            'email' => 'required|email',
+            'current_password' => 'nullable',
+            'new_password' => 'required_if:current_password,!=,null',
+        ]);
+
+        if ($validated->fails()) {
+            
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => $validated->errors()
+            ];
+
+            return response()->json($response);
+        }
+
+        $data = $validated->validated();
+
+        $image = $request->file('logo');
+
+        if (! is_null($image)) {
+
+            $randomNumber = rand();
+
+            $imageName = $randomNumber . $image->getClientOriginalName();
+
+            $image->storeAs('public/images/usersimage', $imageName);
+        }else{
+
+            unset($data['logo']);
+        }
+
+        if (! \Hash::check($data['current_password'],auth()->user()->password)) {
+
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => 'Plase enter valid current password'
+            ];
+
+            return response()->json($response);
+        }
+
+        $user = auth()->user();
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['new_password']);
+        
+        if (isset($imageName)) {
+            
+            $user->logo = $imageName;
+        }
+
+        $user->save();
+
+        $response = [
+            'suceess' => true,
+            'status' => 200,
+            'message' => 'Your profile updated successfully'
+        ];
+
+        return response()->json($response);
     }
 }

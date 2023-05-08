@@ -30,12 +30,6 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Missions</h3>
-<<<<<<< HEAD
-                <a href="/admin/createMission"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i>Add New Mission</button></a>
-              </div>
-              
-              
-=======
                 <a href="{{route('createMission')}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i>Add New Mission</button></a>
               </div>
               
@@ -54,7 +48,6 @@
                 </form>
                 </div>
               </div>
->>>>>>> 541b8c452e1b7d07206b3f089092f39fd0756b91
               <!-- /.card-header -->
               <div class="card-body">
                 @if ($message = Session::get('success'))
@@ -76,24 +69,12 @@
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-<<<<<<< HEAD
-                    <th>Id</th>
-                    <th>Mission Title</th>
-                    <th>Mission Description</th>
-                    <th>Mission Proof</th>
-                    <th>Number Of Referals Required</th>
-                    <th>Referal Unit Point</th>
-                    <th>Referal Code</th>
-                    <th>Mission Start Date</th>
-                    <th>Mission End Date</th>
-=======
                     <th>Mission Title</th>
                     <th>Mission Description</th>
                     <th>Mission Proof Type</th>
                     <!-- <th>Number of Share Required</th> -->
                     <th>Each Share Point</th>
                     <th>Levels</th>
->>>>>>> 541b8c452e1b7d07206b3f089092f39fd0756b91
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -101,29 +82,6 @@
                   <tbody>
                     @foreach ($mission as $missions)
                   <tr>
-<<<<<<< HEAD
-                    <td>{{ $loop->index }}</td>
-                    <td>{{$missions->mission_title}}</td>
-                    <td>{{$missions->mission_description}}</td>
-                    <td>{{$missions->mission_proof_type}}</td>
-                    <td>{{$missions->number_of_referals_required}}</td>
-                    <td>{{$missions->referal_unit_point}}</td>
-                    <td>{{$missions->referal_code}}</td>
-                    <td>{{$missions->mission_start_date}}</td>
-                    <td>{{$missions->mission_end_date}}</td>
-                    <td>
-                      @if ($missions->status==1)
-                      <input type="button" class="btn btn-success" value="Active">
-                      @else
-                      <input type="button" class="btn btn-warning" value="Inactive">
-                      @endif  
-                     </td>
-                    <td>
-                      <a href="/admin/editMission/{{encrypt($missions->id)}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
-                      &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove misssion: {{$missions->mission_title}}?')" href="/admin/deleteMission/{{encrypt($missions->id)}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
-
-=======
                     <td>{{$missions->mission_title}}</td>
                     <td>{{$missions->mission_description}}</td>
                     <td>{{$missions->mission_proof_type}}</td>
@@ -141,7 +99,6 @@
                       <a href="{{route('editMission',[encrypt($missions->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
                       <a onclick="return confirm('Are you sure remove misssion: {{$missions->mission_title}}?')" href="{{route('removeMission',[encrypt($missions->id)])}}"><button type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
->>>>>>> 541b8c452e1b7d07206b3f089092f39fd0756b91
                     </td>
                   </tr>
                   @endforeach
@@ -149,8 +106,6 @@
                 
                 </table>
               </div>
-<<<<<<< HEAD
-=======
               <div class="row">
                 <div class="col-md-10"></div>
                 <div class="col-md-2">
@@ -204,7 +159,6 @@
                     @endif      
                 </div>
               </div>
->>>>>>> 541b8c452e1b7d07206b3f089092f39fd0756b91
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
