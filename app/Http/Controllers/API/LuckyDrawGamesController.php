@@ -219,8 +219,19 @@ class LuckyDrawGamesController extends Controller
             
             $username = [];
             foreach ($userLottery as $data) {
+                $user_name = $data->username;
+                $length = strlen($user_name); // Calculate length of email
+                if($length > 5){
+                    $first_two = substr($user_name, 0, 2); // Get first two characters
+                    $last_six = substr($user_name, -3); // Get last six characters
+                }else{
+                    $first_two = substr($user_name, 0, 2);
+                    $last_six = substr($user_name, -2); 
+                }
+                $midCharacter = "*******";
+                $fullname = $first_two. $midCharacter . $last_six;
                 
-                $username[] = $data->username;  
+                $username[] = $fullname;  
             }
 
             $response = [
