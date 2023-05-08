@@ -16,7 +16,8 @@ class LuckyDraw extends Model
         'status',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

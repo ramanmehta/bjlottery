@@ -72,11 +72,11 @@
                                     <img width="100" height="50" src="{{ getImage($data->game_image) }}"
                                         alt="{{$data->game_title}}">
                                 </div>
-                                <div class="col-md-2 text-left">
-                                    <button id="add" class="btn btn-success btn-xs"><i class="fa fa-plus"></i>&nbsp; Add
-                                        Prize</button>
+                                <div class="col-md-2 text-right">
+                                    <button id="add" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp; Add More</button>
                                 </div>
                             </div>
+                            
                             <hr>
 
                             <form action="{{ route('add.price.post') }}" method="post" enctype="multipart/form-data">
@@ -116,8 +116,7 @@
 
                                         <tr>
                                             <td colspan="4">
-                                                <button type="submit" class="btn btn-success btn-sm">Add
-                                                    Tickets</button>
+                                                <button type="submit" class="btn btn-success btn-sm">Submit Winner</button>
                                             </td>
                                         </tr>
                                     </tbody>

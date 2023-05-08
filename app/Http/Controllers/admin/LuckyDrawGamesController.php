@@ -246,13 +246,24 @@ class LuckyDrawGamesController extends Controller
         return redirect('/admin/viewLuckyDraw')->with('error', $error);
     }
 
+    public function luckyWinnerList($id)
+    {
+        $luckyDrawid = decrypt($id);
+
+        $data  = LuckyDrawGames::findOrFail($luckyDrawid);
+
+        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
+
+        return view('admin.lucky_draw.lucky_winner_list', compact('data', 'claims'));
+    }
+
     public function addPrice($id)
     {
         $luckyDrawid = decrypt($id);
 
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
-        $claims = LuckyDraw::where('lucky_draw_games_id', $data->id)->get();
+        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
 
         return view('admin.lucky_draw.add_price', compact('data', 'claims'));
     }
@@ -287,5 +298,19 @@ class LuckyDrawGamesController extends Controller
         }
 
         return redirect()->back()->with('success', 'Ticket Added Successfully');
+    }
+
+    public function addPriceEdit($id)
+    {
+        dd('pending');
+    }
+
+    public function addPriceDestroy($lId,$id)
+    {
+        $id = decrypt($id);
+
+       LuckyDrawWinner::destroy($id);
+
+        return redirect()->route('add.price',encrypt($lId) )->with('error', 'Ticket Deleted successfully');
     }
 }

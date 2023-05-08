@@ -10,6 +10,7 @@ use App\Http\Controllers\API\LuckyDrawGamesController;
 use App\Http\Controllers\API\MissionController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ReferalsStatsController;
+use App\Http\Controllers\API\LuckeyWinnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +34,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/passwordChange',[AuthController::class, 'passwordChange']);
     //Route::post('/profile-update',[AuthController::class, 'updateUser']);
     Route::post('/profile-update',[AuthController::class, 'profileUpdate']);
-
-    Route::get('');
+    Route::get('lotter-prize/{id?}',[LuckeyWinnerController::class,'lotterPrizeWinner']);
 });
 
 // Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
