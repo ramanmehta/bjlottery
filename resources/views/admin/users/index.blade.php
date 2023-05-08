@@ -88,7 +88,7 @@
                     <td>{{$users->email}}</td>
                     <td>{{$users->phone}}</td>
                     <td>{{$users->referal_code}}</td>
-                    <td><img src="{{asset('storage/app/public/images/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
+                    <td><img src="{{asset('storage/app/public/images/usersimage/'.$users->logo)}}" style="height: 50px;" alt="User Image"></td>
                     <td>
                       {{$users->total_point_available}}
                       <a style="margin:10px;" href="{{route('userAppoint',[encrypt($users->id)])}}"><i class='fas fa-coins'></i>&nbsp;</a></td>

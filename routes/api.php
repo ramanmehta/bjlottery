@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/passwordChange',[AuthController::class, 'passwordChange']);
     //Route::post('/profile-update',[AuthController::class, 'updateUser']);
     Route::post('/profile-update',[AuthController::class, 'profileUpdate']);
+
+    Route::get('');
 });
 
 // Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
@@ -109,15 +111,10 @@ Route::controller(NotificationController::class)->group(function(){
     Route::get('' , '');
 });
 
-
 Route::controller(ReferalsStatsController::class)->group(function(){
     Route::get('referalsStats' , 'index');
     Route::get('referalsStats/{id}' , 'show');
     Route::post('getYourHIstory' , 'getYourHIstory');
     Route::post('' , '');
     Route::post('' , '');
-    
-
 });
-
-

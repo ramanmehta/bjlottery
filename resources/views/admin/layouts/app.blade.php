@@ -27,7 +27,8 @@
     <!-- daterange picker -->
     {{-- <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css"> --}}
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
-  
+
+  @yield('css')
   
 </head>
   <body class="hold-transition sidebar-mini">
@@ -40,5 +41,7 @@
 
       @include('admin.layouts.footer')
     </div>
+
+    @yield('script')
   </body>
 </html>

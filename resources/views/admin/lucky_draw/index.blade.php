@@ -100,16 +100,16 @@
                     <td>{{$luckyDraws->end_date_time}}</td>
                     <td>
                       @if ($luckyDraws->status==1)
-                      <a onclick="return confirm('Are you sure deactivate Lucky Draw : {{$luckyDraws->game_title}}?')" href="{{route('luckyDrawsStatus',[encrypt($luckyDraws->id)])}}"><input type="button" class="btn btn-success" value="Active"></a>
+                      <a onclick="return confirm('Are you sure deactivate Lucky Draw : {{$luckyDraws->game_title}}?')" href="{{route('luckyDrawsStatus',[encrypt($luckyDraws->id)])}}"><input type="button" class="btn btn-success btn-xs" value="Active"></a>
                       @else
-                      <a onclick="return confirm('Are you sure activate Lucky Draw : {{$luckyDraws->game_title}}?')" href="{{route('luckyDrawsStatus',[encrypt($luckyDraws->id)])}}"><input type="button" class="btn btn-warning" value="Inactive"></a>
+                      <a onclick="return confirm('Are you sure activate Lucky Draw : {{$luckyDraws->game_title}}?')" href="{{route('luckyDrawsStatus',[encrypt($luckyDraws->id)])}}"><input type="button" class="btn btn-warning btn-xs" value="Inactive"></a>
                       @endif  
                      </td>
                     <td>
-                      <a href="{{route('editLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
-                      &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}" ><button style="margin-top:5px;" type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
-
+                      <a href="{{route('editLuckyDraw',[encrypt($luckyDraws->id)])}}"><button type="button" class="btn btn-success btn-xs" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a onclick="return confirm('Are you sure remove lucky draw : {{$luckyDraws->game_title}}?')" href="{{route('removeLuckyDraw',[encrypt($luckyDraws->id)])}}" ><button type="button" class="btn btn-danger btn-xs"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a href="{{ route('add.price',[encrypt($luckyDraws->id)]) }}" ><button type="button" class="btn btn-info btn-xs"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        &nbsp;Add Price</button></a> 
                     </td>
                   </tr>
                   @endforeach

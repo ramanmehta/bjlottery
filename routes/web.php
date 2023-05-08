@@ -109,6 +109,8 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::post('/admin/updateLuckyDraw/{id}', [LuckyDrawGamesController::class,'update'])->name('update.LuckyDraw');
     Route::get('/admin/deleteLuckyDraw/{id}', [LuckyDrawGamesController::class,'destroy'])->name('removeLuckyDraw');
     Route::get('/admin/luckyDrawsStatus/{id}', [LuckyDrawGamesController::class,'lotteryStatus'])->name('luckyDrawsStatus');
+    Route::get('/admin/add-price/{id}', [LuckyDrawGamesController::class,'addPrice'])->name('add.price');
+    Route::post('/admin/add-price', [LuckyDrawGamesController::class,'addPriceStore'])->name('add.price.post');
 
     // Missions route
 

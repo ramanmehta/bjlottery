@@ -29,7 +29,7 @@ class AuthController extends Controller
     use CommonTrait;
     public function register(Request $request, $ref = '')
     {
-        
+
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
             'username' => 'nullable|string|min:1|max:20|unique:users',
@@ -42,7 +42,7 @@ class AuthController extends Controller
             'state' => 'nullable|string|min:1|max:50',
             'country' => 'nullable|string|min:1|max:50',
             'zip' => 'nullable|string|min:1|max:50',
-            'referal_code'=>'nullable|string|min:6|max:6',
+            'referal_code' => 'nullable|string|min:6|max:6',
             // 'password' => 'string|required|min:6',
             'password' => [
                 'required',
@@ -56,7 +56,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            
+
             $response = [
                 'success' => false,
                 'status' => 404,
@@ -68,23 +68,23 @@ class AuthController extends Controller
         $ref = isset($request->all()['referal_code']) && !empty($request->all()['referal_code']) ? $request->all()['referal_code'] : '';
         // referal code validation
         $refered_by = '';
-        
-        if($ref){
+
+        if ($ref) {
             $refralCheck = User::checkReferralCode($request->all()['referal_code']);
-            
-            if(!$refralCheck){ // no referal code exists
+
+            if (!$refralCheck) { // no referal code exists
                 $response = [
                     'success' => false,
                     'status' => 404,
                     'message' => 'Invalid referal code!'
-                    ];
-    
+                ];
+
                 return response()->json($response);
-            }else{
+            } else {
                 // echo "here";
                 //$refererData = User::where('referal_code', $ref)->first();
                 $refered_by = $refralCheck->id;
-                
+
                 // $checkReferal = ReferalPoint::where('referal_code', $ref)->count();
                 // dd($checkReferal);
                 // if ($checkReferal == 1) {
@@ -105,21 +105,21 @@ class AuthController extends Controller
                 // }
             }
         }
-        
+
         $input = $request->all();
         // dd($input);
         $user_referal = $this->referalCode(); // Str::random(10);
         $input['password'] = bcrypt($input['password']);
         $input['logo'] = "/usersimage/avatar.png";
         $input['referal_code'] = $user_referal;
-        if(isset($refered_by) && !empty($refered_by)){
+        if (isset($refered_by) && !empty($refered_by)) {
             $input['refered_by'] =  $refered_by;
         }
         $user = User::create($input);
-        
+
 
         $user_id = $user->id;
-        
+
         $url = URL::to('/');
         $referal_link = $url . '/api/referal-register/' . $user_referal;
         // RewardType
@@ -134,11 +134,11 @@ class AuthController extends Controller
             'referal_point' => $referalPoint,
             'referal_type' => $referalType
         ];
-        
-        if(isset($refered_by) && !empty($refered_by)){
+
+        if (isset($refered_by) && !empty($refered_by)) {
             $data['refered_by'] = $refered_by;
         }
-    
+
         $referal = ReferalPoint::create($data);
         // referal status 
         // if ($user_referal != '') {
@@ -149,7 +149,7 @@ class AuthController extends Controller
         //         $referalLink = $checkReferal->referal_link;
         //         $referalCode = $checkReferal->referal_code;
         //         // $getReferalType = RewardType::where('reward_type' , 'referal')->first();
-                
+
         //         $data = [
         //             'user_id' => $user_id,
         //             'parent_user_id' => $parentReferalId,
@@ -169,8 +169,8 @@ class AuthController extends Controller
         //     }
         // }
         $success['token'] = $user->createToken('MyApp')->plainTextToken;
-        
-        $userData = User::where(['id'=>$user_id])->first();
+
+        $userData = User::where(['id' => $user_id])->first();
         $success['user'] = $userData;
         // $success['name'] = $user->name;
 
@@ -195,11 +195,17 @@ class AuthController extends Controller
             'password' => 'string|required'
         ]);
 
+
         if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            $user1 = User::where('email', $username)->count();
-            if ($user1 > 0) {
+
+            $user1 = User::where('email', $username)->exists();
+
+            if ($user1) {
+
                 $user = User::where('email', $username)->first();
+
                 if ($user->status == 1) {
+
                     if (Auth::attempt([
                         'email' => $request->username,
                         'password' => $request->password
@@ -243,6 +249,7 @@ class AuthController extends Controller
         } else {
 
             $user1 = User::where('username', $username)->count();
+
             if ($user1 > 0) {
                 $user = User::where('username', $username)->first();
                 if ($user->status == 1) {
@@ -557,11 +564,11 @@ class AuthController extends Controller
     public function updateUser(Request $request)
     {
         $userid = auth('sanctum')->user()->id;
-        
+
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
-            'username' => 'required|string|min:1|max:20|unique:users,username,'.$userid,
-            'email' => 'string|required|email|max:100|unique:users,email,'.$userid,
+            'username' => 'required|string|min:1|max:20|unique:users,username,' . $userid,
+            'email' => 'string|required|email|max:100|unique:users,email,' . $userid,
             'phone' => 'required|numeric|digits:10',
             'address_1' => 'nullable|string|min:1|max:200',
             'address_2' => 'nullable|string|min:1|max:200',
@@ -628,7 +635,7 @@ class AuthController extends Controller
 
     public function profileUpdate(Request $request)
     {
-        $validated = Validator::make($request->all(),[
+        $validated = Validator::make($request->all(), [
             'logo' => 'nullable|image',
             'name' => 'required|max:150',
             'email' => 'required|email',
@@ -637,7 +644,7 @@ class AuthController extends Controller
         ]);
 
         if ($validated->fails()) {
-            
+
             $response = [
                 'success' => false,
                 'status' => 404,
@@ -649,21 +656,7 @@ class AuthController extends Controller
 
         $data = $validated->validated();
 
-        $image = $request->file('logo');
-
-        if (! is_null($image)) {
-
-            $randomNumber = rand();
-
-            $imageName = $randomNumber . $image->getClientOriginalName();
-
-            $image->storeAs('public/images/usersimage', $imageName);
-        }else{
-
-            unset($data['logo']);
-        }
-
-        if (! \Hash::check($data['current_password'],auth()->user()->password)) {
+        if (!\Hash::check($data['current_password'], auth()->user()->password)) {
 
             $response = [
                 'success' => false,
@@ -679,10 +672,14 @@ class AuthController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = bcrypt($data['new_password']);
-        
-        if (isset($imageName)) {
-            
-            $user->logo = $imageName;
+
+        if ($request->has('logo')) {
+
+            $image = $request->file('logo');
+
+            $user->logo = rand() . $image->getClientOriginalName();
+
+            $image->storeAs('public/images/usersimage', $user->logo);
         }
 
         $user->save();
