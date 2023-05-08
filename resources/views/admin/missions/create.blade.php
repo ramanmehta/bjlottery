@@ -75,8 +75,8 @@ dd($user);
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="per_share_point">Per Share Point </label>
-                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter referal point" name="per_share_point" required>
+                          <label for="per_share_point">Referal APoint </label>
+                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter Referal APoint" name="per_share_point" required>
                         </div>
                         
                         <!--<div class="form-group col-md-6">-->

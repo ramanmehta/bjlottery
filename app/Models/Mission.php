@@ -28,4 +28,12 @@ class Mission extends Model
     {
         return $this->hasMany(MissionLevel::class);
     }
+
+    /**
+     * Get the mission levels for the mission.
+     */
+    public function missionSubmission()
+    {
+        return $this->hasOne(MissionSubmission::class);
+    }
 }

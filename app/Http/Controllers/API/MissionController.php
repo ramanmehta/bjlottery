@@ -13,35 +13,32 @@ class MissionController extends Controller
      */
     public function index()
     {
-        $mission = Mission::with(['missionLevels'])->get();
-        if($mission->count() > 0){
-            return response()->json([
-                'status' => 200,
-                'mission' => $mission,
-            ], 200);
+        // with(['missionLevels'])
+        if (auth('sanctum')->check()) {
+            $userId = auth('sanctum')->user()->id;
+            $mission = Mission::with(['missionSubmission' => function ($query,$userId) {
+                $query->where('user_id', $userId);
+            }])->where('status',1)->get();
+            if($mission->count() > 0){
+                return response()->json([
+                    'status' => 200,
+                    'mission' => $mission,
+                ], 200);
+            }else{
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No record found',
+                ], 404);
+            }
         }else{
             return response()->json([
                 'status' => 404,
                 'message' => 'No record found',
             ], 404);
-        }
+        }        
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    
 
     /**
      * Display the specified resource.

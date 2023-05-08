@@ -6,16 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::table('missions', function (Blueprint $table) {
+        Schema::table('mission_submissions', function (Blueprint $table) {
             $table->string('approval_status')->nullable()->after('proof');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
-        Schema::table('missions', function (Blueprint $table) {
+        Schema::table('mission_submissions', function (Blueprint $table) {
             $table->dropColumn('approval_status');
         });
     }

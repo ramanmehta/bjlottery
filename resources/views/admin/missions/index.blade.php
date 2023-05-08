@@ -75,7 +75,7 @@
                     <th>Mission Description</th>
                     <th>Mission Proof Type</th>
                     <!-- <th>Number of Share Required</th> -->
-                    <th>Each referal APoint</th>                    
+                    <th>Referal APoint</th>                    
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
