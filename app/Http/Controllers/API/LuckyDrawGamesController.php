@@ -105,10 +105,9 @@ class LuckyDrawGamesController extends Controller
         $game_id = $request->game_id;
 
         $user = User::find($user_id);
+        $currentDate = date('Y-m-d',time());
+        $game = LuckyDrawGames::where('id',$game_id)->where('end_date_time', '<', $currentDate)->first();
        
-
-        $game = LuckyDrawGames::find($game_id);
-        
         if($user && $game){
             $user_points = $user->total_point_available;
             $pointRequired = $game->points_per_ticket;
