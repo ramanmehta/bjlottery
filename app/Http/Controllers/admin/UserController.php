@@ -19,9 +19,21 @@ class UserController extends Controller
     {
         //$user = User::all();
         // $roles = Role::all();
+
         $user = DB::table('users')
                     ->join('roles','users.role_id', "=", 'roles.id')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.status','users.logo','roles.role_title')->get();
+                    ->select(
+                        'users.id',
+                        'users.name',
+                        'users.username',
+                        'users.email',
+                        'users.phone',
+                        'users.country',
+                        'users.status',
+                        'users.logo',
+                        'roles.role_title'
+                        )
+                    ->get();
         
         return view('admin.users.index',['user' => $user]);
     }
@@ -61,10 +73,29 @@ class UserController extends Controller
         // dd($user);
         $user = DB::table('users')
                     ->join('roles','users.role_id', "=", 'roles.id')
-                    ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.role_id','users.logo','roles.role_title')
-                    ->where('users.id', $userid)->first();
+                    ->select(
+                        'users.id',
+                    'users.name',
+                    'users.username',
+                    'users.email',
+                    'users.phone',
+                    'users.country',
+                    'users.address_1',
+                    'users.address_2',
+                    'users.city',
+                    'users.state',
+                    'users.country',
+                    'users.zip',
+                    'users.status',
+                    'users.role_id',
+                    'users.logo',
+                    'roles.role_title'
+                    )
+                    ->where('users.id', $userid)
+                    ->first();
 
-        $roles = Role::where('status', 1)->get();    
+        $roles = Role::where('status', 1)->get();
+        
         return view('admin.users.edit', ['user'=>$user , 'roles' => $roles]);
     }
 
