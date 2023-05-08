@@ -48,25 +48,6 @@
                   </div>
                 </form>
               </div>
-<<<<<<< HEAD
-              <!-- /.card-header -->
-              <div class="card-body">
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <strong></strong> {{ $message }}
-                </div>
-              @endif
-              @if ($message = Session::get('error'))
-                <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
-                    <button type="button" class="close" data-dismiss="alert">
-                        <i class="fa fa-times"></i>
-                    </button>
-                    <strong></strong> {{ $message }}
-                </div>
-=======
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -85,7 +66,6 @@
                 </button>
                 <strong></strong> {{ $message }}
               </div>
->>>>>>> origin/haresh
               @endif
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
