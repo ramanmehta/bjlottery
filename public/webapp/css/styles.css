@@ -1,0 +1,160 @@
+:root {
+	--pink: #F23E53;
+	--white: #FFFFFF;
+	--black:#000000;
+	--gray:#DDDFDF;
+	--light-black:#525252;
+	--light-white:#FBFBFB;
+
+}
+html, body {
+    height: 100%;
+}
+.container-fluid {
+    height: 100%;
+    overflow-y: hidden; /* don't show content that exceeds my height */
+}
+*{ 
+	margin: 0 auto;
+	background-color: var(--light-white);
+}
+.top-bg{
+	margin-top: 0px 0px auto;
+	position: absolute;
+	width: 100%;
+	height: 204px;
+	left: 0px;
+	top: 0px;
+	background: var(--pink);
+}
+
+.top-bg h4{
+	position: relative;
+	height: 169px;
+	margin: 0px 0px auto;
+	top: 52px;
+	font-family: 'Skranji';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 40px;
+	line-height: 80px;
+	text-align: center;
+	color: var(--white);
+	background: transparent;
+}
+.draw-heading {
+	position: relative;
+	width: 325px;
+	top: 255px;
+	background: transparent;
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 19px;
+	line-height: 28px;
+	color: #000000;
+	top: 255px;
+}
+
+.draw-heading h4{
+	margin: 0px 0px auto;
+	background: transparent !important;
+}
+
+.loginform{
+
+	position: absolute;
+	/* position: relative; */
+	background: var(--pink);
+	top: 300px;
+	background: transparent;
+	text-align: center;
+	margin: 4% 34% auto;
+	float: left;
+}
+
+.loginform form {
+	position: relative;
+	background: transparent !important;
+	text-align: center;
+}
+
+.loginform form .form-group {
+	background: transparent;
+	/* margin: 0 0 auto; */
+}
+
+.loginform form .form-group input {
+    box-sizing: border-box;
+    width: 330px;
+    height: 66px;
+    background: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: 16px;
+    margin-bottom: 25px;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    padding: 10px;
+    display: inline;
+}
+
+.loginform form .pinkbtn{
+	box-sizing: border-box;
+    width: 330px;
+    height: 66px;
+    background: var(--pink);
+    border: 1px solid var(--gray);
+    border-radius: 16px;
+    margin-bottom: 25px;
+    font-family: 'Source Sans Pro';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 19px;
+	line-height: 24px;
+    padding: 10px;
+	color: var(--white);
+	cursor: pointer;
+}
+
+.lefta{
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--black);
+	left: 0px;
+	position: relative;
+	text-decoration: none;
+	margin-right: 100px;
+	width: 100px;
+}
+.righta{
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 26px;
+	color: var(--black);
+	left: 0px;
+	position: relative;
+	text-decoration: none;
+}
+
+.error{
+	color: red;
+	width: 100%;
+	height: 35px;
+}
+
+.registerform {
+	position: absolute;
+	background: var(--pink);
+	top: 300px;
+	background: transparent;
+	text-align: center;
+	margin: 5% 40% auto;
+	float: left;
+}

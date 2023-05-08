@@ -13,11 +13,18 @@ class Mission extends Model
         'mission_title',
         'mission_description',
         'mission_proof_type',
-        'number_of_referals_required',
-        'referal_unit_point',
-        'referal_code',
+        'number_of_share',
+        'per_share_point',
         'mission_start_date',
         'mission_end_date',
         'status',
     ];
+
+    /**
+     * Get the mission levels for the mission.
+     */
+    public function missionLevels()
+    {
+        return $this->hasMany(MissionLevel::class);
+    }
 }

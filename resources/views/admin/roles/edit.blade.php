@@ -23,7 +23,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
+          <div class="row justify-content-center">
             <!-- left column -->
             <div class="col-md-6">
               <!-- general form elements -->

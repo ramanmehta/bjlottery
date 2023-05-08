@@ -13,7 +13,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
               <li class="breadcrumb-item active">Edit Daily Reward</li>
             </ol>
           </div>
@@ -23,7 +23,7 @@
       <!-- Main content -->
       <section class="content">
         <div class="container-fluid">
-          <div class="row">
+          <div class="row justify-content-center">
             <!-- left column -->
             <div class="col-md-6">
               <!-- general form elements -->
@@ -61,18 +61,9 @@
                       <div class="form-group">
                         <label>status</label>
                         <select class="form-control" name="status" required>
-                          @if($dailyReward->id) 
-                          <option value="{{$dailyReward->status}}" selected>
-                            @if ($dailyReward->status == 1)
-                                Active
-                            @else
-                              Inactive
-                            @endif
-                          </option>
-                          @endif
                           <option disabled>Select Status</option>
-                          <option value="1">Active</option>
-                          <option value="0">Inactive</option>
+                          <option value="1" {{$dailyReward->status == 1 ? "selected" : "" }}>Active</option>
+                          <option value="0" {{$dailyReward->status == 0 ? "selected" : "" }}>Inactive</option>
                         </select>
                       </div>
                     </div>

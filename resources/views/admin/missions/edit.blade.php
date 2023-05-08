@@ -16,7 +16,7 @@ dd($mission);
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
                 <li class="breadcrumb-item active">Update Mission</li>
               </ol>
             </div>
@@ -71,32 +71,48 @@ dd($mission);
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="mission_proof_type">Mission Proof</label>
-                            <input type="file" class="form-control" name="mission_proof_type" id="mission_proof_type">
+                            <label for="mission_proof_type">Mission Proof Type</label>
+                            <input type="text" class="form-control" name="mission_proof_type" id="mission_proof_type" value="{{$mission->mission_proof_type}}">
                         </div>
                         
                         <div class="form-group col-md-6">
-                          <label for="number_of_referals_required">Winning Prize Amount </label>
-                          <input type="number" class="form-control" id="number_of_referals_required" placeholder="Enter number of referal required" name="number_of_referals_required" value="{{$mission->number_of_referals_required}}" required>
+                          <label for="number_of_share">Number of Share Required</label>
+                          <input type="number" class="form-control" id="number_of_share" placeholder="Enter number of referal required" name="number_of_share" value="{{$mission->number_of_share}}" required>
                         </div>
                       </div>
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <label for="referal_unit_point">Minimum Points</label>
-                          <input type="number" class="form-control" id="referal_unit_point" placeholder="Enter referal point" name="referal_unit_point" value="{{$mission->referal_unit_point}}" required>
+                          <label for="per_share_point">Per Share Point </label>
+                          <input type="number" class="form-control" id="per_share_point" placeholder="Enter referal point" name="per_share_point" value="{{$mission->per_share_point}}" required>
                         </div>
                         
-                        <div class="form-group col-md-6">
+                        {{-- <div class="form-group col-md-6">
                           <label for="referal_code">Referal Code</label>
-                          <input type="number" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" value="{{$mission->referal_code}}" required>
+                          <input type="text" class="form-control" id="referal_code" placeholder="Enter referal code" name="referal_code" value="{{$mission->referal_code}}" required>
+                        </div> --}}
+
+
+                        <div class="form-group col-md-6">
+
+                          <label>Date and time range:</label>
+  
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-clock"></i></span>
+                            </div>
+                            <input type="text" class="form-control float-right" id="reservationtime" name="daterange">
+                          </div>
+                          
                         </div>
                       </div>
+
+                      
                       
                       {{-- date input --}}
 
                       <div class="form-row">
-                        <div class="form-group col-md-6">
+                        {{-- <div class="form-group col-md-6">
                           <label for="mission_start_date">Mission Start Date</label>
                           
                           <input type="datetime-local" class="form-control" name="mission_start_date" id="mission_start_date" value="{{$mission->mission_start_date}}">
@@ -107,29 +123,38 @@ dd($mission);
                           <label for="mission_end_date">Mission End Date</label>
                           <input type="datetime-local" class="form-control" name="mission_end_date" id="mission_end_date" value="{{$mission->mission_end_date}}">
                           
-                        </div>
+                        </div> --}}
+
+                        
+
+
+                        {{-- <div class="form-group col-md-6">
+                          <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                              <option disabled>Select Status</option>
+                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
+                            </select>
+                          </div>
+                        </div> --}}
                       </div>
 
                       {{-- end date input --}}
                       
-                      <div class="form-row">
+                      {{-- <div class="form-row">
 
-                        {{-- <div class="form-group col-md-6">
-                          <label for="game_point">Game Points</label>
-                          <input type="number" class="form-control" id="game_point" placeholder="Enter maximum point" name="game_point" value="{{$mission->game_point}}" required>
-                        </div> --}}
                         <div class="form-group col-md-6">
                           <div class="form-group">
                             <label>Status</label>
-                            <select class="form-control" name="status" value="{{$mission->status}}" required>
-                              
+                            <select class="form-control" name="status" required>
                               <option disabled>Select Status</option>
-                              <option value="1">Active</option>
-                              <option value="0">Inactive</option>
+                              <option value="1" {{$mission->status == 1 ? "selected" : ""}}>Active</option>
+                              <option value="0" {{$mission->status == 0 ? "selected" : ""}}>Inactive</option>
                             </select>
                           </div>
                         </div>
-                      </div>
+                      </div> --}}
 
                     </div>
                     <!-- /.card-body -->
@@ -148,6 +173,31 @@ dd($mission);
           <!-- /.row -->
         </div>
         <!-- /.container-fluid -->
+       
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+        <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+
+        <!-- date-range-picker -->
+        <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+        <script>
+          
+
+        var today = new Date(); 
+    
+    
+          $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            minDate:today,
+            // timePickerIncrement: 30,
+            locale: {
+              // format: 'MM/DD/YYYY H:mm:ss'
+              format: 'YYYY/MM/DD H:mm:ss'
+            }
+          });
+               
+    </script>
+    
       </section>
       <!-- /.content -->
   </div>
