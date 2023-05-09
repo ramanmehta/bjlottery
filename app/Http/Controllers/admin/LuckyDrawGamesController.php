@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LuckyDraw;
 use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
+use App\Models\LuckyDrawWinnerClaim;
 use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 use Illuminate\Support\Carbon;
@@ -246,13 +247,18 @@ class LuckyDrawGamesController extends Controller
         return redirect('/admin/viewLuckyDraw')->with('error', $error);
     }
 
-    public function luckyWinnerList($id)
+    public function luckyWinnerList(Request $request, $id)
     {
         $luckyDrawid = decrypt($id);
 
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
-        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
+        $claims = LuckyDrawWinner::with('user')
+            ->where('lottery_id', $data->id)
+            ->when(isset($request->search), function ($q) use ($request) {
+                $q->where('ticket_no', 'like', "%{$request->search}%");
+            })
+            ->get();
 
         return view('admin.lucky_draw.lucky_winner_list', compact('data', 'claims'));
     }
@@ -302,15 +308,63 @@ class LuckyDrawGamesController extends Controller
 
     public function addPriceEdit($id)
     {
-        dd('pending');
+        $id = decrypt($id);
+
+        $winners = LuckyDrawWinner::with('lottery')->where('id', $id)->first();
+
+        return view('admin.lucky_draw.edit_price', compact('winners'));
     }
 
-    public function addPriceDestroy($lId,$id)
+    public function addPriceDestroy($lId, $id)
     {
         $id = decrypt($id);
 
-       LuckyDrawWinner::destroy($id);
+        if (LuckyDrawWinnerClaim::where('lucky_draw_winner_id', $id)->exists()) {
 
-        return redirect()->route('add.price',encrypt($lId) )->with('error', 'Ticket Deleted successfully');
+            return redirect()->route('add.price', encrypt($lId))->with('error', 'You can not delete this ticket, Claimed');
+        }
+
+        LuckyDrawWinner::destroy($id);
+
+        return redirect()->route('add.price', encrypt($lId))->with('error', 'Ticket Deleted successfully');
+    }
+
+    public function winnerUserClaim(Request $request)
+    {
+        $claims = LuckyDrawWinnerClaim::with(['user', 'lottery', 'prize'])
+            ->when(isset($request->search), function ($q) use ($request) {
+                $q->where('ticket_no', 'like', "%{$request->search}%");
+            })
+            ->get();
+
+        return view('admin.lucky_draw_winners.list', compact('claims'));
+    }
+
+    public function statusUpdateWinnerUser(Request $request)
+    {
+        LuckyDrawWinnerClaim::where('id', $request->id)
+            ->update([
+                'status' => $request->status
+            ]);
+
+        return response()->json('ok');
+    }
+
+    public function editPrizeUpdate(Request $request, $id)
+    {
+        if ($request->has('prize_image') && $request->file('prize_image')) {
+
+            $data['prize_image'] = rand() . $request->prize_image->getClientOriginalName();
+
+            $request->prize_image->storeAs('public/images/luckey_winner', $data['prize_image']);
+        }
+
+        $data['prize_name'] = $request->prize_name;
+
+        LuckyDrawWinner::where('id', $id)->update($data);
+
+        $res = LuckyDrawWinner::where('id', $id)->first();
+
+        return redirect()->route('add.price', encrypt($res->lottery_id))->with('succes', 'Ticket updated successfully');
     }
 }

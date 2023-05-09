@@ -16,7 +16,6 @@ class LuckyDrawGamesController extends Controller
      */
     public function index()
     {
-       
         $luckydraw = LuckyDrawGames::all();
         if($luckydraw->count() > 0){
             $imagePath = asset('storage/app/public/images/luckydraw/');

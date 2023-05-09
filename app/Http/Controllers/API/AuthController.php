@@ -65,6 +65,7 @@ class AuthController extends Controller
 
             return response()->json($response);
         }
+        
         $ref = isset($request->all()['referal_code']) && !empty($request->all()['referal_code']) ? $request->all()['referal_code'] : '';
         // referal code validation
         $refered_by = '';
@@ -640,7 +641,7 @@ class AuthController extends Controller
             'name' => 'required|max:150',
             'email' => 'required|email',
             'current_password' => 'nullable',
-            'new_password' => 'required_if:current_password,!=,null',
+            'new_password' => 'required_with:current_password',
         ]);
 
         if ($validated->fails()) {
@@ -656,7 +657,7 @@ class AuthController extends Controller
 
         $data = $validated->validated();
 
-        if (!\Hash::check($data['current_password'], auth()->user()->password)) {
+        if (! is_null($data['current_password']) && !\Hash::check($data['current_password'], auth()->user()->password)) {
 
             $response = [
                 'success' => false,

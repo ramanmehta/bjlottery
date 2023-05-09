@@ -115,9 +115,10 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::post('admin/add-price', [LuckyDrawGamesController::class,'addPriceStore'])->name('add.price.post');
     Route::get('admin/add-price/edit/{id}', [LuckyDrawGamesController::class,'addPriceEdit'])->name('add.price.edit');
     Route::get('admin/add-price/destroy/{lottery_id}/{id}', [LuckyDrawGamesController::class,'addPriceDestroy'])->name('add.price.destroy');
+    Route::get('admin/winner-user/claim',[LuckyDrawGamesController::class,'winnerUserClaim'])->name('winner.user.claim');
+    Route::post('admin/edit-prize/update/{id}',[LuckyDrawGamesController::class,'editPrizeUpdate'])->name('edit.prize.update');
 
     // Missions route
-
     Route::get('/admin/viewMission', [MissionController::class,'index'])->name('mission');
     Route::get('/admin/createMission', [MissionController::class,'create'])->name('createMission');
     Route::post('/admin/createMission', [MissionController::class,'store'])->name('user.Mission');
@@ -166,9 +167,7 @@ Route::group(['middleware' => 'admin_auth'], function(){
 });
 
 // test relationship
+Route::get('/fortest/join', [\App\Http\Controllers\fortest\JoinController::class,'referalPoints']);
+Route::get('/fortest/date', [\App\Http\Controllers\fortest\JoinController::class,'datetimeOnly']);
 
-    Route::get('/fortest/join', [\App\Http\Controllers\fortest\JoinController::class,'referalPoints']);
-    Route::get('/fortest/date', [\App\Http\Controllers\fortest\JoinController::class,'datetimeOnly']);
-
-    
-
+Route::post('status/update/winner/user',[LuckyDrawGamesController::class,'statusUpdateWinnerUser'])->name('status.update.winner.user');

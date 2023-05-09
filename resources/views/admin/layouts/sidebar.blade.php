@@ -46,6 +46,11 @@
             Missions Submission
             </a>
           </li>
+          <li class="nav-item menu-open">
+            <a href="{{route('winner.user.claim')}}" class="nav-link @if($currentRoute == 'winner.user.claim') {{'active'}} @endif">
+            Luckey Winner Claimed
+            </a>
+          </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

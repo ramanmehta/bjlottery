@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //Route::post('/profile-update',[AuthController::class, 'updateUser']);
     Route::post('/profile-update',[AuthController::class, 'profileUpdate']);
     Route::get('lotter-prize/{id?}',[LuckeyWinnerController::class,'lotterPrizeWinner']);
+    Route::post('user-lotter-prize/claim',[LuckeyWinnerController::class,'lotterPrizeClaim']);
 });
 
 // Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
