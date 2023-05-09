@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('prize_image');
             $table->timestamps();
         });
-
-        
     }
 
     /**

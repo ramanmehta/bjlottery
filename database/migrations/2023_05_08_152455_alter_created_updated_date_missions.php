@@ -9,6 +9,10 @@ return new class extends Migration
     public function up()
     {
         Schema::table('missions', function (Blueprint $table) {
+            $table->string('proof')->nullable();
+        });
+
+        Schema::table('missions', function (Blueprint $table) {
             $table->string('approval_status')->nullable()->after('proof');
         });
     }
@@ -16,7 +20,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('missions', function (Blueprint $table) {
-            $table->dropColumn('approval_status');
+            $table->dropColumn(['approval_status','proof']);
         });
     }
 };
