@@ -689,10 +689,13 @@ class AuthController extends Controller
 
         $user->save();
 
+        $success['user'] = auth()->user();
+
         $response = [
-            'suceess' => true,
+            'success' => true,
             'status' => 200,
-            'message' => 'Your profile updated successfully'
+            'data' => $success,
+            'message' => 'User Profile Updated successfully'
         ];
 
         return response()->json($response);

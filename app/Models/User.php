@@ -88,4 +88,8 @@ class User extends Authenticatable
         return false;
     }
     
+    public function getLogoAttribute($value)
+    {
+        return getImage('usersimage/'.$value);
+    }
 }
