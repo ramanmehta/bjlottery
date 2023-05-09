@@ -640,6 +640,7 @@ class AuthController extends Controller
             'logo' => 'nullable|image',
             'name' => 'required|max:150',
             'email' => 'required|email',
+            'phone' => 'required|numeric',
             'current_password' => 'nullable',
             'new_password' => 'required_with:current_password',
         ]);
@@ -677,6 +678,7 @@ class AuthController extends Controller
 
         $user->name = $data['name'];
         $user->email = $data['email'];
+        $user->phone = $data['phone'];
 
         if ($request->has('logo')) {
 
