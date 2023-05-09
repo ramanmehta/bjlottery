@@ -670,9 +670,13 @@ class AuthController extends Controller
 
         $user = auth()->user();
 
+        if (isset($data['new_password']) && ! is_null($data['new_password'])) {
+            
+            $user->password = bcrypt($data['new_password']);
+        }
+
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->password = bcrypt($data['new_password']);
 
         if ($request->has('logo')) {
 
