@@ -102,7 +102,7 @@
                                                 <input class="form-control" type="file" name="prize_image">
                                             </td>
                                             <td>
-                                                <img width="100" height="50" src="{{ getImage($winners->prize_image) }}" alt="">
+                                                <img width="100" height="50" src="{{ $winners->prize_image }}" alt="">
                                             </td>
                                         </tr>
                                         <tr>

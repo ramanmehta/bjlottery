@@ -12,12 +12,12 @@ dd($user);
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>New Lucky Draw</h1>
+              <h1>New Lottery Create</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="/admin/dashboard">Home</a></li>
-                <li class="breadcrumb-item active">Lucky Draw Games</li>
+                <li class="breadcrumb-item active">New Lottery Create</li>
               </ol>
             </div>
           </div>
