@@ -20,4 +20,9 @@ class LuckyDrawGames extends Model
         'end_date_time',
         'status',
     ];
+
+    public function getGameImageAttribute($value)
+    {
+        return \Storage::disk('public')->url('images'.$value);
+    }
 }

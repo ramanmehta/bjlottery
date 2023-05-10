@@ -54,6 +54,7 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('changePassword','changePassword');
     Route::get('userwalletap', 'userwalletap');
     Route::get('redeemPoints', 'redeemPoints');
+    
 });
 
 Route::controller(RoleController::class)->group(function(){
