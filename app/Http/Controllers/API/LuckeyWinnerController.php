@@ -12,16 +12,25 @@ class LuckeyWinnerController extends Controller
 {
     public function lotterPrizeWinner(Request $request, $id = null)
     {
-        $winner['data'] = LuckyDrawWinner::with('lottery')
-            ->select('prize_image', 'prize_name', 'lottery_id','id')
+        $winner = LuckyDrawWinner::with('lottery')
+            ->select('lucky_draw_winners.prize_image', 'lucky_draw_winners.prize_name', 'lucky_draw_winners.lottery_id','lucky_draw_winners.id','lucky_draw_winner_claims.status')
             ->when(!is_null($id), function ($q) use ($id) {
-                $q->where('lottery_id', $id);
+                $q->where('lucky_draw_winners.lottery_id', $id);
             })
             ->when($request->has('ticket_no'), function ($q) use ($request) {
-                $q->where('ticket_no', 'like', "%{$request->ticket_no}%");
+                $q->where('lucky_draw_winners.ticket_no', 'like', "%{$request->ticket_no}%");
             })
-            ->where('user_id', auth()->id())
+            ->where('lucky_draw_winners.user_id', auth()->id())
+            ->leftjoin('lucky_draw_winner_claims','lucky_draw_winner_claims.lucky_draw_winner_id','=','lucky_draw_winners.id')
             ->get();
+
+        $resource = [
+            'success' => true,
+            'message' => 'User winner lottery ticket list',
+            'data' => $winner
+        ];
+    
+        return response()->json($resource);
 
         // if ($winner->isEmpty()) {
 
@@ -33,8 +42,6 @@ class LuckeyWinnerController extends Controller
 
         //     return response()->json($response);
         // }
-
-        return response()->json($winner);
     }
 
     public function lotterPrizeClaim(Request $request)
@@ -45,7 +52,6 @@ class LuckeyWinnerController extends Controller
             'address_2' => 'nullable',
             'lucky_draw_winner_id' => 'required|exists:lucky_draw_winners,id'
         ]);
-
 
         if ($validated->fails()) {
 
@@ -61,6 +67,21 @@ class LuckeyWinnerController extends Controller
         $input = $validated->validated();
 
         $winner = LuckyDrawWinner::find($input['lucky_draw_winner_id']);
+
+        if (LuckyDrawWinnerClaim::where('lucky_draw_winner_id',$winner->id)
+            ->where('lottery_id',$winner->lottery_id)
+            ->where('lucky_draw_id',$winner->lucky_draw_id)
+            ->where('ticket_no',$winner->ticket_no)
+            ->exists()) {
+            
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => 'This Ticket not already been claimed'
+            ];
+    
+            return response()->json($response);
+        }
 
         LuckyDrawWinnerClaim::create([
             'user_id' => auth()->id(),
