@@ -250,7 +250,7 @@ class LuckyDrawGamesController extends Controller
     public function luckyWinnerList(Request $request, $id)
     {
         $luckyDrawid = decrypt($id);
-        
+
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
         $claims = LuckyDrawWinner::with('user')
@@ -269,7 +269,7 @@ class LuckyDrawGamesController extends Controller
 
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
-        $claims = LuckyDrawWinner::with('user')->where('lottery_id', $data->id)->get();
+        $claims = LuckyDraw::with('user')->where('lucky_draw_games_id', $data->id)->get();
 
         return view('admin.lucky_draw.add_price', compact('data', 'claims'));
     }
@@ -297,14 +297,14 @@ class LuckyDrawGamesController extends Controller
             $data['ticket_no'] = $value;
             $data['prize_name'] = $validated['prize_name'][$key];
 
-            $data['prize_image'] = 'luckey_winner/'.rand() . $validated['prize_image'][$key]->getClientOriginalName();
+            $data['prize_image'] = 'luckey_winner/' . rand() . $validated['prize_image'][$key]->getClientOriginalName();
 
             $validated['prize_image'][$key]->storeAs('public/images', $data['prize_image']);
 
             LuckyDrawWinner::create($data);
         }
 
-        return redirect()->back()->with('success', 'Ticket Added Successfully');
+        return redirect()->route('add.price', encrypt($validated['lottery_id']))->with('success', 'Ticket Added successfully');
     }
 
     public function addPriceEdit($id)
@@ -355,13 +355,12 @@ class LuckyDrawGamesController extends Controller
     {
         if ($request->has('prize_image') && $request->file('prize_image')) {
 
-            $data['prize_image'] = 'luckey_winner/'.rand() . $request->prize_image->getClientOriginalName();
+            $data['prize_image'] = 'luckey_winner/' . rand() . $request->prize_image->getClientOriginalName();
 
             $request->prize_image->storeAs('public/images', $data['prize_image']);
         }
 
         $data['prize_name'] = $request->prize_name;
-
 
         LuckyDrawWinner::where('id', $id)->update($data);
 

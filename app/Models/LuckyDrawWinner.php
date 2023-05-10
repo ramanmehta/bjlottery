@@ -17,12 +17,12 @@ class LuckyDrawWinner extends Model
 
     public function lottery()
     {
-        return $this->hasOne(LuckyDrawGames::class,'id','lottery_id');
+        return $this->hasOne(LuckyDrawGames::class, 'id', 'lottery_id');
     }
 
     public function getPrizeImageAttribute($value)
     {
-        return getImage('/luckey_winner/'.$value);
+        return getImage($value);
     }
 
     public function user()
