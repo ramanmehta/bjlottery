@@ -64,10 +64,7 @@
                                         alt="{{$data->game_title}}">
                                 </div>
                                 <div class="col-md-2 text-right">
-                                    <a href="{{route('add.price.form',encrypt($data->id))}}"><button type="button"
-                                            class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add
-                                            Prize</button></a>
-
+                                    <a href="{{route('add.price.form',encrypt($data->id))}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Prize</button></a>
                                 </div>
                             </div>
 

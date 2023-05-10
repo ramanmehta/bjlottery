@@ -250,7 +250,7 @@ class LuckyDrawGamesController extends Controller
     public function luckyWinnerList(Request $request, $id)
     {
         $luckyDrawid = decrypt($id);
-
+        
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
         $claims = LuckyDrawWinner::with('user')
@@ -297,8 +297,9 @@ class LuckyDrawGamesController extends Controller
             $data['ticket_no'] = $value;
             $data['prize_name'] = $validated['prize_name'][$key];
 
-            $data['prize_image'] = rand() . $validated['prize_image'][$key]->getClientOriginalName();
-            $validated['prize_image'][$key]->storeAs('public/images/luckey_winner', $data['prize_image']);
+            $data['prize_image'] = 'luckey_winner/'.rand() . $validated['prize_image'][$key]->getClientOriginalName();
+
+            $validated['prize_image'][$key]->storeAs('public/images', $data['prize_image']);
 
             LuckyDrawWinner::create($data);
         }
@@ -354,12 +355,13 @@ class LuckyDrawGamesController extends Controller
     {
         if ($request->has('prize_image') && $request->file('prize_image')) {
 
-            $data['prize_image'] = rand() . $request->prize_image->getClientOriginalName();
+            $data['prize_image'] = 'luckey_winner/'.rand() . $request->prize_image->getClientOriginalName();
 
-            $request->prize_image->storeAs('public/images/luckey_winner', $data['prize_image']);
+            $request->prize_image->storeAs('public/images', $data['prize_image']);
         }
 
         $data['prize_name'] = $request->prize_name;
+
 
         LuckyDrawWinner::where('id', $id)->update($data);
 
