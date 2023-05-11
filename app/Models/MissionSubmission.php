@@ -27,4 +27,9 @@ class MissionSubmission extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getTypeAttribute($val)
+    {
+        return 'mission';
+    }
 }

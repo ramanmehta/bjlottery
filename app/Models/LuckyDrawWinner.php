@@ -34,4 +34,9 @@ class LuckyDrawWinner extends Model
     {
         return status($value);
     }
+
+    public function getTypeAttribute($val)
+    {
+        return 'mission';
+    }
 }
