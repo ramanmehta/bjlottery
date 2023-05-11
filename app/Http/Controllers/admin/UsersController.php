@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
@@ -11,14 +12,14 @@ use Validator;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Validation\Rules\Password;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {   
-        
+    
         if($request->has('search')){
 
             $search = $request->search;
@@ -254,6 +255,4 @@ class UserController extends Controller
         $success = "$user->name password reset successfully";
         return redirect('/admin/viewUser')->with('success',$success);
     }
-
-
 }
