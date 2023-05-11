@@ -9,6 +9,7 @@ use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
 use App\Models\MissionSubmission;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 use Illuminate\Support\Carbon;
@@ -376,8 +377,16 @@ class LuckyDrawGamesController extends Controller
     {
         MissionSubmission::where('id',$request->id)->update(['approval_status' => $request->status]);
         
-        $user = User::select(['total_point_available as total_ap', 'total_cash_available as total_wallet'])->where('id', $userId)->first();
-        
+        $mission = MissionSubmission::where('mission_submissions.id',$request->id)
+            ->join('missions','missions.id','=','mission_submissions.mission_id')
+            ->first();
+
+        if ($mission->mission_type == 'affliated_points' && $request->status == 'approved') {
+            
+            User::where('id',$mission->user_id)
+            ->update(['total_point_available'=> DB::raw('total_point_available + '.$mission->enter_earn_affliated_points)]);
+        }
+
         return response()->json('ok');
     }
 }
