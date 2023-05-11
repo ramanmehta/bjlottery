@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
@@ -11,7 +10,6 @@ use DB;
 use Validator;
 use App\Http\Traits\CommonTrait;
 use Illuminate\Validation\Rules\Password;
-
 
 class UserController extends Controller
 {
@@ -79,24 +77,25 @@ class UserController extends Controller
      */
     public function edit($id)
     {   
-      
         $userid = decrypt($id);
+
         $user = User::find($userid);     
+
         // $user = DB::table('users')
-        //             ->join('countries', 'users.country', "=", 'countries.sortname')
-        //             ->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','users.total_point_available','users.total_cash_available','users.password','countries.countries')
-        //             ->where('users.id', $userid)->first();
+            //->join('countries', 'users.country', "=", 'countries.sortname')
+            //->select('users.id','users.name','users.username','users.email','users.phone','users.country','users.address_1','users.address_2','users.city','users.state','users.country','users.zip','users.status','users.logo','users.total_point_available','users.total_cash_available','users.password','countries.countries')
+            //->where('users.id', $userid)->first();
 
         $phone = $user->phone;
         
         $code = substr( $phone, 0, strrpos( $phone, '-' ) );
         $countryCode = substr($code, 1);
-        // dd($countryCode);
+        
         $phone = substr( $phone, strrpos( $phone, '-' )+1 );
           
         $country = DB::table('countries')->get();
         
-        return view('admin.users.edit')->with('user',$user)->with('country',$country)->with('countryCode',$countryCode)->with('phone',$phone);
+        return view('admin.users.edit',compact('user','country','countryCode','phone'));
     }
 
     /**

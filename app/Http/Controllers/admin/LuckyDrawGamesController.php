@@ -253,13 +253,15 @@ class LuckyDrawGamesController extends Controller
 
         $data  = LuckyDrawGames::findOrFail($luckyDrawid);
 
+        // LuckyDrawWinner::truncate();
+        // dd('ok');
         $claims = LuckyDrawWinner::with('user')
             ->where('lottery_id', $data->id)
             ->when(isset($request->search), function ($q) use ($request) {
                 $q->where('ticket_no', 'like', "%{$request->search}%");
             })
             ->get();
-
+            
         return view('admin.lucky_draw.lucky_winner_list', compact('data', 'claims'));
     }
 
@@ -303,7 +305,7 @@ class LuckyDrawGamesController extends Controller
 
             LuckyDrawWinner::create($data);
         }
-
+        
         return redirect()->route('add.price', encrypt($validated['lottery_id']))->with('success', 'Ticket Added successfully');
     }
 

@@ -60,7 +60,7 @@
                                     Image :
                                 </div>
                                 <div class="col-md-4 text-left">
-                                    <img width="100" height="50" src="{{ getImage($data->game_image) }}"
+                                    <img width="100" height="50" src="{{ $data->game_image }}"
                                         alt="{{$data->game_title}}">
                                 </div>
                                 <div class="col-md-2 text-right">
