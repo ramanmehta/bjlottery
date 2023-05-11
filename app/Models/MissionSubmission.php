@@ -14,7 +14,8 @@ class MissionSubmission extends Model
         'user_id',
         'proof',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'approval_status'
     ];
 
     public function mission()

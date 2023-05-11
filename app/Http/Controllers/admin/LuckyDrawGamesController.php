@@ -8,6 +8,7 @@ use App\Models\LuckyDraw;
 use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
+use App\Models\MissionSubmission;
 use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 use Illuminate\Support\Carbon;
@@ -369,5 +370,14 @@ class LuckyDrawGamesController extends Controller
         $res = LuckyDrawWinner::where('id', $id)->first();
 
         return redirect()->route('add.price', encrypt($res->lottery_id))->with('succes', 'Ticket updated successfully');
+    }
+
+    public function missionSubmitStatusUpdate(Request $request)
+    {
+        MissionSubmission::where('id',$request->id)->update(['approval_status' => $request->status]);
+        
+        $user = User::select(['total_point_available as total_ap', 'total_cash_available as total_wallet'])->where('id', $userId)->first();
+        
+        return response()->json('ok');
     }
 }

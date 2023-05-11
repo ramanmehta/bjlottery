@@ -140,6 +140,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
     // Mission Submissions 
 
     Route::get('/admin/mission-submissions', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
+    Route::get('/admin/mission-submissions-show/{id}', [MissionSubmissionController::class, 'show'])->name('missionsubmissions.show');
     // Settings route
 
     Route::get('/admin/viewSetting', [SettingController::class, 'index'])->name('settings');
@@ -173,3 +174,4 @@ Route::get('/fortest/join', [\App\Http\Controllers\fortest\JoinController::class
 Route::get('/fortest/date', [\App\Http\Controllers\fortest\JoinController::class, 'datetimeOnly']);
 
 Route::post('status/update/winner/user', [LuckyDrawGamesController::class, 'statusUpdateWinnerUser'])->name('status.update.winner.user');
+Route::post('mission/submit/status/update', [LuckyDrawGamesController::class, 'missionSubmitStatusUpdate'])->name('mission.submit.status.update');
