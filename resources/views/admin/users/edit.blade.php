@@ -361,7 +361,7 @@
                                             @if ($user->logo != '')
                                                 <div class="form-group col-md-12">
 
-                                                    <img src="{{ asset('storage/app/public/images/' . $user->logo) }}"
+                                                    <img src="{{ $user->logo }}"
                                                         style="height: 50px;">
                                                 </div>
                                             @endif
