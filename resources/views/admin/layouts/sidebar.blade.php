@@ -38,7 +38,7 @@
           </li>
           <li class="nav-item menu-open">
             <a href="{{route('mission')}}" class="nav-link @if($currentRoute == 'mission') {{'active'}} @endif">
-            Missions(Levels)
+            Missions
             </a>
           </li>
           <li class="nav-item menu-open">

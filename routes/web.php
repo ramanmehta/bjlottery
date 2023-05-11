@@ -130,7 +130,7 @@ Route::group(['middleware' => 'admin_auth'], function(){
      // levels route    
     Route::get('/admin/levels/{id}', [MissionLevelController::class,'index'])->name('levels');
     Route::get('/admin/createLevels', [MissionLevelController::class,'create'])->name('createlevels');    
-    Route::post('/admin/createLevels', [MissionLevelController::class,'store'])->name('createlevels');
+    Route::post('/admin/createLevels', [MissionLevelController::class,'store'])->name('createlevels.store');
     Route::get('/admin/deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class,'destroy'])->name('removeLevelMission');
     Route::get('/admin/editMissionLevel/{id}', [MissionLevelController::class,'edit'])->name('editMissionLevel');
     Route::post('/admin/updateMissionLevel/{id}', [MissionLevelController::class,'update'])->name('editMissionLevel.id');  

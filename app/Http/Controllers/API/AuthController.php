@@ -185,7 +185,6 @@ class AuthController extends Controller
         return response()->json($response);
     }
 
-
     public function login(Request $request)
     {
         $username = $request->username;
