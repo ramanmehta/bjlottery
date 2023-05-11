@@ -60,8 +60,6 @@ class MissionController extends Controller
         }
     }
 
-    
-
     /**
      * Display the specified resource.
      */
@@ -103,5 +101,29 @@ class MissionController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function list(Request $request,$id=null)
+    {
+        $mission = Mission::where('status',1)
+            ->select('id',
+                'mission_title',
+                'mission_description',
+                'banner_image',
+                'mission_type',
+                'enter_earn_affliated_points',
+                'prize_name',
+                'prize_image')
+            ->when(! is_null($id),function($q) use ($id){
+                $q->where('id',$id);
+            })
+            ->orderBy('id','desc')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'Message' => 'Mission list',
+            'data' => $mission
+        ], 200);
     }
 }

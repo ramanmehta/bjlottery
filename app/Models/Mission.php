@@ -12,13 +12,12 @@ class Mission extends Model
     protected $fillable = [
         'mission_title',
         'mission_description',
-        'mission_proof_type',
-        'number_of_share',
-        'per_share_point',
-        'mission_start_date',
-        'mission_end_date',
         'status',
-        'banner_image'
+        'banner_image',
+        'mission_type',
+        'enter_earn_affliated_points',
+        'prize_name',
+        'prize_image',
     ];
 
     /**
@@ -35,5 +34,15 @@ class Mission extends Model
     public function missionSubmission()
     {
         return $this->hasOne(MissionSubmission::class);
+    }
+
+    public function getBannerImageAttribute($value)
+    {
+        return getImage($value);
+    }
+
+    public function getPrizeImageAttribute($value)
+    {
+        return getImage($value);
     }
 }

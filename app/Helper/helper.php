@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Storage;
 
 function getImage($path)
 {
+    if ($path == null) {
+        
+        return null;
+    }
     return Storage::disk('public')->url('images/'.$path);
 }
 

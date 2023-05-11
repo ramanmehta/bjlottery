@@ -30,29 +30,35 @@
             <div class="card-header">
               <h3 class="card-title">Missions</h3>
               <a href="{{route('createMission')}}"><button type="button" class="btn btn-primary float-right"><i
-                    class='fas fa-plus-circle'></i>Add New Mission</button></a>
+                    class='fas fa-plus-circle'></i> Add New Mission</button></a>
             </div>
 
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                {{-- <h1>Users</h1> --}}
-              </div>
-              <div class="col-sm-6">
-                <form action="" method="get">
-                  <div class="input-group mb-3 ">
 
-                    <input type="search" class="form-control" placeholder="Search here" aria-label="search mission"
-                      aria-describedby="basic-addon2" name="search" value="{{ request()->get('search') }}" id="search">
-                    <input class="btn btn-outline-secondary" type="submit" value="Search">
-
-                  </div>
-                </form>
-              </div>
-            </div>
             <!-- /.card-header -->
             <div class="card-body">
+              <br>
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  {{-- <h1>Users</h1> --}}
+                </div>
+                <div class="col-sm-6">
+
+                  <form action="" method="get">
+                    <div class="input-group mb-3 ">
+
+                      <input type="search" class="form-control" placeholder="Search here" aria-label="search mission"
+                        aria-describedby="basic-addon2" name="search" value="{{ request()->get('search') }}"
+                        id="search">
+                      &nbsp;
+                      &nbsp;
+                      <input class="btn btn-outline-secondary" type="submit" value="Search">
+                    </div>
+                  </form>
+                </div>
+              </div>
+
               @if ($message = Session::get('success'))
-              <div class="alert alert-success alert-dismissible col-lg-6" role="alert">
+              <div class="alert alert-success alert-dismissible col-lg-12" role="alert">
                 <button type="button" class="close" data-dismiss="alert">
                   <i class="fa fa-times"></i>
                 </button>
@@ -60,22 +66,23 @@
               </div>
               @endif
               @if ($message = Session::get('error'))
-              <div class="alert alert-danger alert-dismissible col-lg-6" role="alert">
+              <div class="alert alert-danger alert-dismissible col-lg-12" role="alert">
                 <button type="button" class="close" data-dismiss="alert">
                   <i class="fa fa-times"></i>
                 </button>
                 <strong></strong> {{ $message }}
               </div>
               @endif
-              <table id="example2" class="table table-bordered table-hover">
+              <table id="example2" class="table table-bordered table-hover text-center">
                 <thead>
                   <tr>
                     <th>Banner Image</th>
                     <th>Mission Title</th>
                     <th>Mission Description</th>
-                    <th>Mission Proof Type</th>
-                    <!-- <th>Number of Share Required</th> -->
-                    <th>Referal APoint</th>                    
+                    <th>Mission Type</th>
+                    <th>Enter Earn Affliated Points</th>
+                    <th>Prize Name</th>
+                    <th>Prize Image</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -83,13 +90,21 @@
                 <tbody>
                   @foreach ($mission as $missions)
                   <tr>
-                    <td><img src="{{asset('storage/app/public/images/'.$missions->banner_image)}}" style="height: 50px;" alt="User Image"></td>
+                    <td><img src="{{getImage($missions->banner_image)}}" style="height: 50px;" alt="User Image"></td>
                     <td>{{$missions->mission_title}}</td>
-                    <td>{{$missions->mission_description}}</td>
-                    <td>{{$missions->mission_proof_type}}</td>
-                    <!-- <td>{{$missions->number_of_share}}</td> -->
-                    <td>{{$missions->per_share_point}}</td>
-                    
+                    <td>{!!$missions->mission_description!!}</td>
+                    <td>{{$missions->mission_type}}</td>
+                    <td>{{$missions->enter_earn_affliated_points}}</td>
+                    @if ($missions->prize_name == null)
+                    <td>---</td>
+                    @else
+                    <td>{{$missions->prize_name}}</td>
+                    @endif
+                    @if ($missions->prize_image == null)
+                    <td>---</td>
+                    @else
+                    <td><img src="{{getImage($missions->prize_image)}}" style="height: 50px;" alt="User Image"></td>
+                    @endif
                     <td>
                       @if ($missions->status==1)
                       <a onclick="return confirm('Are you sure deactivate Mission : {{$missions->mission_title}}?')"
@@ -127,7 +142,7 @@
                   <span class="font-medium">{{ $mission->total() }}</span>
                   {!! __('results') !!}
                 </p>
-                
+
                 @if ($mission->hasPages())
                 <ul class="pagination pagination">
                   {{-- Previous Page Link --}}
