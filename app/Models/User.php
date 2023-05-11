@@ -90,6 +90,6 @@ class User extends Authenticatable
     
     public function getLogoAttribute($value)
     {
-        return \Storage::disk('public')->url($value) ;
+        return getImage($value);
     }
 }

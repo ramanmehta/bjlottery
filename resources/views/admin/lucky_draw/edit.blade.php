@@ -155,7 +155,7 @@ dd($luckyDraw);
 			
 			                  <div class="form-group col-md-12">
                           
-                          <img src="{{asset('storage/app/public/images'.$luckyDraw->game_image)}}" style="height: 50px;">
+                          <img src="{{$luckyDraw->game_image}}" style="height: 50px;">
                           {{-- <img src="{{$this->fileurl.'/luckydraw/'.$luckyDraw->game_image}}" style="height: 50px;"> --}}
                         </div>
 			
