@@ -5,9 +5,10 @@ use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\DailyRewardController;
 use App\Http\Controllers\admin\RewardTypeController;
-use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\admin\LuckyDrawGamesController;
-use App\Http\Controllers\admin\MissionController;
+// use App\Http\Controllers\admin\MissionController;
+use App\Http\Controllers\admin\MissionsController;
 use App\Http\Controllers\admin\NotificationController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\ReferalsStatsController;
@@ -81,22 +82,22 @@ Route::group(['middleware' => 'admin_auth'], function(){
     // register user detail route
 
 
-    Route::get('/admin/viewUser', [UserController::class,'index'])->name('admin.users');
-    // Route::get('/admin/viewUser', [UserController::class,'index'])->name('admin.users');
-    // Route::get('/admin/createUser', [UserController::class,'create']);
-    // Route::post('/admin/createUser', [UserController::class,'store'])->name('user.DailyReward');
-    Route::get('/admin/editUser/{id}', [UserController::class,'edit'])->name('edituser');
-    Route::post('/admin/updateUser/{id}', [UserController::class,'update'])->name('update.User');
-    Route::get('/admin/deleteUser/{id}', [UserController::class,'destroy'])->name('removeUser');
-    Route::get('/admin/userStatus/{id}', [UserController::class,'userStatus'])->name('userStatus');
-    Route::get('/admin/userAppoint/{id}', [UserController::class,'userAppoint'])->name('userAppoint');
-    Route::post('/admin/updateAppoint/{id}', [UserController::class,'updateAppoint'])->name('updateAppoint');
-    Route::get('/admin/editWallet/{id}', [UserController::class,'editWallet'])->name('editWallet');
-    Route::post('/admin/updateWallet/{id}', [UserController::class,'updateWallet'])->name('updateWallet');
-    Route::get('/admin/cPassword/{id}', [UserController::class,'changePassword'])->name('cPassword');
-    Route::post('/admin/passwordReset/{id}', [UserController::class,'passwordReset'])->name('passwordReset');
+    Route::get('/admin/viewUser', [UsersController::class,'index'])->name('admin.users');
+    // Route::get('/admin/viewUser', [UsersController::class,'index'])->name('admin.users');
+    // Route::get('/admin/createUser', [UsersController::class,'create']);
+    // Route::post('/admin/createUser', [UsersController::class,'store'])->name('user.DailyReward');
+    Route::get('/admin/editUser/{id}', [UsersController::class,'edit'])->name('edituser');
+    Route::post('/admin/updateUser/{id}', [UsersController::class,'update'])->name('update.User');
+    Route::get('/admin/deleteUser/{id}', [UsersController::class,'destroy'])->name('removeUser');
+    Route::get('/admin/userStatus/{id}', [UsersController::class,'userStatus'])->name('userStatus');
+    Route::get('/admin/userAppoint/{id}', [UsersController::class,'userAppoint'])->name('userAppoint');
+    Route::post('/admin/updateAppoint/{id}', [UsersController::class,'updateAppoint'])->name('updateAppoint');
+    Route::get('/admin/editWallet/{id}', [UsersController::class,'editWallet'])->name('editWallet');
+    Route::post('/admin/updateWallet/{id}', [UsersController::class,'updateWallet'])->name('updateWallet');
+    Route::get('/admin/cPassword/{id}', [UsersController::class,'changePassword'])->name('cPassword');
+    Route::post('/admin/passwordReset/{id}', [UsersController::class,'passwordReset'])->name('passwordReset');
 
-    // Route::controller(UserController::class)->group(function(){
+    // Route::controller(UsersController::class)->group(function(){
     //     Route::get('/admin/userStatus/{id}', 'userStatus')->name('userStatus');
     // });
 
@@ -118,19 +119,22 @@ Route::group(['middleware' => 'admin_auth'], function(){
     Route::get('admin/winner-user/claim',[LuckyDrawGamesController::class,'winnerUserClaim'])->name('winner.user.claim');
     Route::post('admin/edit-prize/update/{id}',[LuckyDrawGamesController::class,'editPrizeUpdate'])->name('edit.prize.update');
 
+    
     // Missions route
-    Route::get('/admin/viewMission', [MissionController::class,'index'])->name('mission');
-    Route::get('/admin/createMission', [MissionController::class,'create'])->name('createMission');
-    Route::post('/admin/createMission', [MissionController::class,'store'])->name('user.Mission');
-    Route::get('/admin/editMission/{id}', [MissionController::class,'edit'])->name('editMission');
-    Route::post('/admin/updateMission/{id}', [MissionController::class,'update'])->name('update.Mission');
-    Route::get('/admin/deleteMission/{id}', [MissionController::class,'destroy'])->name('removeMission');
-    Route::get('/admin/missionStatus/{id}', [MissionController::class,'missionStatus'])->name('missionStatus');
+    Route::get('/admin/viewMission', [MissionsController::class,'index'])->name('mission');
+    Route::get('/admin/createMission', [MissionsController::class,'create'])->name('createMission');
+    Route::post('/admin/createMission', [MissionsController::class,'store'])->name('user.Mission');
+    Route::get('/admin/editMission/{id}', [MissionsController::class,'edit'])->name('editMission');
+    Route::post('/admin/updateMission/{id}', [MissionsController::class,'update'])->name('update.Mission');
+    Route::get('/admin/deleteMission/{id}', [MissionsController::class,'destroy'])->name('removeMission');
+    Route::get('/admin/missionStatus/{id}', [MissionsController::class,'missionStatus'])->name('missionStatus');
 
      // levels route    
     Route::get('/admin/levels/{id}', [MissionLevelController::class,'index'])->name('levels');
+
     Route::get('/admin/createLevels', [MissionLevelController::class,'create'])->name('createlevels');    
-    Route::post('/admin/createLevels', [MissionLevelController::class,'store'])->name('createlevels');
+    Route::post('/admin/createLevels', [MissionLevelController::class,'store'])->name('createlevels.store');
+
     Route::get('/admin/deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class,'destroy'])->name('removeLevelMission');
     Route::get('/admin/editMissionLevel/{id}', [MissionLevelController::class,'edit'])->name('editMissionLevel');
     Route::post('/admin/updateMissionLevel/{id}', [MissionLevelController::class,'update'])->name('editMissionLevel.id');  

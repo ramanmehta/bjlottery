@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Mission;
 use DB;
 
-class MissionController extends Controller
+class MissionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,7 +31,7 @@ class MissionController extends Controller
             $mission = Mission::orderBy('id', 'DESC')->paginate(10);
 
         }
-        
+            
         return view('admin.missions.index', compact('mission'));
     }
 

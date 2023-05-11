@@ -127,6 +127,7 @@
                   <span class="font-medium">{{ $mission->total() }}</span>
                   {!! __('results') !!}
                 </p>
+                
                 @if ($mission->hasPages())
                 <ul class="pagination pagination">
                   {{-- Previous Page Link --}}
