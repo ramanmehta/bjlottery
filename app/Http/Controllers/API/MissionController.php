@@ -117,7 +117,8 @@ class MissionController extends Controller
                 'mission_type',
                 'enter_earn_affliated_points',
                 'prize_name',
-                'prize_image'
+                'prize_image',
+                'status'
             )
             ->when(!is_null($id), function ($q) use ($id) {
                 $q->where('id', $id);
