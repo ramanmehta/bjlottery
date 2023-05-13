@@ -72,12 +72,12 @@ class MissionController extends Controller
         if ($mission) {
             return response()->json([
                 'status' => 200,
-                'Mission' => $mission
+                'message' => $mission
             ], 200);
         } else {
             return response()->json([
                 'status' => 404,
-                'Message' => 'No record found',
+                'message' => 'No record found',
             ], 404);
         }
     }
@@ -118,7 +118,7 @@ class MissionController extends Controller
                 'enter_earn_affliated_points',
                 'prize_name',
                 'prize_image',
-                'id as status'
+                'id as mission_status'
             )
             ->when(!is_null($id), function ($q) use ($id) {
                 $q->where('id', $id);
@@ -128,7 +128,7 @@ class MissionController extends Controller
 
         return response()->json([
             'status' => 200,
-            'Message' => 'Mission list',
+            'message' => 'Mission list',
             'data' => $mission
         ], 200);
     }
@@ -151,7 +151,7 @@ class MissionController extends Controller
             
             return response()->json([
                 'status' => 404,
-                'Message' => 'You are already involved in this mission',
+                'message' => 'You are already involved in this mission',
                 'data' => []
             ], 404);
         }
@@ -179,7 +179,7 @@ class MissionController extends Controller
 
         return response()->json([
             'status' => 200,
-            'Message' => 'Mission Submited successfully',
+            'message' => 'Mission Submited successfully',
             'data' => []
         ], 200);
     }

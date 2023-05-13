@@ -90,7 +90,7 @@
                 <tbody>
                   @foreach ($mission as $missions)
                   <tr>
-                    <td><img src="{{getImage($missions->banner_image)}}" style="height: 50px;" alt="User Image"></td>
+                    <td><img src="{{$missions->banner_image}}" style="height: 50px;" alt="User Image"></td>
                     <td>{{$missions->mission_title}}</td>
                     <td>{!!$missions->mission_description!!}</td>
                     <td>{{$missions->mission_type}}</td>
@@ -103,7 +103,7 @@
                     @if ($missions->prize_image == null)
                     <td>---</td>
                     @else
-                    <td><img src="{{getImage($missions->prize_image)}}" style="height: 50px;" alt="User Image"></td>
+                    <td><img src="{{$missions->prize_image}}" style="height: 50px;" alt="User Image"></td>
                     @endif
                     <td>
                       @if ($missions->status==1)

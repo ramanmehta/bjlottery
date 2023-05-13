@@ -111,8 +111,8 @@ dd($user);
                       <label>Status</label>
                       <select class="form-control" name="status">
                         <option disabled>Select Status</option>
-                        <option {{ old('status')==1 ? 'selected' : '' }} value="1">Active</option>
                         <option {{ old('status')==0 ? 'selected' : '' }} value="0">Inactive</option>
+                        <option selected {{ old('status')==1 ? 'selected' : '' }} value="1">Active</option>
                       </select>
                     </div>
                     @error('status')

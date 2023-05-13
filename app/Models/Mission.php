@@ -46,7 +46,7 @@ class Mission extends Model
         return getImage($value);
     }
 
-    public function getStatusAttribute($val)
+    public function getMissionStatusAttribute($val)
     {
         $mission = MissionSubmission::where('user_id',auth()->id())
             ->where('mission_id',$val)
@@ -55,7 +55,7 @@ class Mission extends Model
         if (is_null($mission)) {
             return 'redeem';
         }else{
-            $mission->status;
+            return $mission->approval_status;
         }
     }
 }
