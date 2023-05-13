@@ -48,7 +48,7 @@ class Mission extends Model
 
     public function getStatusAttribute($val)
     {
-        $mission = MissionSubmission::where('id',auth()->id())
+        $mission = MissionSubmission::where('user_id',auth()->id())
             ->where('mission_id',$val)
             ->first();
         

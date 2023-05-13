@@ -143,6 +143,19 @@ class MissionController extends Controller
 
         $input = $validated->validate();
 
+        $res = MissionSubmission::where('user_id',auth()->id())
+        ->where('mission_id',$input['mission_id'])
+        ->exists();
+
+        if ($res) {
+            
+            return response()->json([
+                'status' => 404,
+                'Message' => 'You are already involved in this mission',
+                'data' => []
+            ], 404);
+        }
+
         if (isset($input['image'])) {
 
             $data['proof'] = 'missions/' . time() . '.' . $request->image->extension();
