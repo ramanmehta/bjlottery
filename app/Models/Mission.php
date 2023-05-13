@@ -45,4 +45,9 @@ class Mission extends Model
     {
         return getImage($value);
     }
+
+    public function getStatusAttribute($val)
+    {
+        return 'Redeem';
+    }
 }
