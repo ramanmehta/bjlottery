@@ -48,6 +48,14 @@ class Mission extends Model
 
     public function getStatusAttribute($val)
     {
-        return 'Redeem';
+        $mission = MissionSubmission::where('id',auth()->id())
+            ->where('mission_id',$val)
+            ->first();
+        
+        if (is_null($mission)) {
+            return 'redeem';
+        }else{
+            $mission->status;
+        }
     }
 }
