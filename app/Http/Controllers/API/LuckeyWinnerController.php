@@ -49,7 +49,7 @@ class LuckeyWinnerController extends Controller
             ->get();
 
         foreach ($mission as $key1 => $value1) {
-            $i = count($data) + $key1;
+            $i = count($data) + (++$key1);
             $data[$i]['prize_image'] = getImage($value1->prize_image);
             $data[$i]['prize_name'] = $value1->prize_name;
             $data[$i]['type'] = 'mission';
