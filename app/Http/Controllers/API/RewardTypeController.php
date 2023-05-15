@@ -24,7 +24,7 @@ class RewardTypeController extends Controller
         $todatStartDateTime = date('Y-m-d 00:00:00');
 
         $rewardType = RewardType::all();
-        
+
         $dayOfWeek = date('w', time()) - 1;
 
         $weekStartDateTime = date('Y-m-d 00:00:00', strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
