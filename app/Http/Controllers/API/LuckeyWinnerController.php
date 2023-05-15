@@ -38,7 +38,7 @@ class LuckeyWinnerController extends Controller
                 'prize_name' => $value->prize_name,
                 'type' => 'lottery',
                 'id' => $value->id,
-                'status' => $value->status,
+                'status' => ucfirst($value->status),
                 'lottery' => $value->lottery,
             ];
         }
@@ -56,7 +56,7 @@ class LuckeyWinnerController extends Controller
                 'prize_name' => $value1->prize_name,
                 'type' => 'mission',
                 'id' => $value1->id,
-                'status' => $value1->approval_status,
+                'status' => ucfirst($value1->approval_status),
                 'mission' => $value1->mission,
             ];
         }

@@ -53,9 +53,9 @@ class Mission extends Model
             ->first();
         
         if (is_null($mission)) {
-            return 'redeem';
+            return ucfirst('redeem');
         }else{
-            return $mission->approval_status;
+            return ucfirst($mission->approval_status);
         }
     }
 }

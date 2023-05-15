@@ -41,7 +41,8 @@ class User extends Authenticatable
         'today_deduct_point',
         'total_point_available',
         'total_cash_available',
-        'refered_by'
+        'refered_by',
+        'ip_address'
     ];
 
     public function luckydraw(){

@@ -29,7 +29,6 @@ class AuthController extends Controller
     use CommonTrait;
     public function register(Request $request, $ref = '')
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'string|required|min:1',
             'username' => 'nullable|string|min:1|max:20|unique:users',
@@ -113,34 +112,41 @@ class AuthController extends Controller
         $input['password'] = bcrypt($input['password']);
         $input['logo'] = "/usersimage/avatar.png";
         $input['referal_code'] = $user_referal;
-        if (isset($refered_by) && !empty($refered_by)) {
-            $input['refered_by'] =  $refered_by;
-        }
-        $user = User::create($input);
 
+        if (! User::where('ip_address',$request->ip())->where('refered_by',$refered_by)->exists()) {
+            if (isset($refered_by) && !empty($refered_by)) {
+                $input['refered_by'] =  $refered_by;
+                $input['ip_address'] =  $request->ip();
+            }
+        }
+
+        $user = User::create($input);
 
         $user_id = $user->id;
 
-        $url = URL::to('/');
-        $referal_link = $url . '/api/referal-register/' . $user_referal;
-        // RewardType
-        // $getReferal = RewardType::where('reward_type' , 'referal')->first();
-        // $referalPoint = $getReferal->reward_points;
-        $referalPoint = 0;
-        $referalType = "referal";
-        $data = [
-            'user_id' => $user_id,
-            'referal_code' => $user_referal,
-            'referal_link' => $referal_link,
-            'referal_point' => $referalPoint,
-            'referal_type' => $referalType
-        ];
-
-        if (isset($refered_by) && !empty($refered_by)) {
-            $data['refered_by'] = $refered_by;
+        if (! User::where('ip_address',$request->ip())->where('refered_by',$refered_by)->exists()) {
+    
+            $url = URL::to('/');
+            $referal_link = $url . '/api/referal-register/' . $user_referal;
+            // RewardType
+            // $getReferal = RewardType::where('reward_type' , 'referal')->first();
+            // $referalPoint = $getReferal->reward_points;
+            $referalPoint = 0;
+            $referalType = "referal";
+            $data = [
+                'user_id' => $user_id,
+                'referal_code' => $user_referal,
+                'referal_link' => $referal_link,
+                'referal_point' => $referalPoint,
+                'referal_type' => $referalType
+            ];
+    
+            if (isset($refered_by) && !empty($refered_by)) {
+                $data['refered_by'] = $refered_by;
+            }
+    
+            $referal = ReferalPoint::create($data);
         }
-
-        $referal = ReferalPoint::create($data);
         // referal status 
         // if ($user_referal != '') {
         //     $countReferal = ReferalPoint::where('referal_code', $user_referal)->count();
@@ -211,7 +217,7 @@ class AuthController extends Controller
                         'password' => $request->password
                     ])) {
                         $user = Auth::user();
-                        $user->referral_count = User::where('refered_by',$user->referal_code)->count();
+                        $user->referral_count = User::where('id',$user->id)->count();
                         $success['token'] = $user->createToken('MyApp')->plainTextToken;
                         $success['user'] = $user;
                         $response = [
@@ -260,7 +266,7 @@ class AuthController extends Controller
                     ])) {
 
                         $user = Auth::user();
-                        $user->referral_count = User::where('refered_by',$user->referal_code)->count();
+                        $user->referral_count = User::where('id',$user->id)->count();
                         $success['token'] = $user->createToken('MyApp')->plainTextToken;
                         $success['user'] = $user;
                         $response = [
@@ -693,7 +699,7 @@ class AuthController extends Controller
         $user->save();
 
         $success['user'] = auth()->user();
-        $success['user']['referral_count'] = User::where('refered_by',auth()->user()->referal_code)->count();
+        $success['user']['referral_count'] = User::where('id',auth()->user()->id)->count();
 
         $response = [
             'success' => true,
