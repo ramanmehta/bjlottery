@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mission;
+use App\Models\MissionSubmission;
 use DB;
 
 class MissionsController extends Controller
@@ -168,7 +169,7 @@ class MissionsController extends Controller
         // dd($luckyDrawid);
         $mission = Mission::findOrFail($missionid);
         $mission->delete();
-
+        MissionSubmission::where('mission_id',$missionid)->delete();
         $error = "Mission removed successfully";
         return redirect()->route('mission')->with('error', $error);
     }

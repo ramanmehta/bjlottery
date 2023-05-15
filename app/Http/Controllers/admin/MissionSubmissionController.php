@@ -10,9 +10,14 @@ use App\Models\Mission;
 
 class MissionSubmissionController extends Controller
 {
-    public function index()
+    public function index($id = null)
     {
-        $submissions = MissionSubmission::with(['mission', 'user'])->orderBy('id', 'DESC')->paginate(10);;
+        $submissions = MissionSubmission::with(['mission', 'user'])
+            ->orderBy('id', 'DESC')
+            ->when(!is_null($id), function ($q) use ($id) {
+                $q->where('mission_id', $id);
+            })
+            ->paginate(10);;
 
         return view('admin.submissions.index', compact('submissions'));
     }

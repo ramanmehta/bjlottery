@@ -85,6 +85,7 @@
                     <th>Prize Image</th>
                     <th>Status</th>
                     <th>Action</th>
+                    <th>View</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -120,9 +121,12 @@
                       <a href="{{route('editMission',[encrypt($missions->id)])}}"><button type="button"
                           class="btn btn-success"><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove misssion: {{$missions->mission_title}}?')"
+                      <a onclick="return confirm('if you delete mission then associated submissions will delete , change the status of mission instead of deleting mission')"
                         href="{{route('removeMission',[encrypt($missions->id)])}}"><button type="button"
                           class="btn btn-danger"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
+                    </td>
+                    <td>
+                      <a href="{{ route('mission-submissions.index',$missions->id) }}">View</a>
                     </td>
                   </tr>
                   @endforeach

@@ -139,7 +139,7 @@ Route::group(['middleware' => 'admin_auth'], function () {
 
     // Mission Submissions 
 
-    Route::get('/admin/mission-submissions', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
+    Route::get('/admin/mission-submissions/{id?}', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
     Route::get('/admin/mission-submissions-show/{id}', [MissionSubmissionController::class, 'show'])->name('missionsubmissions.show');
     // Settings route
 
