@@ -26,6 +26,7 @@ use App\Http\Controllers\admin\MissionSubmissionController;
 */
 
 Route::get('/', function () {
+    
     return view('/admin/login');
 });
 
