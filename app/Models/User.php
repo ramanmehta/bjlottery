@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\LuckyDraw;
 
 class User extends Authenticatable
@@ -20,10 +18,10 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $primaryKey = "id";
+
     protected $fillable = [
         'name',
         'username',
-        // 'role_id',
         'email',
         'phone',
         'address_1',
@@ -34,7 +32,6 @@ class User extends Authenticatable
         'zip',
         'referal_code',
         'referal_type',
-        // 'status',
         'password',
         'logo',
         'today_gained_point',
@@ -45,7 +42,8 @@ class User extends Authenticatable
         'ip_address'
     ];
 
-    public function luckydraw(){
+    public function luckydraw()
+    {
         return $this->hasMany(LuckyDraw::class);
     }
 
@@ -54,7 +52,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Role', 'role_id', 'role_id');
     }
 
-    public function referal_point(){
+    public function referal_point()
+    {
         return $this->hasOne('App\Models\ReferalPoint');
     }
     /**
@@ -76,16 +75,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
-    public static function checkReferralCode($code) {
-        
-        // Check if the code already exists in the database
+    public static function checkReferralCode($code) 
+    {
+        // CHECK IF THE CODE ALREADY EXISTS IN THE DATABASE
         $existingCode = User::where('referal_code', $code)->count();
        
         if ($existingCode > 0) {
+
           return User::where('referal_code', $code)->first();
         }
       
-        // If all checks pass, the code is valid
+        // IF ALL CHECKS PASS, THE CODE IS VALID
         return false;
     }
     

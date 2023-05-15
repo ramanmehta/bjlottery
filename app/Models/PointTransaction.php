@@ -11,6 +11,6 @@ class PointTransaction extends Model
         'title',
         'type',
         'points',
-        'status',
+        'status', // 1 : credit 2 : debit
     ];
 }

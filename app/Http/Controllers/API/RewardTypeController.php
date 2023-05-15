@@ -371,7 +371,8 @@ class RewardTypeController extends Controller
                 'title',
                 'type',
                 'points',
-                'status'
+                'status',
+                'created_at'
             )
             ->get();
 
