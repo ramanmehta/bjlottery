@@ -33,7 +33,7 @@ class LuckeyWinnerController extends Controller
             ->get();
 
         foreach ($winner as $key => $value) {
-            $data[$key]['prize_image'] = getImage($value->prize_image);
+            $data[$key]['prize_image'] = $value->prize_image;
             $data[$key]['prize_name'] = $value->prize_name;
             $data[$key]['type'] = 'lottery';
             $data[$key]['id'] = $value->id;
@@ -42,14 +42,14 @@ class LuckeyWinnerController extends Controller
         }
 
         $mission = MissionSubmission::with('mission')
-            ->join('missions', 'missions.id', '=', 'mission_submissions.id')
+            ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
             ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.approval_status', 'mission_id','mission_submissions.id')
             ->where('mission_submissions.user_id', auth()->id())
             ->where('mission_type', 'prize')
             ->get();
 
         foreach ($mission as $key1 => $value1) {
-            $i = count($data) + $key1;
+            $i = count($data) + (++$key1);
             $data[$i]['prize_image'] = getImage($value1->prize_image);
             $data[$i]['prize_name'] = $value1->prize_name;
             $data[$i]['type'] = 'mission';
