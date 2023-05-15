@@ -33,14 +33,16 @@ class LuckeyWinnerController extends Controller
             ->get();
 
         foreach ($winner as $key => $value) {
-            $data[$key]['prize_image'] = $value->prize_image;
-            $data[$key]['prize_name'] = $value->prize_name;
-            $data[$key]['type'] = 'lottery';
-            $data[$key]['id'] = $value->id;
-            $data[$key]['status'] = $value->status;
-            $data[$key]['lottery'] = $value->lottery;
+            $data[] = [
+                'prize_image' => $value->prize_image,
+                'prize_name' => $value->prize_name,
+                'type' => 'lottery',
+                'id' => $value->id,
+                'status' => $value->status,
+                'lottery' => $value->lottery,
+            ];
         }
-
+        
         $mission = MissionSubmission::with('mission')
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
             ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.approval_status', 'mission_id','mission_submissions.id')
@@ -49,13 +51,14 @@ class LuckeyWinnerController extends Controller
             ->get();
 
         foreach ($mission as $key1 => $value1) {
-            $i = count($data) + (++$key1);
-            $data[$i]['prize_image'] = getImage($value1->prize_image);
-            $data[$i]['prize_name'] = $value1->prize_name;
-            $data[$i]['type'] = 'mission';
-            $data[$i]['id'] = $value1->id;
-            $data[$i]['status'] = $value1->approval_status;
-            $data[$i]['mission'] = $value1->mission;
+            $data[] = [
+                'prize_image' => getImage($value1->prize_image),
+                'prize_name' => $value1->prize_name,
+                'type' => 'mission',
+                'id' => $value1->id,
+                'status' => $value1->approval_status,
+                'mission' => $value1->mission,
+            ];
         }
 
         // $winner->merge($mission);

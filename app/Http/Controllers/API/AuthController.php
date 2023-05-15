@@ -211,6 +211,7 @@ class AuthController extends Controller
                         'password' => $request->password
                     ])) {
                         $user = Auth::user();
+                        $user->referral_count = User::where('refered_by',$user->referal_code)->count();
                         $success['token'] = $user->createToken('MyApp')->plainTextToken;
                         $success['user'] = $user;
                         $response = [
@@ -259,6 +260,7 @@ class AuthController extends Controller
                     ])) {
 
                         $user = Auth::user();
+                        $user->referral_count = User::where('refered_by',$user->referal_code)->count();
                         $success['token'] = $user->createToken('MyApp')->plainTextToken;
                         $success['user'] = $user;
                         $response = [
@@ -691,6 +693,7 @@ class AuthController extends Controller
         $user->save();
 
         $success['user'] = auth()->user();
+        $success['user']['referral_count'] = User::where('refered_by',auth()->user()->referal_code)->count();
 
         $response = [
             'success' => true,
