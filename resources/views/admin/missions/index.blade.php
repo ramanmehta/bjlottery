@@ -9,12 +9,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Game Missions</h1>
+          <h1>Missions List</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-            <li class="breadcrumb-item active">Game Missions</li>
+            <li class="breadcrumb-item active">Missions List</li>
           </ol>
         </div>
       </div>
@@ -32,7 +32,6 @@
               <a href="{{route('createMission')}}"><button type="button" class="btn btn-primary float-right"><i
                     class='fas fa-plus-circle'></i> Add New Mission</button></a>
             </div>
-
 
             <!-- /.card-header -->
             <div class="card-body">
@@ -84,8 +83,8 @@
                     <th>Prize Name</th>
                     <th>Prize Image</th>
                     <th>Status</th>
-                    <th>Action</th>
                     <th>View</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -110,23 +109,23 @@
                       @if ($missions->status==1)
                       <a onclick="return confirm('Are you sure deactivate Mission : {{$missions->mission_title}}?')"
                         href="{{route('missionStatus',[encrypt($missions->id)])}}"><input type="button"
-                          class="btn btn-success" value="Active"></a>
+                          class="btn btn-success btn-sm" value="Active"></a>
                       @else
                       <a onclick="return confirm('Are you sure activate Mission : {{$missions->mission_title}}?')"
                         href="{{route('missionStatus',[encrypt($missions->id)])}}"><input type="button"
-                          class="btn btn-warning" value="Inactive"></a>
+                          class="btn btn-warning btn-sm" value="Inactive"></a>
                       @endif
                     </td>
                     <td>
+                      <a class="btn btn-info btn-sm" href="{{ route('mission-submissions.index',$missions->id) }}"><i class="fa fa-eye"></i> View Submissions</a>
+                    </td>
+                    <td>
                       <a href="{{route('editMission',[encrypt($missions->id)])}}"><button type="button"
-                          class="btn btn-success"><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                          class="btn btn-success btn-sm"><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
                       <a onclick="return confirm('if you delete mission then associated submissions will delete , change the status of mission instead of deleting mission')"
                         href="{{route('removeMission',[encrypt($missions->id)])}}"><button type="button"
-                          class="btn btn-danger"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
-                    </td>
-                    <td>
-                      <a href="{{ route('mission-submissions.index',$missions->id) }}">View</a>
+                          class="btn btn-danger btn-sm"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
                     </td>
                   </tr>
                   @endforeach

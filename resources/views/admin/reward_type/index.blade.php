@@ -87,15 +87,15 @@
                     <td>{{$rewardTypes->reward_points}}</td>
                     <td>
                       @if ($rewardTypes->status==1)
-                      <a onclick="return confirm('Are you sure deactivate Reward : {{$rewardTypes->reward_title}}?')" href="{{route('rewardStatus',[encrypt($rewardTypes->id)])}}"><input type="button" class="btn btn-success" value="Active"></a>
+                      <a onclick="return confirm('Are you sure deactivate Reward : {{$rewardTypes->reward_title}}?')" href="{{route('rewardStatus',[encrypt($rewardTypes->id)])}}"><input type="button" class="btn btn-success btn-sm" value="Active"></a>
                       @else
-                      <a onclick="return confirm('Are you sure activate Reward : {{$rewardTypes->reward_title}}?')" href="{{route('rewardStatus',[encrypt($rewardTypes->id)])}}"><input type="button" class="btn btn-warning" value="Inactive"></a>
+                      <a onclick="return confirm('Are you sure activate Reward : {{$rewardTypes->reward_title}}?')" href="{{route('rewardStatus',[encrypt($rewardTypes->id)])}}"><input type="button" class="btn btn-warning btn-sm" value="Inactive"></a>
                       @endif  
                      </td>
                     <td>
-                      <a href="{{route('editRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a> </a>
+                      <a href="{{route('editRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-success btn-sm" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a> </a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')" href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button style="margin-top:5px;" type="button" class="btn btn-danger" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
+                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')" href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button type="button" class="btn btn-danger btn-sm" ><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
 
                     </td>
                   </tr>

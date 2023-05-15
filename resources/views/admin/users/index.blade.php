@@ -58,6 +58,8 @@
                       <div class="input-group mb-3 ">
                         
                         <input type="search" class="form-control" placeholder="Search here" aria-label="search user" aria-describedby="basic-addon2" name="search" value="{{ request()->get('search') }}" id="search">
+                        &nbsp;
+                        &nbsp;
                         <input class="btn btn-outline-secondary" type="submit" value="Search">
                         
                       </div>
@@ -101,16 +103,15 @@
                     </td>
                     <td>
                       @if ($users->status==1)
-                      <a onclick="return confirm('Are you sure deactivate user : {{$users->name}}?')" href="{{route('userStatus',[encrypt($users->id)])}}"><input type="button" class="btn btn-success" value="Activated"></a>
+                      <a onclick="return confirm('Are you sure deactivate user : {{$users->name}}?')" href="{{route('userStatus',[encrypt($users->id)])}}"><input type="button" class="btn btn-success btn-sm" value="Activated"></a>
                       @else
-                      <a onclick="return confirm('Are you sure activate user : {{$users->name}}?')"  href="{{route('userStatus',[encrypt($users->id)])}}"><input type="button" class="btn btn-warning" value="Inactive"></a>
+                      <a onclick="return confirm('Are you sure activate user : {{$users->name}}?')"  href="{{route('userStatus',[encrypt($users->id)])}}"><input type="button" class="btn btn-warning btn-sm" value="Inactive"></a>
                       @endif  
                      </td>
                     <td>
-                      <a href="{{route('edituser',[encrypt($users->id)])}}"><button type="button" class="btn btn-success" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
+                      <a href="{{route('edituser',[encrypt($users->id)])}}"><button type="button" class="btn btn-success btn-sm" ><i class='fas fa-edit'></i>&nbsp;Edit</button></a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove user : {{$users->name}}?')" href="{{route('removeUser',[encrypt($users->id)])}}"><button type="button" class="btn btn-danger" style="margin-top:5px;"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
-
+                      <a onclick="return confirm('Are you sure remove user : {{$users->name}}?')" href="{{route('removeUser',[encrypt($users->id)])}}"><button type="button" class="btn btn-danger btn-sm"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a> 
                     </td>
                   </tr>
                   @endforeach

@@ -169,7 +169,7 @@ class MissionsController extends Controller
         // dd($luckyDrawid);
         $mission = Mission::findOrFail($missionid);
         $mission->delete();
-        MissionSubmission::where('mission_id',$missionid)->delete();
+        MissionSubmission::where('mission_id', $missionid)->delete();
         $error = "Mission removed successfully";
         return redirect()->route('mission')->with('error', $error);
     }
