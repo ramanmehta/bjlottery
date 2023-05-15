@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LuckyDrawGames;
 use App\Models\LuckyDraw;
 use App\Models\RewardPoint;
+use App\Models\RewardType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use DB;
@@ -125,10 +126,6 @@ class LuckyDrawGamesController extends Controller
 
                 $updateUserPoint = User::where('id', $user_id)->update([
                     'total_point_available' => $balancePoint
-                ]);
-
-                RewardPoint::create([
-
                 ]);
 
                 $data = [

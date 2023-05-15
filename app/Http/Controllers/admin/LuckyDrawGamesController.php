@@ -8,7 +8,9 @@ use App\Models\LuckyDraw;
 use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
+use App\Models\Mission;
 use App\Models\MissionSubmission;
+use App\Models\PointTransaction;
 use App\Models\RewardPoint;
 use App\Models\RewardType;
 use App\Models\User;
@@ -388,31 +390,56 @@ class LuckyDrawGamesController extends Controller
             User::where('id',$mission->user_id)
             ->update(['total_point_available'=> DB::raw('total_point_available + '.$mission->enter_earn_affliated_points)]);
 
-            $reward = RewardType::where('reward_type','mission')->first();
+
+            PointTransaction::create([
+                'user_id' => $mission->user_id,
+                'title' => 'Mission',
+                'type' => $mission->mission_title,
+                'points' => $mission->enter_earn_affliated_points,
+                'status' => 1,
+            ]);
+
+            // $reward = RewardType::where('reward_type','mission')->first();
             
-            if (is_null($reward)) {
+            // if (is_null($reward)) {
                 
-                RewardType::create([
-                    'reward_type' => 'mission',
-                    'reward_title' => 'Mission Point',
-                    'reward_description' => 'Mission Complete Reward',
-                    'reward_points' => 100,
-                    'status' => 1,
+            //     RewardType::create([
+            //         'reward_type' => 'mission',
+            //         'reward_title' => 'Mission Point',
+            //         'reward_description' => 'Mission Complete Reward',
+            //         'reward_points' => 100,
+            //         'status' => 1,
+            //     ]);
+
+            //     $reward = RewardType::where('reward_type','mission')->first();
+            // }
+
+            // $data = [
+            //     'user_id' => $mission->user_id,
+            //     'reward_type_id' => $reward->id,
+            //     'reward_type' => $reward->reward_type,
+            //     'reward_points' => $mission->enter_earn_affliated_points,
+            //     'status' => '1',
+            //     'referal_type' => 'mission'
+            // ];
+
+            // RewardPoint::create($data);
+        }else{
+
+            $points = PointTransaction::where('user_id',$mission->user_id)->where('type',$mission->mission_title)->first();
+
+            if ($mission->mission_type == 'affliated_points' && $request->status == 'reject' && ! is_null($points)) {
+                
+                PointTransaction::create([
+                    'user_id' => $mission->user_id,
+                    'title' => 'Mission',
+                    'type' => $mission->mission_title,
+                    'points' => $mission->enter_earn_affliated_points,
+                    'status' => 2,
                 ]);
 
-                $reward = RewardType::where('reward_type','mission')->first();
+                User::where('id',$mission->user_id)->update(['total_point_available'=> DB::raw('total_point_available - '.$mission->enter_earn_affliated_points)]);
             }
-
-            $data = [
-                'user_id' => $mission->user_id,
-                'reward_type_id' => $reward->id,
-                'reward_type' => $reward->reward_type,
-                'reward_points' => $mission->enter_earn_affliated_points,
-                'status' => '1',
-                'referal_type' => 'mission'
-            ];
-
-            RewardPoint::create($data);
         }
 
         return response()->json('ok');

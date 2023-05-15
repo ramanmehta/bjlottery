@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\PointTransaction;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
 use App\Models\User;
@@ -167,6 +168,15 @@ class RewardTypeController extends Controller
             $rewardUser = RewardPoint::where('user_id', $request->user_id)->where('reward_type_id', $rewardType_id)->whereDate('created_at', '>=', $todatStartDateTime)->whereDate('created_at', '<=', $todatEndDateTime)->first();
 
             if (empty($rewardUser)) {
+
+                PointTransaction::create([
+                    'user_id' => $user_id,
+                    'title' => 'Daily Reward',
+                    'type' => 'daily_reward',
+                    'points' => $rewardPoint,
+                    'status' => 1,
+                ]);
+
                 $data = [
                     'user_id' => $user_id,
                     'reward_type_id' => $rewardType_id,
@@ -241,6 +251,14 @@ class RewardTypeController extends Controller
                 // dd($parseWeekDay->isWeekend());
                 if ($parseWeekDay->isWeekend() && ((int)$yesterday < (int)$todayTime) && ((int)$tomorrow > (int)$todayTime)) {
 
+                    PointTransaction::create([
+                        'user_id' => $user_id,
+                        'title' => 'Weekly Reward',
+                        'type' => 'weekly_reward',
+                        'points' => $rewardPoint,
+                        'status' => 1,
+                    ]);
+                    
                     $data = [
                         'user_id' => $user_id,
                         'reward_type_id' => $rewardType_id,
@@ -285,6 +303,14 @@ class RewardTypeController extends Controller
                 if ($parseWeekDay->isWeekend()) {
                     // dd("is weekend");
 
+                    PointTransaction::create([
+                        'user_id' => $user_id,
+                        'title' => 'Weekly Reward',
+                        'type' => 'weekly_reward',
+                        'points' => $rewardPoint,
+                        'status' => 1,
+                    ]);
+                    
                     $data = [
                         'user_id' => $user_id,
                         'reward_type_id' => $rewardType_id,
@@ -332,15 +358,20 @@ class RewardTypeController extends Controller
 
     public function rewardTransaction(Request $request)
     {
-        $res = RewardPoint::where('user_id', auth()->id())
+        $res = PointTransaction::where('user_id', auth()->id())
             ->when(isset($request->month), function ($q) use ($request) {
-                $q->whereMonth('reward_points.created_at', $request->month);
+                $q->whereMonth('created_at', $request->month);
             })
             ->when(isset($request->year), function ($q) use ($request) {
-                $q->whereYear('reward_points.created_at', $request->year);
+                $q->whereYear('created_at', $request->year);
             })
-            ->select('reward_points.id', 'reward_types.reward_title', 'reward_points.created_at', 'reward_points.reward_points')
-            ->join('reward_types', 'reward_types.id', '=', 'reward_points.reward_type_id')
+            ->select(
+                'user_id',
+            'title',
+            'type',
+            'points',
+            'status'
+            )
             ->get();
 
         $resource = [
