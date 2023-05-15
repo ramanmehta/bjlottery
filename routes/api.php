@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('mission/{id?}', [MissionController::class, 'list']);
     Route::post('mission/submit', [MissionController::class, 'missionSubmit']);
+    Route::get('reward-transaction',[RewardTypeController::class,'rewardTransaction']);
 });
 
 // Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);

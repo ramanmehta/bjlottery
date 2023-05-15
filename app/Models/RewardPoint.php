@@ -16,4 +16,8 @@ class RewardPoint extends Model
         'status',
         'referal_type'
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d'
+    ];
 }

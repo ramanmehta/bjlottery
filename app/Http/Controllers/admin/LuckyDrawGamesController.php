@@ -9,6 +9,8 @@ use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
 use App\Models\MissionSubmission;
+use App\Models\RewardPoint;
+use App\Models\RewardType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
@@ -385,6 +387,32 @@ class LuckyDrawGamesController extends Controller
             
             User::where('id',$mission->user_id)
             ->update(['total_point_available'=> DB::raw('total_point_available + '.$mission->enter_earn_affliated_points)]);
+
+            $reward = RewardType::where('reward_type','mission')->first();
+            
+            if (is_null($reward)) {
+                
+                RewardType::create([
+                    'reward_type' => 'mission',
+                    'reward_title' => 'Mission Point',
+                    'reward_description' => 'Mission Complete Reward',
+                    'reward_points' => 100,
+                    'status' => 1,
+                ]);
+
+                $reward = RewardType::where('reward_type','mission')->first();
+            }
+
+            $data = [
+                'user_id' => $mission->user_id,
+                'reward_type_id' => $reward->id,
+                'reward_type' => $reward->reward_type,
+                'reward_points' => $mission->enter_earn_affliated_points,
+                'status' => '1',
+                'referal_type' => 'mission'
+            ];
+
+            RewardPoint::create($data);
         }
 
         return response()->json('ok');
