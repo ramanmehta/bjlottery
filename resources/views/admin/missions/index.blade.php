@@ -117,7 +117,7 @@
                       @endif
                     </td>
                     <td>
-                      <a class="btn btn-info btn-sm" href="{{ route('mission-submissions.index',$missions->id) }}"><i class="fa fa-eye"></i> View Submissions</a>
+                      <a class="btn btn-info btn-sm" href="{{ route('mission-submissions.index',$missions->id) }}"><i class="fa fa-eye"></i> Submissions</a>
                     </td>
                     <td>
                       <a href="{{route('editMission',[encrypt($missions->id)])}}"><button type="button"
