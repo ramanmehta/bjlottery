@@ -258,7 +258,7 @@ class RewardTypeController extends Controller
                         'points' => $rewardPoint,
                         'status' => 1,
                     ]);
-                    
+
                     $data = [
                         'user_id' => $user_id,
                         'reward_type_id' => $rewardType_id,
@@ -310,7 +310,7 @@ class RewardTypeController extends Controller
                         'points' => $rewardPoint,
                         'status' => 1,
                     ]);
-                    
+
                     $data = [
                         'user_id' => $user_id,
                         'reward_type_id' => $rewardType_id,
@@ -366,11 +366,12 @@ class RewardTypeController extends Controller
                 $q->whereYear('created_at', $request->year);
             })
             ->select(
+                'id',
                 'user_id',
-            'title',
-            'type',
-            'points',
-            'status'
+                'title',
+                'type',
+                'points',
+                'status'
             )
             ->get();
 
