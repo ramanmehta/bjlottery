@@ -20,9 +20,13 @@ class RewardTypeController extends Controller
     public function index()
     {
         $userId = auth('sanctum')->user()->id;
+
         $todatStartDateTime = date('Y-m-d 00:00:00');
+
         $rewardType = RewardType::all();
+        
         $dayOfWeek = date('w', time()) - 1;
+
         $weekStartDateTime = date('Y-m-d 00:00:00', strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
         $todatEndDateTime = date('Y-m-d 23:59:59');
         $rewardTypesArr = [];
