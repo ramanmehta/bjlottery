@@ -57,6 +57,23 @@ class RewardTypeController extends Controller
                 $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '>=', $todatStartDateTime);
                 $getReward = $getReward->count();
 
+                $extraPoints = 0;
+
+                if ($value->reward_type == 'dailyreward') {
+
+                    $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
+                    $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
+            
+                    $userIds = User::where('refered_by',$userId)->pluck('id')->toArray();
+        
+                    $extraPoints = RewardPoint::whereIn('user_id',$userIds)
+                        ->where('reward_type','dailyreward')
+                        ->whereBetween('created_at',[$start,$end])
+                        ->count();
+
+                    $value->reward_points = $value->reward_points + $extraPoints;
+                }
+
                 if ($getReward > 0) {
                     $value->claimed = 1;
                 } else {
@@ -156,13 +173,29 @@ class RewardTypeController extends Controller
         $user_id = $request->user_id;
         $rewardType_id = $request->reward_type_id;
         $users = User::find($user_id);
-
+        
         $reward = RewardType::find($rewardType_id);
         $rewardPoint = $reward->reward_points;
         $rewardType = $reward->reward_type;
         $todayTime = Carbon::now()->timestamp;
         $yesterday = Carbon::yesterday()->timestamp;
         $tomorrow = Carbon::tomorrow()->timestamp;
+        
+        $extraPoints = 0;
+
+        if ($reward->reward_type == 'dailyreward') {
+
+            $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
+            $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
+    
+            $userIds = User::where('refered_by',$user_id)->pluck('id')->toArray();
+
+            $extraPoints = RewardPoint::whereIn('user_id',$userIds)
+                ->where('reward_type','dailyreward')
+                ->whereBetween('created_at',[$start,$end])
+                ->count();
+        }
+
         if ($users && $reward) {
 
             $todatStartDateTime = date('Y-m-d 00:00:00');
@@ -190,7 +223,7 @@ class RewardTypeController extends Controller
                     'user_id' => $user_id,
                     'title' => 'Daily Reward',
                     'type' => 'daily_reward',
-                    'points' => $rewardPoint,
+                    'points' => $rewardPoint + $extraPoints,
                     'status' => 1,
                 ]);
 
@@ -198,13 +231,13 @@ class RewardTypeController extends Controller
                     'user_id' => $user_id,
                     'reward_type_id' => $rewardType_id,
                     'reward_type' => $rewardType,
-                    'reward_points' => $rewardPoint,
+                    'reward_points' => $rewardPoint + $extraPoints,
                 ];
 
                 $creteNew = RewardPoint::create($data);
 
                 $userPoints = $users->total_point_available;
-                $addTotal = $userPoints + $rewardPoint;
+                $addTotal = $userPoints + ($rewardPoint + $extraPoints);
                 $users->total_point_available = $addTotal;
                 $updateUserPoint = $users->save();
 
