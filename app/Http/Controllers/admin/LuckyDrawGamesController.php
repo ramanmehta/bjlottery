@@ -8,21 +8,16 @@ use App\Models\LuckyDraw;
 use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
-use App\Models\Mission;
 use App\Models\MissionPrizeClaim;
 use App\Models\MissionSubmission;
 use App\Models\PointTransaction;
-use App\Models\RewardPoint;
-use App\Models\RewardType;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Nette\Utils\DateTime;
-use Illuminate\Support\Carbon;
-use DB;
+
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\Paginator;
 use \Illuminate\Pagination\LengthAwarePaginator;
-use PharIo\Manifest\Url;
+use Illuminate\Support\Facades\DB;
 
 class LuckyDrawGamesController extends Controller
 {
@@ -33,19 +28,19 @@ class LuckyDrawGamesController extends Controller
     public function index(Request $request)
     {
         $luckyDraw = LuckyDrawGames::when($request->has('search'), function ($q) use ($request) {
-                $search = $request->search;
-                $q->where('game_title', 'LIKE', '%' . $search . '%')
+            $search = $request->search;
+            $q->where('game_title', 'LIKE', '%' . $search . '%')
                 ->orWhere('game_description', 'LIKE', '%' . $search . '%')
                 ->orWhere('winning_prize_amount', 'LIKE', '%' . $search . '%')
                 ->orWhere('minimum_prize_amount', 'LIKE', '%' . $search . '%')
                 ->orWhere('points_per_ticket', 'LIKE', '%' . $search . '%');
-            })
+        })
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
         $imgPath = $this->fileurl();
 
-        return view('admin.lucky_draw.index',['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
+        return view('admin.lucky_draw.index', ['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
     }
 
     /**
@@ -363,7 +358,6 @@ class LuckyDrawGamesController extends Controller
 
         return view('admin.lucky_draw_winners.list', compact('claims'));
     }
-
 
     public function statusUpdateWinnerUser(Request $request)
     {

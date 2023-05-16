@@ -18,7 +18,7 @@ class MissionSubmissionController extends Controller
             ->when(!is_null($id), function ($q) use ($id) {
                 $q->where('mission_id', $id);
             })
-            ->paginate(10);;
+            ->paginate(10);
 
         return view('admin.submissions.index', compact('submissions'));
     }

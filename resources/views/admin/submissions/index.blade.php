@@ -27,12 +27,12 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            <div class="card-header">
+            {{-- <div class="card-header">
               <!-- <h3 class="card-title">Levels</h3> -->
               &nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
+            </div> --}}
 
-            <div class="row mb-2 mt-4">
+            {{-- <div class="row mb-2 mt-4">
               <div class="col-sm-6">
               </div>
               <div class="col-sm-6 ">
@@ -46,7 +46,7 @@
                 </form>
 
               </div>
-            </div>
+            </div> --}}
             <!-- /.card-header -->
             <div class="card-body">
               @if ($message = Session::get('success'))
@@ -65,7 +65,7 @@
                 <strong></strong> {{ $message }}
               </div>
               @endif
-              <table class="table table-striped text-center">
+              <table class="table table-striped table-bordered text-center">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -121,66 +121,10 @@
                   @endforeach
                 </tbody>
               </table>
+              <br>
+              {!! $submissions->links() !!}
             </div>
-            <div class="row">
-              <div class="col-md-10"></div>
-              <div class="col-md-2">
-                <p class="text-sm text-gray-700 leading-5">
-                  {!! __('Showing') !!}
-                  <span class="font-medium">{{ $submissions->firstItem() }}</span>
-                  {!! __('to') !!}
-                  <span class="font-medium">{{ $submissions->lastItem() }}</span>
-                  {!! __('of') !!}
-                  <span class="font-medium">{{ $submissions->total() }}</span>
-                  {!! __('results') !!}
-                </p>
-                @if ($submissions->hasPages())
-                <ul class="pagination pagination">
-                  {{-- Previous Page Link --}}
-                  @if ($submissions->onFirstPage())
-                  <li class="disabled page-item"><a href="{{$submissions->currentPage()}}"
-                      class="page-link"><span>«</span></a></li>
-                  @else
-                  <li class="page-item"><a class="page-link" href="{{ $submissions->previousPageUrl() }}"
-                      rel="prev">«</a></li>
-                  @endif
-
-                  @if($submissions->currentPage() > 3)
-                  <li class="page-item"><a class="page-link" href="{{ $submissions->url(1) }}">1</a></li>
-                  @endif
-                  @if($submissions->currentPage() > 4)
-                  <li class="page-item"><span>...</span></li>
-                  @endif
-                  @foreach(range(1, $submissions->lastPage()) as $i)
-                  @if($i >= $submissions->currentPage() - 2 && $i <= $submissions->currentPage() + 2)
-                    @if ($i == $submissions->currentPage())
-                    <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
-                    @else
-                    <li class="page-item"><a class="page-link" href="{{ $submissions->url($i) }}">{{ $i }}</a></li>
-                    @endif
-                    @endif
-                    @endforeach
-                    @if($submissions->currentPage() < $submissions->lastPage() - 3)
-                      <li class="page-item"><span class="page-link">...</span></li>
-                      @endif
-                      @if($submissions->currentPage() < $submissions->lastPage() - 2)
-                        <li class="page-item"><a class="page-link"
-                            href="{{ $submissions->url($submissions->lastPage()) }}">{{ $submissions->lastPage() }}</a>
-                        </li>
-                        @endif
-
-                        {{-- Next Page Link --}}
-                        @if ($submissions->hasMorePages())
-                        <li class="page-item"><a class="page-link" href="{{ $submissions->nextPageUrl() }}"
-                            rel="next">»</a></li>
-                        @else
-                        <li class="page-item disabled"><a href="{{$submissions->lastPage()}}"
-                            class="page-link"><span>»</span></a></li>
-                        @endif
-                </ul>
-                @endif
-              </div>
-            </div>
+            
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

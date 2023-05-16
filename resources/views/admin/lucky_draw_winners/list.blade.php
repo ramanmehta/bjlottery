@@ -9,12 +9,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lucky Draw Claim</h1>
+                    <h1>User Winner Prize Claim</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item active">Lucky Draw Claim List</li>
+                        <li class="breadcrumb-item active">User Winner Prize Claim</li>
                     </ol>
                 </div>
             </div>
@@ -130,16 +130,20 @@
                                         </td>
                                         <td>
                                             <select class="status form-control">
-                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 1 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}"
+                                                    data-id="{{ $claim->id }}" {{ $claim->status == 1 ? 'selected' :
                                                     '' }} value="1">Claim
                                                 </option>
-                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}"
+                                                    data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
                                                     '' }} value="2">Pending
                                                 </option>
-                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}"
+                                                    data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :
                                                     '' }} value="3">Approved
                                                 </option>
-                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 4 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}"
+                                                    data-id="{{ $claim->id }}" {{ $claim->status == 4 ? 'selected' :
                                                     '' }} value="4">Rejected
                                                 </option>
                                             </select>

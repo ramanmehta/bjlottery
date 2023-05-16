@@ -130,72 +130,13 @@
                   </tr>
                   @endforeach
                 </tbody>
-
               </table>
-            </div>
-            <div class="row">
-              <div class="col-md-10"></div>
-              <div class="col-md-2">
-                <p class="text-sm text-gray-700 leading-5">
-                  {!! __('Showing') !!}
-                  <span class="font-medium">{{ $mission->firstItem() }}</span>
-                  {!! __('to') !!}
-                  <span class="font-medium">{{ $mission->lastItem() }}</span>
-                  {!! __('of') !!}
-                  <span class="font-medium">{{ $mission->total() }}</span>
-                  {!! __('results') !!}
-                </p>
-
-                @if ($mission->hasPages())
-                <ul class="pagination pagination">
-                  {{-- Previous Page Link --}}
-                  @if ($mission->onFirstPage())
-                  <li class="disabled page-item"><a href="{{$mission->currentPage()}}"
-                      class="page-link"><span>«</span></a></li>
-                  @else
-                  <li class="page-item"><a class="page-link" href="{{ $mission->previousPageUrl() }}" rel="prev">«</a>
-                  </li>
-                  @endif
-
-                  @if($mission->currentPage() > 3)
-                  <li class="page-item"><a class="page-link" href="{{ $mission->url(1) }}">1</a></li>
-                  @endif
-                  @if($mission->currentPage() > 4)
-                  <li class="page-item"><span>...</span></li>
-                  @endif
-                  @foreach(range(1, $mission->lastPage()) as $i)
-                  @if($i >= $mission->currentPage() - 2 && $i <= $mission->currentPage() + 2)
-                    @if ($i == $mission->currentPage())
-                    <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
-                    @else
-                    <li class="page-item"><a class="page-link" href="{{ $mission->url($i) }}">{{ $i }}</a></li>
-                    @endif
-                    @endif
-                    @endforeach
-                    @if($mission->currentPage() < $mission->lastPage() - 3)
-                      <li class="page-item"><span class="page-link">...</span></li>
-                      @endif
-                      @if($mission->currentPage() < $mission->lastPage() - 2)
-                        <li class="page-item"><a class="page-link" href="{{ $mission->url($mission->lastPage()) }}">{{
-                            $mission->lastPage() }}</a></li>
-                        @endif
-
-                        {{-- Next Page Link --}}
-                        @if ($mission->hasMorePages())
-                        <li class="page-item"><a class="page-link" href="{{ $mission->nextPageUrl() }}" rel="next">»</a>
-                        </li>
-                        @else
-                        <li class="page-item disabled"><a href="{{$mission->lastPage()}}"
-                            class="page-link"><span>»</span></a></li>
-                        @endif
-                </ul>
-                @endif
-              </div>
+              <br>
+              {!! $mission->links() !!}
             </div>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
-
           <!-- /.card -->
         </div>
         <!-- /.col -->
