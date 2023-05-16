@@ -335,7 +335,7 @@ class LuckyDrawGamesController extends Controller
         return redirect()->route('add.price', encrypt($lId))->with('error', 'Ticket Deleted successfully');
     }
 
-    public function paginate($items, $perPage = 15, $page = null, $options = [])
+    public function paginate($items, $perPage = 10, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
@@ -350,10 +350,11 @@ class LuckyDrawGamesController extends Controller
             })
             ->get();
 
-        $mission = MissionPrizeClaim::with(['user', 'mission', 'mission_submission'])->get();
+        $mission = MissionPrizeClaim::with(['user', 'mission', 'mission_submission'])
+            ->get();
 
-        $claims = $claims->merge($mission);
-        $claims = $this->paginate($claims, 10);
+        $claims = collect($claims->merge($mission))->sortByDesc('created_at');
+        $claims = $this->paginate($claims);
         $claims->setPath('/admin/winner-user/claim');
 
         return view('admin.lucky_draw_winners.list', compact('claims'));

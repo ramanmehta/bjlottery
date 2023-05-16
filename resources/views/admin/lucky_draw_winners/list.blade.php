@@ -68,7 +68,7 @@
                                 <thead>
                                     <tr>
                                         <td>ID</td>
-                                        <th>Ticket No / Mission Id</th>
+                                        <th>Ticket No / Mission ID</th>
                                         <th>Name</th>
                                         <th>UserName</th>
                                         <th>Lottery name / Mission Name</th>
@@ -81,10 +81,11 @@
                                 </thead>
                                 <tbody>
                                     @if ($claims->isNotEmpty())
+                                    @php $i = 0 @endphp
                                     @foreach ($claims as $key => $claim)
-                                    @php $has = isset($claim->lottery) @endphp
+                                    @php $has = isset($claim->lottery); @endphp
                                     <tr>
-                                        <td>{{ ++$key }}</td>
+                                        <td>{{ ++$i }}</td>
                                         <td>
                                             @if ($has)
                                             {{ $claim->ticket_no }}

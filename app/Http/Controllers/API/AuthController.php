@@ -27,6 +27,7 @@ use App\Http\Traits\CommonTrait;
 class AuthController extends Controller
 {
     use CommonTrait;
+
     public function register(Request $request, $ref = '')
     {
         $validator = Validator::make($request->all(), [
@@ -307,7 +308,6 @@ class AuthController extends Controller
     }
 
     // login with token
-
     public function user(Request $request)
     {
         $response = [
@@ -319,9 +319,7 @@ class AuthController extends Controller
         return response()->json($response);
     }
 
-
     // logout with token
-
     public function logout(Request $request)
     {
 
@@ -335,7 +333,6 @@ class AuthController extends Controller
     }
 
     // forget password api method
-
     public function forgetPassword(Request $request)
     {
         //dd("forgetPassword");
@@ -387,11 +384,8 @@ class AuthController extends Controller
             return response()->json($response);
         }
     }
-    // end forget password api method
-
 
     // change password api method
-
     public function changePassword(Request $request)
     {
         // dd(Auth::user());
@@ -434,7 +428,6 @@ class AuthController extends Controller
     }
 
     // change passwod from token
-
     public function passwordChange(Request $request)
     {
         // return("here");
@@ -567,7 +560,6 @@ class AuthController extends Controller
             return response()->json($response);
         }
     }
-
 
     public function updateUser(Request $request)
     {

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+
 class ReferalsStatsController extends Controller
 {
     /**
@@ -18,12 +19,12 @@ class ReferalsStatsController extends Controller
     {
         // dd("notification here");
         $referals = ReferalsStats::all();
-        if($referals->count() > 0){
+        if ($referals->count() > 0) {
             return response()->json([
                 'status' => 200,
                 'referals' => $referals,
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'No records found',
@@ -54,17 +55,16 @@ class ReferalsStatsController extends Controller
     {
         // dd('notification id');
         $referals = ReferalsStats::find($id);
-        if($referals){
+        if ($referals) {
             return response()->json([
                 'status' => 200,
                 'Referals' => $referals,
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'No records found'
             ], 404);
-
         }
     }
 
@@ -93,7 +93,8 @@ class ReferalsStatsController extends Controller
     }
 
     // Get referal history 
-    public function getYourHIstory(Request $request){
+    public function getYourHIstory(Request $request)
+    {
         $monthName = $request->all()['month_name'];
         $year = $request->all()['year'];
 
@@ -107,12 +108,12 @@ class ReferalsStatsController extends Controller
 
         $monthName = $monthName; //'May';
         $year = $year; //2023;
-        $startDate = Carbon::createFromFormat('Y F', $year.' '.$monthName)->startOfMonth();
+        $startDate = Carbon::createFromFormat('Y F', $year . ' ' . $monthName)->startOfMonth();
         $start_date = $startDate->format('Y-m-d');
-        $endDate = Carbon::createFromFormat('Y F', $year.' '.$monthName)->endOfMonth();
+        $endDate = Carbon::createFromFormat('Y F', $year . ' ' . $monthName)->endOfMonth();
         $end_date = $endDate->format('Y-m-d');
-        
-        
+
+
         if ($validator->fails()) {
             $response = [
                 'success' => false,
@@ -132,14 +133,14 @@ class ReferalsStatsController extends Controller
                 //                     ->get();
                 // \DB::enableQueryLog(); // Enable query log
                 $results = DB::table('referal_points')
-                            ->selectRaw('user_id, SUM(referal_point) as total_referal_points')
-                            ->whereBetween('created_at', [$start_date, $end_date])
-                            ->where('user_id',$userId)
-                            ->groupBy('user_id')
-                            ->first();
+                    ->selectRaw('user_id, SUM(referal_point) as total_referal_points')
+                    ->whereBetween('created_at', [$start_date, $end_date])
+                    ->where('user_id', $userId)
+                    ->groupBy('user_id')
+                    ->first();
                 // dd(\DB::getQueryLog()); // Show results of log
                 // dd($results);
-                $data['referal_points_earned'] = $results->total_referal_points ? $results->total_referal_points :0;
+                $data['referal_points_earned'] = $results->total_referal_points ? $results->total_referal_points : 0;
                 $data['mission_points_earned'] = 0;
 
                 $response = [
@@ -159,10 +160,5 @@ class ReferalsStatsController extends Controller
 
             return response()->json($response);
         }
-
-
-
     }
-
-    
 }

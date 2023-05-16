@@ -15,18 +15,17 @@ class RoleController extends Controller
     {
         //dd("here role api");
         $role = Role::all();
-        if($role->count() > 0){
+        if ($role->count() > 0) {
             return response()->json([
                 'status' => 200,
                 'roles' => $role
-            ],200);
-        }else{
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 404,
                 'Roles' => 'No records found'
             ], 404);
         }
-        
     }
 
     /**
@@ -53,13 +52,13 @@ class RoleController extends Controller
         // $role =  Role::findOrFail($id);
         // var_dump(Role::findOrFail($id));
         $role =  Role::find($id);
-        if($role){
+        if ($role) {
 
             return response()->json([
                 'status' => 200,
                 'role' => $role
             ], 200);
-        }else{
+        } else {
 
             return response()->json([
                 'status' => 404,
