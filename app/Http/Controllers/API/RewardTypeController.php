@@ -163,6 +163,11 @@ class RewardTypeController extends Controller
         $todayTime = Carbon::now()->timestamp;
         $yesterday = Carbon::yesterday()->timestamp;
         $tomorrow = Carbon::tomorrow()->timestamp;
+
+
+
+
+        
         if ($users && $reward) {
 
             $todatStartDateTime = date('Y-m-d 00:00:00');
