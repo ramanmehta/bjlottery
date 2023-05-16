@@ -40,11 +40,11 @@ class MissionSubmission extends Model
         $mission = MissionPrizeClaim::where('user_id',auth()->id())
         ->where('mission_id',$val)
         ->first();
-    
+        
     if (is_null($mission)) {
         return ucfirst('claim');
     }else{
-        return ucfirst($mission->status);
+        return status($mission->status);
     }
     }
 }

@@ -369,10 +369,19 @@ class LuckyDrawGamesController extends Controller
 
     public function statusUpdateWinnerUser(Request $request)
     {
-        LuckyDrawWinnerClaim::where('id', $request->id)
-            ->update([
-                'status' => $request->status
-            ]);
+        if ($request->type == 'lottery') {
+            LuckyDrawWinnerClaim::where('id', $request->id)
+                ->update([
+                    'status' => $request->status
+                ]);
+        }
+
+        if ($request->type == 'mission') {
+            MissionPrizeClaim::where('id', $request->id)
+                ->update([
+                    'status' => $request->status
+                ]);
+        }
 
         return response()->json('ok');
     }

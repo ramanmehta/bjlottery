@@ -47,7 +47,7 @@ class LuckeyWinnerController extends Controller
 
         $mission = MissionSubmission::with('mission')
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
-            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.approval_status as status', 'mission_id','mission_submissions.id')
+            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.mission_id as status', 'mission_id','mission_submissions.id')
             ->where('mission_submissions.user_id',auth()->id())
             ->where('mission_type', 'prize')
             ->where('mission_submissions.approval_status','approved')

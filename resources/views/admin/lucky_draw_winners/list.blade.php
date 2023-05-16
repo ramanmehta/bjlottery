@@ -130,16 +130,16 @@
                                         </td>
                                         <td>
                                             <select class="status form-control">
-                                                <option data-id="{{ $claim->id }}" {{ $claim->status == 1 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 1 ? 'selected' :
                                                     '' }} value="1">Claim
                                                 </option>
-                                                <option data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
                                                     '' }} value="2">Pending
                                                 </option>
-                                                <option data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :
                                                     '' }} value="3">Approved
                                                 </option>
-                                                <option data-id="{{ $claim->id }}" {{ $claim->status == 4 ? 'selected' :
+                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}" data-id="{{ $claim->id }}" {{ $claim->status == 4 ? 'selected' :
                                                     '' }} value="4">Rejected
                                                 </option>
                                             </select>
@@ -172,7 +172,7 @@
     $.ajax({
         type: "post",
         url: "{{ route('status.update.winner.user') }}",
-        data: {'status' : $(this).val(),'id' : $('option:selected',this).data('id'),'_token' : "{{ csrf_token() }}"},
+        data: {'status' : $(this).val(),'id' : $('option:selected',this).data('id'),'_token' : "{{ csrf_token() }}",'type' : $('option:selected',this).data('type')},
         dataType: "json",
         success: function (response) {
             console.log(response)
