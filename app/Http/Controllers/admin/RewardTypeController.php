@@ -16,26 +16,17 @@ class RewardTypeController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('search')){
-
-            $search = $request->search;
-          
-            $rewardType = DB::table('reward_types')
-                ->where('reward_type' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('reward_title' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('reward_description' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('reward_points' , 'LIKE' , '%'.$search.'%')
-                ->paginate(10);           
-        
-            }else{
-              
-                // $rewardType = RewardType::all();
-                $rewardType = RewardType::orderBy('id', 'DESC')->paginate(10);
-            
-            }
-        
+        $rewardType = RewardType::orderBy('id', 'DESC')
+            ->when($request->has('search'),function($q) use ($request){
+                $search = $request->search;
+                $q->where('reward_type' , 'LIKE' , '%'.$search.'%')
+                    ->orWhere('reward_title' , 'LIKE' , '%'.$search.'%')
+                    ->orWhere('reward_description' , 'LIKE' , '%'.$search.'%')
+                    ->orWhere('reward_points' , 'LIKE' , '%'.$search.'%');
+                })
+                ->paginate(10);
     
-        return view('admin.reward_type.index',['rewardType' => $rewardType]);
+        return view('admin.reward_type.index',compact('rewardType'));
     }
 
     /**

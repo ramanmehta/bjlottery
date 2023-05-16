@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MissionSubmission extends Model
 {
     use HasFactory;
+    
     protected $table = 'mission_submissions';
+
     protected $fillable = [
         'mission_id',
         'user_id',
@@ -31,5 +33,18 @@ class MissionSubmission extends Model
     public function getTypeAttribute($val)
     {
         return 'mission';
+    }
+
+    public function getStatusAttribute($val)
+    {
+        $mission = MissionPrizeClaim::where('user_id',auth()->id())
+        ->where('mission_id',$val)
+        ->first();
+    
+    if (is_null($mission)) {
+        return ucfirst('claim');
+    }else{
+        return ucfirst($mission->status);
+    }
     }
 }

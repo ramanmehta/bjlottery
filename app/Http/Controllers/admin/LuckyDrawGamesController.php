@@ -9,6 +9,7 @@ use App\Models\LuckyDrawGames;
 use App\Models\LuckyDrawWinner;
 use App\Models\LuckyDrawWinnerClaim;
 use App\Models\Mission;
+use App\Models\MissionPrizeClaim;
 use App\Models\MissionSubmission;
 use App\Models\PointTransaction;
 use App\Models\RewardPoint;
@@ -18,7 +19,10 @@ use Illuminate\Http\Request;
 use Nette\Utils\DateTime;
 use Illuminate\Support\Carbon;
 use DB;
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\Paginator;
+use \Illuminate\Pagination\LengthAwarePaginator;
+use PharIo\Manifest\Url;
 
 class LuckyDrawGamesController extends Controller
 {
@@ -338,6 +342,13 @@ class LuckyDrawGamesController extends Controller
         return redirect()->route('add.price', encrypt($lId))->with('error', 'Ticket Deleted successfully');
     }
 
+    public function paginate($items, $perPage = 15, $page = null, $options = [])
+{
+    $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+    $items = $items instanceof Collection ? $items : Collection::make($items);
+    return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+}
+
     public function winnerUserClaim(Request $request)
     {
         $claims = LuckyDrawWinnerClaim::with(['user', 'lottery', 'prize'])
@@ -346,8 +357,15 @@ class LuckyDrawGamesController extends Controller
             })
             ->get();
 
+        $mission = MissionPrizeClaim::with(['user','mission','mission_submission'])->get();
+        
+        $claims = $claims->merge($mission);
+        $claims = $this->paginate($claims,10);
+        $claims->setPath('/admin/winner-user/claim');
+        
         return view('admin.lucky_draw_winners.list', compact('claims'));
     }
+
 
     public function statusUpdateWinnerUser(Request $request)
     {
@@ -380,7 +398,8 @@ class LuckyDrawGamesController extends Controller
     public function missionSubmitStatusUpdate(Request $request)
     {
         MissionSubmission::where('id',$request->id)->update(['approval_status' => $request->status]);
-        
+
+        // MissionPrizeClaim::where('id',$request->id)->update(['approval_status' => $request->status]);
         $mission = MissionSubmission::where('mission_submissions.id',$request->id)
             ->join('missions','missions.id','=','mission_submissions.mission_id')
             ->first();

@@ -44,13 +44,13 @@ class LuckeyWinnerController extends Controller
                 'lottery' => $value->lottery,
             ];
         }
-        
+
         $mission = MissionSubmission::with('mission')
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
-            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.approval_status', 'mission_id','mission_submissions.id')
-            ->where('mission_submissions.user_id', auth()->id())
+            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.approval_status as status', 'mission_id','mission_submissions.id')
+            ->where('mission_submissions.user_id',auth()->id())
             ->where('mission_type', 'prize')
-            ->where('mission_submissions.approval_status', 'approved')
+            ->where('mission_submissions.approval_status','approved')
             ->get();
 
         foreach ($mission as $key1 => $value1) {
@@ -59,7 +59,7 @@ class LuckeyWinnerController extends Controller
                 'prize_name' => $value1->prize_name,
                 'type' => 'mission',
                 'id' => $value1->id,
-                'status' => ucfirst($value1->approval_status),
+                'status' => ucfirst($value1->status),
                 'mission' => $value1->mission,
             ];
         }
@@ -142,14 +142,14 @@ class LuckeyWinnerController extends Controller
             ]);
         }else{
 
-            $mission = MissionSubmission::find($input['id']);
+            $mission = MissionSubmission::where('mission_id',$input['id'])->where('user_id',auth()->id())->first();
 
             MissionPrizeClaim::create([
                 'user_id' => auth()->id(),
                 'name' => $input['name'],
                 'address_1' => $input['address_1'],
                 'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
-                'status' => 1,
+                'status' => 'Claim',
                 'mission_id' => $mission->mission_id,
                 'mission_submit_id' => $mission->id,
             ]);

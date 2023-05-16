@@ -68,10 +68,10 @@
                                 <thead>
                                     <tr>
                                         <td>ID</td>
-                                        <th>Ticket No</th>
+                                        <th>Ticket No / Mission Id</th>
                                         <th>Name</th>
                                         <th>UserName</th>
-                                        <th>Lottery name</th>
+                                        <th>Lottery name / Mission Name</th>
                                         <th>Prize Name</th>
                                         <th>Prize Image</th>
                                         <th>Address 1</th>
@@ -82,10 +82,16 @@
                                 <tbody>
                                     @if ($claims->isNotEmpty())
                                     @foreach ($claims as $key => $claim)
+                                    @php $has = isset($claim->lottery) @endphp
                                     <tr>
                                         <td>{{ ++$key }}</td>
                                         <td>
+                                            @if ($has)
                                             {{ $claim->ticket_no }}
+                                            @else
+
+                                            {{ $claim->id }}
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $claim->name }}
@@ -94,14 +100,27 @@
                                             {{ $claim->username }}
                                         </td>
                                         <td>
+                                            @if ($has)
                                             {{ $claim->lottery->game_title }}
+                                            @else
+                                            {{ $claim->mission->mission_title }}
+                                            @endif
                                         </td>
                                         <td>
+                                            @if ($has)
                                             {{ $claim->prize->prize_name }}
+                                            @else
+                                            {{ $claim->mission->prize_name }}
+                                            @endif
                                         </td>
                                         <td>
+                                            @if ($has)
                                             <img width="100" height="50" src="{{ $claim->prize->prize_image }}"
                                                 alt="{{ $claim->prize->prize_name }}">
+                                            @else
+                                            <img width="100" height="50" src="{{ $claim->mission->prize_image }}"
+                                                alt="{{ $claim->mission->prize_name }}">
+                                            @endif
                                         </td>
                                         <td>
                                             {{ $claim->address_1 }}
@@ -135,6 +154,8 @@
                                 </tbody>
                             </table>
                             </form>
+                            <br>
+                            {!! $claims->links() !!}
                         </div>
                     </div>
                 </div>

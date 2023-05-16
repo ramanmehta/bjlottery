@@ -15,4 +15,24 @@ class MissionPrizeClaim extends Model
         'mission_id',
         'mission_submit_id'
     ];
+
+    public function mission()
+    {
+        return $this->belongsTo(Mission::class,'mission_id','id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+    
+    public function mission_submission()
+    {
+        return $this->belongsTo(MissionSubmission::class,'mission_submit_id','id');
+    }
+
+    public function getStatusAttribute($val)
+    {
+        return ucfirst($val);
+    }
 }
