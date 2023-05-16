@@ -32,6 +32,8 @@ class LuckeyWinnerController extends Controller
             ->leftjoin('lucky_draw_winner_claims', 'lucky_draw_winner_claims.lucky_draw_winner_id', '=', 'lucky_draw_winners.id')
             ->get();
 
+        $data = [];
+        
         foreach ($winner as $key => $value) {
             $data[] = [
                 'prize_image' => $value->prize_image,

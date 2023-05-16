@@ -19,7 +19,7 @@ class RewardTypeController extends Controller
 {
     public function index()
     {
-        $userId = auth('sanctum')->user()->id;
+        $userId = 26;
 
         $todatStartDateTime = date('Y-m-d 00:00:00');
 
@@ -27,29 +27,43 @@ class RewardTypeController extends Controller
 
         $dayOfWeek = date('w', time()) - 1;
 
+
         $weekStartDateTime = date('Y-m-d 00:00:00', strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
         $todatEndDateTime = date('Y-m-d 23:59:59');
+
         $rewardTypesArr = [];
         foreach ($rewardType as $value) {
             $reward_type_id = $value->id;
             $getReward  = DB::table('reward_points')
                 ->where('user_id', $userId)
                 ->where('reward_type_id', $reward_type_id);
-            switch ($value->reward_type) {
-                case 'weeklyreward':
-                    $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '<=', $todatEndDateTime);
-                    break;
-                default:
-                    $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '>=', $todatStartDateTime);
-            }
 
-            $getReward = $getReward->count();
+            // switch ($value->reward_type) {
+            //     case 'weeklyreward':
+            //         $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '<=', $todatEndDateTime);
+            //         break;
+            //     default:
+            // }
 
-            if ($getReward > 0) {
-                $value->claimed = 1;
+            if ($value->reward_type == 'weeklyreward') {
+
+                if (date('l', time()) == 'Saturday') {
+                    $value->claimed = 0;
+                } else {
+                    $value->claimed = 1;
+                }
             } else {
-                $value->claimed = 0;
+
+                $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '>=', $todatStartDateTime);
+                $getReward = $getReward->count();
+
+                if ($getReward > 0) {
+                    $value->claimed = 1;
+                } else {
+                    $value->claimed = 0;
+                }
             }
+
             $rewardTypesArr[] = $value;
         }
 
@@ -142,20 +156,19 @@ class RewardTypeController extends Controller
         $user_id = $request->user_id;
         $rewardType_id = $request->reward_type_id;
         $users = User::find($user_id);
+
         $reward = RewardType::find($rewardType_id);
         $rewardPoint = $reward->reward_points;
         $rewardType = $reward->reward_type;
         $todayTime = Carbon::now()->timestamp;
         $yesterday = Carbon::yesterday()->timestamp;
         $tomorrow = Carbon::tomorrow()->timestamp;
-
         if ($users && $reward) {
 
             $todatStartDateTime = date('Y-m-d 00:00:00');
             $todatEndDateTime = date('Y-m-d 23:59:59');
             $todaydate = date('Y-m-d'); // '2023-04-08';
-            $dayOfWeek = date('w', strtotime($todaydate));
-
+            $dayOfWeek = date('w', strtotime('2023-05-20'));
             switch ($reward->reward_type) {
                 case 'weeklyreward':
                     if ($dayOfWeek != 6) {
