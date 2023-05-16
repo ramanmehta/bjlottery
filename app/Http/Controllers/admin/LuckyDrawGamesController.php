@@ -32,22 +32,20 @@ class LuckyDrawGamesController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('search')) {
-
-            $search = $request->search;
-            $luckyDraw = DB::table('lucky_draw_games')
-                ->where('game_title', 'LIKE', '%' . $search . '%')
+        $luckyDraw = LuckyDrawGames::when($request->has('search'), function ($q) use ($request) {
+                $search = $request->search;
+                $q->where('game_title', 'LIKE', '%' . $search . '%')
                 ->orWhere('game_description', 'LIKE', '%' . $search . '%')
                 ->orWhere('winning_prize_amount', 'LIKE', '%' . $search . '%')
                 ->orWhere('minimum_prize_amount', 'LIKE', '%' . $search . '%')
-                ->orWhere('points_per_ticket', 'LIKE', '%' . $search . '%')
-                ->paginate(10);
-        } else {
-            $luckyDraw = LuckyDrawGames::orderBy('id', 'DESC')->paginate(10);;
-        }
+                ->orWhere('points_per_ticket', 'LIKE', '%' . $search . '%');
+            })
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
         $imgPath = $this->fileurl();
 
-        return view('admin.lucky_draw.index', ['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
+        return view('admin.lucky_draw.index',['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
     }
 
     /**
@@ -271,7 +269,7 @@ class LuckyDrawGamesController extends Controller
                 $q->where('ticket_no', 'like', "%{$request->search}%");
             })
             ->get();
-            
+
         return view('admin.lucky_draw.lucky_winner_list', compact('data', 'claims'));
     }
 
@@ -315,7 +313,7 @@ class LuckyDrawGamesController extends Controller
 
             LuckyDrawWinner::create($data);
         }
-        
+
         return redirect()->route('add.price', encrypt($validated['lottery_id']))->with('success', 'Ticket Added successfully');
     }
 
@@ -343,11 +341,11 @@ class LuckyDrawGamesController extends Controller
     }
 
     public function paginate($items, $perPage = 15, $page = null, $options = [])
-{
-    $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-    $items = $items instanceof Collection ? $items : Collection::make($items);
-    return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-}
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
 
     public function winnerUserClaim(Request $request)
     {
@@ -357,12 +355,12 @@ class LuckyDrawGamesController extends Controller
             })
             ->get();
 
-        $mission = MissionPrizeClaim::with(['user','mission','mission_submission'])->get();
-        
+        $mission = MissionPrizeClaim::with(['user', 'mission', 'mission_submission'])->get();
+
         $claims = $claims->merge($mission);
-        $claims = $this->paginate($claims,10);
+        $claims = $this->paginate($claims, 10);
         $claims->setPath('/admin/winner-user/claim');
-        
+
         return view('admin.lucky_draw_winners.list', compact('claims'));
     }
 
@@ -406,17 +404,17 @@ class LuckyDrawGamesController extends Controller
 
     public function missionSubmitStatusUpdate(Request $request)
     {
-        MissionSubmission::where('id',$request->id)->update(['approval_status' => $request->status]);
+        MissionSubmission::where('id', $request->id)->update(['approval_status' => $request->status]);
 
         // MissionPrizeClaim::where('id',$request->id)->update(['approval_status' => $request->status]);
-        $mission = MissionSubmission::where('mission_submissions.id',$request->id)
-            ->join('missions','missions.id','=','mission_submissions.mission_id')
+        $mission = MissionSubmission::where('mission_submissions.id', $request->id)
+            ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
             ->first();
 
         if ($mission->mission_type == 'affliated_points' && $request->status == 'approved') {
-            
-            User::where('id',$mission->user_id)
-            ->update(['total_point_available'=> DB::raw('total_point_available + '.$mission->enter_earn_affliated_points)]);
+
+            User::where('id', $mission->user_id)
+                ->update(['total_point_available' => DB::raw('total_point_available + ' . $mission->enter_earn_affliated_points)]);
 
 
             PointTransaction::create([
@@ -428,9 +426,9 @@ class LuckyDrawGamesController extends Controller
             ]);
 
             // $reward = RewardType::where('reward_type','mission')->first();
-            
+
             // if (is_null($reward)) {
-                
+
             //     RewardType::create([
             //         'reward_type' => 'mission',
             //         'reward_title' => 'Mission Point',
@@ -452,12 +450,12 @@ class LuckyDrawGamesController extends Controller
             // ];
 
             // RewardPoint::create($data);
-        }else{
+        } else {
 
-            $points = PointTransaction::where('user_id',$mission->user_id)->where('type',$mission->mission_title)->first();
+            $points = PointTransaction::where('user_id', $mission->user_id)->where('type', $mission->mission_title)->first();
 
-            if ($mission->mission_type == 'affliated_points' && $request->status == 'reject' && ! is_null($points)) {
-                
+            if ($mission->mission_type == 'affliated_points' && $request->status == 'reject' && !is_null($points)) {
+
                 PointTransaction::create([
                     'user_id' => $mission->user_id,
                     'title' => 'Mission',
@@ -466,7 +464,7 @@ class LuckyDrawGamesController extends Controller
                     'status' => 2,
                 ]);
 
-                User::where('id',$mission->user_id)->update(['total_point_available'=> DB::raw('total_point_available - '.$mission->enter_earn_affliated_points)]);
+                User::where('id', $mission->user_id)->update(['total_point_available' => DB::raw('total_point_available - ' . $mission->enter_earn_affliated_points)]);
             }
         }
 
