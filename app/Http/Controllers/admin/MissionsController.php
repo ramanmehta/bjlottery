@@ -130,7 +130,7 @@ class MissionsController extends Controller
             'mission_description' => 'required',
             'enter_earn_affliated_points' => 'required_without:prize_name',
             'prize_name' => 'required_without:enter_earn_affliated_points',
-            'prize_image' => 'required_without:enter_earn_affliated_points|image|mimes:jpg,jpeg,png,gif',
+            'prize_image' => 'nullable|image|mimes:jpg,jpeg,png,gif',
             'status' => 'required',
             'banner_image' => 'nullable|image|mimes:jpg,jpeg,png,gif'
         ]);
@@ -142,7 +142,7 @@ class MissionsController extends Controller
             $request->prize_image->storeAs('public/images', $validated['prize_image']);
         } else {
 
-            unset($validated['prize_image'], $validated['prize_name']);
+            unset($validated['prize_image']);
         }
 
         if ($request->file('banner_image')) {

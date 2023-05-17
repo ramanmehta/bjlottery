@@ -107,7 +107,7 @@ dd($user);
                   </div>
                   <div class="form-group col-md-3">
                     <br>
-                    <img width="100" height="50" src="{{ getImage($mission->prize_image) }}" alt="image">
+                    <img width="100" height="50" src="{{ $mission->prize_image }}" alt="image">
                   </div>
                 </div>
 
@@ -134,7 +134,7 @@ dd($user);
                   </div>
                   <div class="form-group col-md-3">
                     <br>
-                    <img width="100" height="50" src="{{ getImage($mission->banner_image) }}" alt="image">
+                    <img width="100" height="50" src="{{ $mission->banner_image }}" alt="image">
                   </div>
                 </div>
 
