@@ -19,47 +19,43 @@ class RewardTypeController extends Controller
 {
     public function index()
     {
-        $userId = 26;
+        $userId = auth('sanctum')->user()->id;
 
         $todatStartDateTime = date('Y-m-d 00:00:00');
 
-        $rewardType = RewardType::all();
+        $rewardType = RewardType::where('status', 1)->get();
 
         $dayOfWeek = date('w', time()) - 1;
 
-
         $weekStartDateTime = date('Y-m-d 00:00:00', strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
+
         $todatEndDateTime = date('Y-m-d 23:59:59');
 
         $rewardTypesArr = [];
-        foreach ($rewardType as $value) {
-            $reward_type_id = $value->id;
-            $getReward  = DB::table('reward_points')
-                ->where('user_id', $userId)
-                ->where('reward_type_id', $reward_type_id);
 
-            // switch ($value->reward_type) {
-            //     case 'weeklyreward':
-            //         $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '<=', $todatEndDateTime);
-            //         break;
-            //     default:
-            // }
+        foreach ($rewardType as $value) {
+
+            $reward_type_id = $value->id;
 
             if ($value->reward_type == 'weeklyreward') {
 
                 if (date('l', time()) == 'Saturday') {
+
                     $value->claimed = 0;
                 } else {
+
                     $value->claimed = 1;
                 }
-            } else {
+            } else if ($value->reward_type == 'dailyreward') {
 
-                $getReward = $getReward->whereDate('created_at', '>=', $weekStartDateTime)->whereDate('created_at', '>=', $todatStartDateTime);
-                $getReward = $getReward->count();
+                $getReward  = DB::table('reward_points')
+                    ->where('user_id', $userId)
+                    ->where('reward_type_id', $reward_type_id)
+                    ->whereDate('created_at', '>=', $weekStartDateTime)
+                    ->whereDate('created_at', '>=', $todatStartDateTime)
+                    ->exists();
 
-                $extraPoints = 0;
-
-                if ($value->reward_type == 'dailyreward') {
+                if ($getReward) {
 
                     $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
                     $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
@@ -72,9 +68,19 @@ class RewardTypeController extends Controller
                         ->count();
 
                     $value->reward_points = $value->reward_points + $extraPoints;
-                }
 
-                if ($getReward > 0) {
+                    $value->claimed = 1;
+                } else {
+
+                    $value->claimed = 0;
+                }
+            } else {
+
+                $bool = RewardPoint::where('user_id', $userId)
+                    ->where('reward_type_id', $reward_type_id)
+                    ->exists();
+
+                if ($bool) {
                     $value->claimed = 1;
                 } else {
                     $value->claimed = 0;
@@ -195,7 +201,7 @@ class RewardTypeController extends Controller
                 ->whereBetween('created_at', [$start, $end])
                 ->count();
         }
-        
+
         if ($users && $reward) {
 
             $todatStartDateTime = date('Y-m-d 00:00:00');
@@ -225,8 +231,8 @@ class RewardTypeController extends Controller
 
                 PointTransaction::create([
                     'user_id' => $user_id,
-                    'title' => 'Daily Reward',
-                    'type' => 'daily_reward',
+                    'title' => $reward->reward_type,
+                    'type' => $reward->reward_type,
                     'points' => $rewardPoint + $extraPoints,
                     'status' => 1,
                 ]);
@@ -428,6 +434,7 @@ class RewardTypeController extends Controller
                 'status',
                 'created_at'
             )
+            ->orderBy('id', 'desc')
             ->get();
 
         $resource = [

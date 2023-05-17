@@ -8,7 +8,6 @@ use App\Models\RewardType;
 use Validator;
 use DB;
 
-
 class RewardTypeController extends Controller
 {
     /**
