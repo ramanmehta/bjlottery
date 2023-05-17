@@ -106,13 +106,13 @@
                     <td>{{ $submission->created_at }}</td>
                     <td>
                       <select class="form-control status" name="status">
-                        <option data-id="{{ $submission->id }}" {{ $submission->status == 'submit' ? 'selected'
+                        <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'submit' ? 'selected'
                           : '' }}
                           value="submit">Submit</option>
-                        <option data-id="{{ $submission->id }}" {{ $submission->status == 'approved' ?
+                        <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'approved' ?
                           'selected' : ''
                           }} value="approved">Approve</option>
-                        <option data-id="{{ $submission->id }}" {{ $submission->status == 'reject' ? 'selected'
+                        <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'reject' ? 'selected'
                           : '' }}
                           value="reject">Reject</option>
                       </select>
