@@ -14,22 +14,16 @@ class NotificationController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {   
-        if($request->has('search')){
+    {
+        $notification = Notification::orderBy('id', 'DESC')
+            ->when($request->has('search'), function ($q) use ($request) {
+                $search = $request->search;
+                $q->where('title', 'LIKE', '%' . $search . '%')
+                    ->orWhere('description', 'LIKE', '%' . $search . '%')
+                    ->orWhere('user_id', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(10);
 
-            $search = $request->search;
-            $notification = DB::table('notifications')
-                ->where('title' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('description' , 'LIKE' , '%'.$search.'%')
-                ->orWhere('user_id' , 'LIKE' , '%'.$search.'%')
-                ->paginate(2);
-
-            }else{
-
-                $notification = Notification::orderBy('id', 'DESC')->paginate(2);
-
-            }
-        
         return view('admin.notifications.index', compact('notification'));
     }
 
@@ -46,7 +40,7 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'user_id' => 'bail|required|exists:users,id',
             'title' => 'required',
@@ -58,7 +52,7 @@ class NotificationController extends Controller
         $notification = Notification::create($request->all());
 
         $success = "New Notification created successfully";
-        return redirect()->route('notifications')->with('success',$success);
+        return redirect()->route('notifications')->with('success', $success);
     }
 
     /**
@@ -73,12 +67,11 @@ class NotificationController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-    {   
+    {
         // dd($id);
         $notificationid = decrypt($id);
         $notification = Notification::findOrFail($notificationid);
-        return view('admin.notifications.edit',compact('notification'));
-    
+        return view('admin.notifications.edit', compact('notification'));
     }
 
     /**
@@ -105,8 +98,7 @@ class NotificationController extends Controller
 
         $notification->save();
         $success = "Notification updated successfully";
-        return redirect()->route('notifications')->with('success',$success);
-
+        return redirect()->route('notifications')->with('success', $success);
     }
 
     /**

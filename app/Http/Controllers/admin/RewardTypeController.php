@@ -72,6 +72,7 @@ class RewardTypeController extends Controller
     }
 
     public function rewardStatus(Request $request , $id){
+        
         $reward_id = decrypt($id);
         $reward = RewardType::find($reward_id);
         $status = $reward->status;
