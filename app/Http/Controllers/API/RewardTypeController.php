@@ -21,15 +21,7 @@ class RewardTypeController extends Controller
     {
         $userId = auth('sanctum')->user()->id;
 
-        $todatStartDateTime = date('Y-m-d 00:00:00');
-
         $rewardType = RewardType::where('status', 1)->get();
-
-        $dayOfWeek = date('w', time()) - 1;
-
-        $weekStartDateTime = date('Y-m-d 00:00:00', strtotime(Carbon::now()->subDay($dayOfWeek)->toDateTimeString()));
-
-        $todatEndDateTime = date('Y-m-d 23:59:59');
 
         $rewardTypesArr = [];
 
@@ -51,8 +43,6 @@ class RewardTypeController extends Controller
                 $getReward  = DB::table('reward_points')
                     ->where('user_id', $userId)
                     ->where('reward_type_id', $reward_type_id)
-                    ->whereDate('created_at', '>=', $weekStartDateTime)
-                    ->whereDate('created_at', '>=', $todatStartDateTime)
                     ->exists();
 
                 if ($getReward) {
@@ -91,13 +81,16 @@ class RewardTypeController extends Controller
         }
 
         if (isset($rewardTypesArr) && !empty($rewardTypesArr)) {
+            
             $response = [
                 'success' => true,
                 'status' => 200,
                 'data' => $rewardTypesArr,
             ];
+
             return response()->json($response);
         } else {
+
             $response = [
                 'success' => false,
                 'status' => 404,
