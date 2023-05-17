@@ -25,8 +25,8 @@ use App\Http\Controllers\admin\MissionSubmissionController;
 */
 
 Route::get('/', function () {
-    
-    return view('/admin/login');
+
+    return view('admin/login');
 });
 
 
@@ -49,124 +49,125 @@ Route::controller(AuthController::class)->group(function () {
 
 // Group middleware
 
-Route::group(['middleware' => 'admin_auth'], function () {
-    Route::get('/admin/dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
+
+    Route::get('dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
     // roles route
-    Route::get('/admin/viewRoles', [RoleController::class, 'index'])->name('viewRoles');
-    Route::get('/admin/createRoles', [RoleController::class, 'create'])->name('createRoles');
-    Route::post('/admin/createRoles', [RoleController::class, 'store'])->name('user.role');
-    Route::get('/admin/editRoles/{id}', [RoleController::class, 'edit'])->name('editRole');
-    Route::post('/admin/updateRoles/{id}', [RoleController::class, 'update'])->name('update.role');
-    Route::get('/admin/deleteRoles/{id}', [RoleController::class, 'destroy'])->name('removeRole');
+    Route::get('viewRoles', [RoleController::class, 'index'])->name('viewRoles');
+    Route::get('createRoles', [RoleController::class, 'create'])->name('createRoles');
+    Route::post('createRoles', [RoleController::class, 'store'])->name('user.role');
+    Route::get('editRoles/{id}', [RoleController::class, 'edit'])->name('editRole');
+    Route::post('updateRoles/{id}', [RoleController::class, 'update'])->name('update.role');
+    Route::get('deleteRoles/{id}', [RoleController::class, 'destroy'])->name('removeRole');
 
     // rewards  route
 
-    // Route::get('/admin/viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
-    // Route::get('/admin/createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
-    // Route::post('/admin/createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
-    // Route::get('/admin/editDailyReward/{id}', [DailyRewardController::class,'edit'])->name('editDailyReward');
-    // Route::post('/admin/updateDailyReward/{id}', [DailyRewardController::class,'update'])->name('update.DailyReward');
-    // Route::get('/admin/deleteDailyReward/{id}', [DailyRewardController::class,'destroy'])->name('removeDailyReward');
+    // Route::get('viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
+    // Route::get('createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
+    // Route::post('createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
+    // Route::get('editDailyReward/{id}', [DailyRewardController::class,'edit'])->name('editDailyReward');
+    // Route::post('updateDailyReward/{id}', [DailyRewardController::class,'update'])->name('update.DailyReward');
+    // Route::get('deleteDailyReward/{id}', [DailyRewardController::class,'destroy'])->name('removeDailyReward');
 
-    Route::get('/admin/viewRewardType', [RewardTypesController::class, 'index'])->name('RewardType');
-    Route::get('/admin/createRewardType', [RewardTypesController::class, 'create'])->name('createRewardType');
-    Route::post('/admin/createRewardType', [RewardTypesController::class, 'store'])->name('create.RewardType');
-    Route::get('/admin/editRewardType/{id}', [RewardTypesController::class, 'edit'])->name('editRewardType');
-    Route::post('/admin/updateRewardType/{id}', [RewardTypesController::class, 'update'])->name('update.RewardType');
-    Route::get('/admin/deleteRewardType/{id}', [RewardTypesController::class, 'destroy'])->name('removeRewardType');
-    Route::get('/admin/rewardStatus/{id}', [RewardTypesController::class, 'rewardStatus'])->name('rewardStatus');
+    Route::get('viewRewardType', [RewardTypesController::class, 'index'])->name('RewardType');
+    Route::get('createRewardType', [RewardTypesController::class, 'create'])->name('createRewardType');
+    Route::post('createRewardType', [RewardTypesController::class, 'store'])->name('create.RewardType');
+    Route::get('editRewardType/{id}', [RewardTypesController::class, 'edit'])->name('editRewardType');
+    Route::post('updateRewardType/{id}', [RewardTypesController::class, 'update'])->name('update.RewardType');
+    Route::get('deleteRewardType/{id}', [RewardTypesController::class, 'destroy'])->name('removeRewardType');
+    Route::get('rewardStatus/{id}', [RewardTypesController::class, 'rewardStatus'])->name('rewardStatus');
 
     // register user detail route
 
 
-    Route::get('/admin/viewUser', [UsersController::class, 'index'])->name('admin.users');
-    // Route::get('/admin/viewUser', [UsersController::class,'index'])->name('admin.users');
-    // Route::get('/admin/createUser', [UsersController::class,'create']);
-    // Route::post('/admin/createUser', [UsersController::class,'store'])->name('user.DailyReward');
-    Route::get('/admin/editUser/{id}', [UsersController::class, 'edit'])->name('edituser');
-    Route::post('/admin/updateUser/{id}', [UsersController::class, 'update'])->name('update.User');
-    Route::get('/admin/deleteUser/{id}', [UsersController::class, 'destroy'])->name('removeUser');
-    Route::get('/admin/userStatus/{id}', [UsersController::class, 'userStatus'])->name('userStatus');
-    Route::get('/admin/userAppoint/{id}', [UsersController::class, 'userAppoint'])->name('userAppoint');
-    Route::post('/admin/updateAppoint/{id}', [UsersController::class, 'updateAppoint'])->name('updateAppoint');
-    Route::get('/admin/editWallet/{id}', [UsersController::class, 'editWallet'])->name('editWallet');
-    Route::post('/admin/updateWallet/{id}', [UsersController::class, 'updateWallet'])->name('updateWallet');
-    Route::get('/admin/cPassword/{id}', [UsersController::class, 'changePassword'])->name('cPassword');
-    Route::post('/admin/passwordReset/{id}', [UsersController::class, 'passwordReset'])->name('passwordReset');
+    Route::get('viewUser', [UsersController::class, 'index'])->name('admin.users');
+    // Route::get('viewUser', [UsersController::class,'index'])->name('admin.users');
+    // Route::get('createUser', [UsersController::class,'create']);
+    // Route::post('createUser', [UsersController::class,'store'])->name('user.DailyReward');
+    Route::get('editUser/{id}', [UsersController::class, 'edit'])->name('edituser');
+    Route::post('updateUser/{id}', [UsersController::class, 'update'])->name('update.User');
+    Route::get('deleteUser/{id}', [UsersController::class, 'destroy'])->name('removeUser');
+    Route::get('userStatus/{id}', [UsersController::class, 'userStatus'])->name('userStatus');
+    Route::get('userAppoint/{id}', [UsersController::class, 'userAppoint'])->name('userAppoint');
+    Route::post('updateAppoint/{id}', [UsersController::class, 'updateAppoint'])->name('updateAppoint');
+    Route::get('editWallet/{id}', [UsersController::class, 'editWallet'])->name('editWallet');
+    Route::post('updateWallet/{id}', [UsersController::class, 'updateWallet'])->name('updateWallet');
+    Route::get('cPassword/{id}', [UsersController::class, 'changePassword'])->name('cPassword');
+    Route::post('passwordReset/{id}', [UsersController::class, 'passwordReset'])->name('passwordReset');
 
     // Route::controller(UsersController::class)->group(function(){
-    //     Route::get('/admin/userStatus/{id}', 'userStatus')->name('userStatus');
+    //     Route::get('userStatus/{id}', 'userStatus')->name('userStatus');
     // });
 
     // lucky_draw_games route
 
-    Route::get('/admin/viewLuckyDraw', [LuckyDrawGamesController::class, 'index'])->name('luckyDraw');
-    Route::get('/admin/createLuckyDraw', [LuckyDrawGamesController::class, 'create'])->name('createLuckyDraw');
-    Route::post('/admin/createLuckyDraw', [LuckyDrawGamesController::class, 'store'])->name('user.LuckyDraw');
-    Route::get('/admin/editLuckyDraw/{id}', [LuckyDrawGamesController::class, 'edit'])->name('editLuckyDraw');
-    Route::post('/admin/updateLuckyDraw/{id}', [LuckyDrawGamesController::class, 'update'])->name('update.LuckyDraw');
-    Route::get('/admin/deleteLuckyDraw/{id}', [LuckyDrawGamesController::class, 'destroy'])->name('removeLuckyDraw');
-    Route::get('/admin/luckyDrawsStatus/{id}', [LuckyDrawGamesController::class, 'lotteryStatus'])->name('luckyDrawsStatus');
+    Route::get('viewLuckyDraw', [LuckyDrawGamesController::class, 'index'])->name('luckyDraw');
+    Route::get('createLuckyDraw', [LuckyDrawGamesController::class, 'create'])->name('createLuckyDraw');
+    Route::post('createLuckyDraw', [LuckyDrawGamesController::class, 'store'])->name('user.LuckyDraw');
+    Route::get('editLuckyDraw/{id}', [LuckyDrawGamesController::class, 'edit'])->name('editLuckyDraw');
+    Route::post('updateLuckyDraw/{id}', [LuckyDrawGamesController::class, 'update'])->name('update.LuckyDraw');
+    Route::get('deleteLuckyDraw/{id}', [LuckyDrawGamesController::class, 'destroy'])->name('removeLuckyDraw');
+    Route::get('luckyDrawsStatus/{id}', [LuckyDrawGamesController::class, 'lotteryStatus'])->name('luckyDrawsStatus');
 
-    Route::get('admin/add-price/{id}', [LuckyDrawGamesController::class, 'luckyWinnerList'])->name('add.price');
-    Route::get('admin/add-price-form/{id}', [LuckyDrawGamesController::class, 'addPrice'])->name('add.price.form');
-    Route::post('admin/add-price', [LuckyDrawGamesController::class, 'addPriceStore'])->name('add.price.post');
-    Route::get('admin/add-price/edit/{id}', [LuckyDrawGamesController::class, 'addPriceEdit'])->name('add.price.edit');
-    Route::get('admin/add-price/destroy/{lottery_id}/{id}', [LuckyDrawGamesController::class, 'addPriceDestroy'])->name('add.price.destroy');
-    Route::get('admin/winner-user/claim', [LuckyDrawGamesController::class, 'winnerUserClaim'])->name('winner.user.claim');
-    Route::post('admin/edit-prize/update/{id}', [LuckyDrawGamesController::class, 'editPrizeUpdate'])->name('edit.prize.update');
+    Route::get('add-price/{id}', [LuckyDrawGamesController::class, 'luckyWinnerList'])->name('add.price');
+    Route::get('add-price-form/{id}', [LuckyDrawGamesController::class, 'addPrice'])->name('add.price.form');
+    Route::post('add-price', [LuckyDrawGamesController::class, 'addPriceStore'])->name('add.price.post');
+    Route::get('add-price/edit/{id}', [LuckyDrawGamesController::class, 'addPriceEdit'])->name('add.price.edit');
+    Route::get('add-price/destroy/{lottery_id}/{id}', [LuckyDrawGamesController::class, 'addPriceDestroy'])->name('add.price.destroy');
+    Route::get('winner-user/claim', [LuckyDrawGamesController::class, 'winnerUserClaim'])->name('winner.user.claim');
+    Route::post('edit-prize/update/{id}', [LuckyDrawGamesController::class, 'editPrizeUpdate'])->name('edit.prize.update');
 
 
     // Missions route
-    Route::get('/admin/viewMission', [MissionsController::class, 'index'])->name('mission');
-    Route::get('/admin/createMission', [MissionsController::class, 'create'])->name('createMission');
-    Route::post('/admin/createMission', [MissionsController::class, 'store'])->name('user.Mission');
-    Route::get('/admin/editMission/{id}', [MissionsController::class, 'edit'])->name('editMission');
-    Route::post('/admin/updateMission/{id}', [MissionsController::class, 'update'])->name('update.Mission');
-    Route::get('/admin/deleteMission/{id}', [MissionsController::class, 'destroy'])->name('removeMission');
-    Route::get('/admin/missionStatus/{id}', [MissionsController::class, 'missionStatus'])->name('missionStatus');
+    Route::get('viewMission', [MissionsController::class, 'index'])->name('mission');
+    Route::get('createMission', [MissionsController::class, 'create'])->name('createMission');
+    Route::post('createMission', [MissionsController::class, 'store'])->name('user.Mission');
+    Route::get('editMission/{id}', [MissionsController::class, 'edit'])->name('editMission');
+    Route::post('updateMission/{id}', [MissionsController::class, 'update'])->name('update.Mission');
+    Route::get('deleteMission/{id}', [MissionsController::class, 'destroy'])->name('removeMission');
+    Route::get('missionStatus/{id}', [MissionsController::class, 'missionStatus'])->name('missionStatus');
 
     // levels route    
-    Route::get('/admin/levels/{id}', [MissionLevelController::class, 'index'])->name('levels');
+    Route::get('levels/{id}', [MissionLevelController::class, 'index'])->name('levels');
 
-    Route::get('/admin/createLevels', [MissionLevelController::class, 'create'])->name('createlevels');
-    Route::post('/admin/createLevels', [MissionLevelController::class, 'store'])->name('createlevels.store');
-    Route::get('/admin/deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class, 'destroy'])->name('removeLevelMission');
-    Route::get('/admin/editMissionLevel/{id}', [MissionLevelController::class, 'edit'])->name('editMissionLevel');
-    Route::post('/admin/updateMissionLevel/{id}', [MissionLevelController::class, 'update'])->name('editMissionLevel.id');
+    Route::get('createLevels', [MissionLevelController::class, 'create'])->name('createlevels');
+    Route::post('createLevels', [MissionLevelController::class, 'store'])->name('createlevels.store');
+    Route::get('deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class, 'destroy'])->name('removeLevelMission');
+    Route::get('editMissionLevel/{id}', [MissionLevelController::class, 'edit'])->name('editMissionLevel');
+    Route::post('updateMissionLevel/{id}', [MissionLevelController::class, 'update'])->name('editMissionLevel.id');
 
     // Mission Submissions 
 
-    Route::get('/admin/mission-submissions/{id?}', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
-    Route::get('/admin/mission-submissions-show/{id}', [MissionSubmissionController::class, 'show'])->name('missionsubmissions.show');
+    Route::get('mission-submissions/{id?}', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
+    Route::get('mission-submissions-show/{id}', [MissionSubmissionController::class, 'show'])->name('missionsubmissions.show');
     // Settings route
 
-    Route::get('/admin/viewSetting', [SettingController::class, 'index'])->name('settings');
-    Route::get('/admin/createSetting', [SettingController::class, 'create'])->name('createSetting');
-    Route::post('/admin/createSetting', [SettingController::class, 'store'])->name('adminSetting');
-    Route::get('/admin/editSetting/{id}', [SettingController::class, 'edit'])->name('editSetting');
-    Route::post('/admin/updateSetting/{id}', [SettingController::class, 'update'])->name('update.Setting');
-    Route::get('/admin/deleteSetting/{id}', [SettingController::class, 'destroy'])->name('removeSetting');
+    Route::get('viewSetting', [SettingController::class, 'index'])->name('settings');
+    Route::get('createSetting', [SettingController::class, 'create'])->name('createSetting');
+    Route::post('createSetting', [SettingController::class, 'store'])->name('adminSetting');
+    Route::get('editSetting/{id}', [SettingController::class, 'edit'])->name('editSetting');
+    Route::post('updateSetting/{id}', [SettingController::class, 'update'])->name('update.Setting');
+    Route::get('deleteSetting/{id}', [SettingController::class, 'destroy'])->name('removeSetting');
 
     // Notifications route
 
-    Route::get('/admin/viewNotifications', [NotificationController::class, 'index'])->name('notifications');
-    Route::get('/admin/createNotifications', [NotificationController::class, 'create'])->name('createNotifications');
-    Route::post('/admin/createNotifications', [NotificationController::class, 'store'])->name('user.Notifications');
-    Route::get('/admin/editNotifications/{id}', [NotificationController::class, 'edit'])->name('editNotifications');
-    Route::post('/admin/updateNotifications/{id}', [NotificationController::class, 'update'])->name('update.Notifications');
-    Route::get('/admin/deleteNotifications/{id}', [NotificationController::class, 'destroy'])->name('removeNotifications');
+    Route::get('viewNotifications', [NotificationController::class, 'index'])->name('notifications');
+    Route::get('createNotifications', [NotificationController::class, 'create'])->name('createNotifications');
+    Route::post('createNotifications', [NotificationController::class, 'store'])->name('user.Notifications');
+    Route::get('editNotifications/{id}', [NotificationController::class, 'edit'])->name('editNotifications');
+    Route::post('updateNotifications/{id}', [NotificationController::class, 'update'])->name('update.Notifications');
+    Route::get('deleteNotifications/{id}', [NotificationController::class, 'destroy'])->name('removeNotifications');
 
     // Referal status 
 
-    Route::get('/admin/viewReferalstatus', [ReferalsStatsController::class, 'index'])->name('referalstatus');
-    Route::get('/admin/createReferalstatus', [ReferalsStatsController::class, 'create'])->name('createReferalstatus');
-    Route::post('/admin/createReferalstatus', [ReferalsStatsController::class, 'store'])->name('user.Referalstatus');
-    Route::get('/admin/editReferalstatus/{id}', [ReferalsStatsController::class, 'edit'])->name('editReferalstatus');
-    Route::post('/admin/updateReferalstatus/{id}', [ReferalsStatsController::class, 'update'])->name('update.Referalstatus');
-    Route::get('/admin/deleteReferalstatus/{id}', [ReferalsStatsController::class, 'destroy'])->name('removeReferalstatus');
+    Route::get('viewReferalstatus', [ReferalsStatsController::class, 'index'])->name('referalstatus');
+    Route::get('createReferalstatus', [ReferalsStatsController::class, 'create'])->name('createReferalstatus');
+    Route::post('createReferalstatus', [ReferalsStatsController::class, 'store'])->name('user.Referalstatus');
+    Route::get('editReferalstatus/{id}', [ReferalsStatsController::class, 'edit'])->name('editReferalstatus');
+    Route::post('updateReferalstatus/{id}', [ReferalsStatsController::class, 'update'])->name('update.Referalstatus');
+    Route::get('deleteReferalstatus/{id}', [ReferalsStatsController::class, 'destroy'])->name('removeReferalstatus');
 });
 
 // test relationship

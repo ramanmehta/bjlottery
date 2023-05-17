@@ -38,9 +38,7 @@ class LuckyDrawGamesController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate(10);
 
-        $imgPath = $this->fileurl();
-
-        return view('admin.lucky_draw.index', ['luckyDraw' => $luckyDraw, 'imgPath' => $imgPath]);
+        return view('admin.lucky_draw.index', compact('luckyDraw'));
     }
 
     /**
@@ -351,6 +349,9 @@ class LuckyDrawGamesController extends Controller
             ->get();
 
         $mission = MissionPrizeClaim::with(['user', 'mission', 'mission_submission'])
+            ->when(isset($request->search), function ($q) use ($request) {
+                $q->where('mission_id', 'like', "%{$request->search}%");
+            })
             ->get();
 
         $claims = collect($claims->merge($mission))->sortByDesc('created_at');
