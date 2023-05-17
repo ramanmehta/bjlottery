@@ -14,14 +14,14 @@ class ReferalsStatsController extends Controller
     public function index()
     {
         $referalstatus = ReferalsStats::all();
-        return view('admin.referals_stats.index',compact('referalstatus'));
+        return view('admin.referals_stats.index', compact('referalstatus'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
 
         return view('admin.referals_stats.create');
     }
@@ -42,7 +42,7 @@ class ReferalsStatsController extends Controller
         // $referals_stats = ReferalsStats::create($request->all());
 
         $success = "New Referal Created successfully";
-        return redirect()->route('referalstatus')->with('success',$success);
+        return redirect()->route('referalstatus')->with('success', $success);
     }
 
     /**
@@ -58,11 +58,10 @@ class ReferalsStatsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        
+
         $referalstatusid = decrypt($id);
         $referalstatus = ReferalsStats::findOrFail($referalstatusid);
-        return view('admin.referals_stats.edit',compact('referalstatus'));
-
+        return view('admin.referals_stats.edit', compact('referalstatus'));
     }
 
     /**
@@ -84,7 +83,7 @@ class ReferalsStatsController extends Controller
         $referalstatus->save();
 
         $success = "Referal Status updated successfully";
-        return redirect()->route('referalstatus')->with('success',$success);
+        return redirect()->route('referalstatus')->with('success', $success);
     }
 
     /**
@@ -97,8 +96,6 @@ class ReferalsStatsController extends Controller
         $referalstatus->delete();
 
         $error = "Referal removed successfully";
-        return redirect()->route('referalstatus')->with('error',$error);
-
-
+        return redirect()->route('referalstatus')->with('error', $error);
     }
 }

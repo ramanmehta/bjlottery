@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\ReferalsStats;
-use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
+
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ReferalsStatsController extends Controller
 {

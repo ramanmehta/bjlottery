@@ -12,7 +12,7 @@ class SettingController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         $setting = Setting::all();
         return view('admin.settings.index', compact('setting'));
     }
@@ -55,17 +55,15 @@ class SettingController extends Controller
      */
     public function edit($id)
     {
-        
-        if($id){
+
+        if ($id) {
             $settingid = decrypt($id);
-        // dd($settingid);
+            // dd($settingid);
             $setting = Setting::findOrFail($settingid);
             return view('admin.settings.edit', compact('setting'));
-        }else{
+        } else {
             return redirect()->route('admin.auth');
         }
-        
-
     }
 
     /**
@@ -86,9 +84,7 @@ class SettingController extends Controller
 
         $success = "Setting successfully updated";
 
-        return redirect()->route('settings')->with('success',$success);
-        
-
+        return redirect()->route('settings')->with('success', $success);
     }
 
     /**
@@ -99,12 +95,11 @@ class SettingController extends Controller
         // dd($id);
         $settingid = decrypt($id);
         $setting = Setting::findOrFail($settingid);
-        
+
         $setting->delete();
-        
+
         $error = "Setting removed successfully";
 
-        return redirect()->route('settings')->with('error',$error);
-        
+        return redirect()->route('settings')->with('error', $error);
     }
 }

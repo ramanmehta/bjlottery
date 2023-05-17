@@ -4,13 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\Mission;
-use App\Models\MissionLevel;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\MissionSubmission;
-use Illuminate\Auth\Events\Validated;
 
 class MissionController extends Controller
 {
@@ -143,12 +139,12 @@ class MissionController extends Controller
 
         $input = $validated->validate();
 
-        $res = MissionSubmission::where('user_id',auth()->id())
-        ->where('mission_id',$input['mission_id'])
-        ->exists();
+        $res = MissionSubmission::where('user_id', auth()->id())
+            ->where('mission_id', $input['mission_id'])
+            ->exists();
 
         if ($res) {
-            
+
             return response()->json([
                 'status' => 404,
                 'message' => 'You are already involved in this mission',

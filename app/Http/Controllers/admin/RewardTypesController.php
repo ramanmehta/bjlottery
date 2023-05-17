@@ -5,8 +5,6 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
-use Validator;
-use DB;
 
 class RewardTypesController extends Controller
 {
@@ -16,16 +14,16 @@ class RewardTypesController extends Controller
     public function index(Request $request)
     {
         $rewardType = RewardType::orderBy('id', 'DESC')
-            ->when($request->has('search'),function($q) use ($request){
+            ->when($request->has('search'), function ($q) use ($request) {
                 $search = $request->search;
-                $q->where('reward_type' , 'LIKE' , '%'.$search.'%')
-                    ->orWhere('reward_title' , 'LIKE' , '%'.$search.'%')
-                    ->orWhere('reward_description' , 'LIKE' , '%'.$search.'%')
-                    ->orWhere('reward_points' , 'LIKE' , '%'.$search.'%');
-                })
-                ->paginate(10);
-    
-        return view('admin.reward_type.index',compact('rewardType'));
+                $q->where('reward_type', 'LIKE', '%' . $search . '%')
+                    ->orWhere('reward_title', 'LIKE', '%' . $search . '%')
+                    ->orWhere('reward_description', 'LIKE', '%' . $search . '%')
+                    ->orWhere('reward_points', 'LIKE', '%' . $search . '%');
+            })
+            ->paginate(10);
+
+        return view('admin.reward_type.index', compact('rewardType'));
     }
 
     /**
@@ -36,7 +34,7 @@ class RewardTypesController extends Controller
     {
         return view('admin.reward_type.create');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
@@ -56,7 +54,7 @@ class RewardTypesController extends Controller
         $reward_type = str_replace(' ', '', $reward);
 
         $data = [
-            'reward_title' => $reward_title,    
+            'reward_title' => $reward_title,
             'reward_type' => $reward_type,
             'reward_description' => $request->reward_description,
             'reward_points' => $request->reward_points,
@@ -67,42 +65,41 @@ class RewardTypesController extends Controller
 
         $success = "New reward created successfully";
 
-        return redirect('/admin/viewRewardType')->with('success',$success);
+        return redirect('/admin/viewRewardType')->with('success', $success);
     }
 
-    public function rewardStatus(Request $request , $id){
-        
+    public function rewardStatus(Request $request, $id)
+    {
+
         $reward_id = decrypt($id);
         $reward = RewardType::find($reward_id);
         $status = $reward->status;
 
-        if($status == 1){
-           
+        if ($status == 1) {
+
             $deactivate = $reward->status = '0';
-           
+
             $reward->save();
 
             $rewardStatus = RewardType::where('id', $reward_id)->update([
                 'status' => $deactivate
             ]);
             $success = "Rewad deactivated successfully";
-            return redirect('/admin/viewRewardType')->with('success',$success);
-            
-        }else{
+            return redirect('/admin/viewRewardType')->with('success', $success);
+        } else {
             $activated = $reward->status = '1';
-           
+
             $reward->save();
 
             $rewardStatus = RewardType::where('id', $reward_id)->update([
                 'status' => $activated
             ]);
             $success = "Reward activated successfully";
-            return redirect('/admin/viewRewardType')->with('success',$success);
+            return redirect('/admin/viewRewardType')->with('success', $success);
         }
-        
     }
 
-    
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -111,7 +108,7 @@ class RewardTypesController extends Controller
         $reward_id = decrypt($id);
         $rewardType = RewardType::where('id', $reward_id)->first();
 
-        return view('admin.reward_type.edit', ['rewardType'=>$rewardType]);
+        return view('admin.reward_type.edit', ['rewardType' => $rewardType]);
     }
 
     /**
@@ -119,11 +116,11 @@ class RewardTypesController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
+
         $reward_id = decrypt($id);
-        
+
         $request->validate([
-            'reward_type' => 'bail|string|required|max:255|unique:reward_types,reward_type,'.$reward_id,
+            'reward_type' => 'bail|string|required|max:255|unique:reward_types,reward_type,' . $reward_id,
             'reward_title' => 'bail|string|required|max:255',
             'reward_description' => 'bail|string|required',
             'reward_points' => 'bail|integer|required|min:1',
@@ -135,7 +132,7 @@ class RewardTypesController extends Controller
         $rewardType->reward_points = $request->reward_points;
         $rewardType->save();
         $success = "Reward updated successfully";
-        return redirect('/admin/viewRewardType')->with('success',$success);
+        return redirect('/admin/viewRewardType')->with('success', $success);
     }
 
     /**
@@ -144,11 +141,11 @@ class RewardTypesController extends Controller
     public function destroy(string $id)
     {
         $reward_id = (int)decrypt($id);
-    
-        $deleteReward = RewardType::where('id' , $reward_id)->first();
+
+        $deleteReward = RewardType::where('id', $reward_id)->first();
         $deleteReward->delete();
 
         $success = "Reward removed successfully";
-        return redirect('/admin/viewRewardType')->with('success',$success);
+        return redirect('/admin/viewRewardType')->with('success', $success);
     }
 }

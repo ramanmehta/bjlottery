@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Mission;
 use App\Models\MissionSubmission;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class MissionsController extends Controller
 {

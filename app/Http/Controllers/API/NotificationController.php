@@ -12,15 +12,15 @@ class NotificationController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         // dd("notification here");
         $notification = Notification::all();
-        if($notification->count() > 0){
+        if ($notification->count() > 0) {
             return response()->json([
                 'status' => 200,
                 'Notification' => $notification
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'status' => 404,
                 'Message' => 'No record found'
@@ -51,12 +51,12 @@ class NotificationController extends Controller
     {
         // dd("notification id");
         $notification = Notification::find($id);
-        if($notification){
+        if ($notification) {
             return response()->json([
                 'status' => 200,
                 'notification' => $notification,
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'status' => 404,
                 'Message' => 'No record found'

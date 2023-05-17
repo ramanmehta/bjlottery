@@ -3,25 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\PasswordReset;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Validation\Rules\Password;
+
 use Illuminate\Support\Facades\Auth;
-use Laravel\Sanctum\HasApiTokens;
-use Mail;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
-use DB;
-// models 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\User;
 use App\Models\ReferalPoint;
-use App\Models\ReferalsStats;
-use App\Models\DailyReward;
-use App\Models\RewardType;
+
 use App\Http\Traits\CommonTrait;
 
 class AuthController extends Controller

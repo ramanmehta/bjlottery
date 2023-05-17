@@ -5,11 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
-use App\Models\Country;
-use DB;
-use Validator;
-use App\Http\Traits\CommonTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
 
 class UsersController extends Controller
@@ -224,7 +220,6 @@ class UsersController extends Controller
     }
     public function passwordReset(Request $request, $id)
     {
-
         $request->validate([
             'password' => [
                 'required',

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DailyReward;
-use Validator;
 
 class DailyRewardController extends Controller
 {
@@ -15,9 +14,8 @@ class DailyRewardController extends Controller
     public function index()
     {
         $dailyReward = DailyReward::all();
-    
-        return view('admin.daily_rewards.index',['dailyReward' => $dailyReward]);
-        
+
+        return view('admin.daily_rewards.index', ['dailyReward' => $dailyReward]);
     }
 
     /**
@@ -26,7 +24,6 @@ class DailyRewardController extends Controller
     public function create(Request $request)
     {
         return view('admin.daily_rewards.create');
-        
     }
 
     /**
@@ -43,7 +40,7 @@ class DailyRewardController extends Controller
 
         $success = "New reward created successfully";
 
-        return redirect('/admin/viewDailyRewards')->with('success',$success);
+        return redirect('/admin/viewDailyRewards')->with('success', $success);
     }
 
     /**
@@ -63,17 +60,16 @@ class DailyRewardController extends Controller
         $rewardid = decrypt($id);
         $dailyReward = DailyReward::where('id', $rewardid)->first();
 
-        return view('admin.daily_rewards.edit', ['dailyReward'=>$dailyReward]);
-    
+        return view('admin.daily_rewards.edit', ['dailyReward' => $dailyReward]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {   
+    {
         $rewardid = decrypt($id);
-        
+
         $request->validate([
             'reward_types' => 'bail|string|required|max:255',
             'reward_points' => 'bail|integer|required',
@@ -85,7 +81,7 @@ class DailyRewardController extends Controller
         $dailyReward->status = $request->status;
         $dailyReward->save();
         $success = "Reward updated successfully";
-        return redirect('/admin/viewDailyRewards')->with('success',$success);
+        return redirect('/admin/viewDailyRewards')->with('success', $success);
     }
 
     /**
@@ -94,11 +90,11 @@ class DailyRewardController extends Controller
     public function destroy($id)
     {
         $dailyRewardid = (int)decrypt($id);
-    
-        $deleteRole = DailyReward::where('id' , $dailyRewardid)->first();
+
+        $deleteRole = DailyReward::where('id', $dailyRewardid)->first();
         $deleteRole->delete();
 
         $error = "Reward removed successfully";
-        return redirect('/admin/viewDailyRewards')->with('error',$error);
+        return redirect('/admin/viewDailyRewards')->with('error', $error);
     }
 }

@@ -7,11 +7,8 @@ use App\Models\PointTransaction;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
 use App\Models\User;
-use App\Models\RewardTypePoint;
 use App\Models\RewardPoint;
-// use Carbon;
 use Illuminate\Support\Carbon;
-use Carbon\CarbonPeriod;
 use DateTime;
 use Illuminate\Support\Facades\DB;
 
