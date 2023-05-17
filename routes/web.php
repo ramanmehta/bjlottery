@@ -4,10 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AuthController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\DailyRewardController;
-use App\Http\Controllers\admin\RewardTypeController;
+use App\Http\Controllers\admin\RewardTypesController;
 use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\admin\LuckyDrawGamesController;
-// use App\Http\Controllers\admin\MissionController;
 use App\Http\Controllers\admin\MissionsController;
 use App\Http\Controllers\admin\NotificationController;
 use App\Http\Controllers\admin\SettingController;
@@ -71,13 +70,13 @@ Route::group(['middleware' => 'admin_auth'], function () {
     // Route::post('/admin/updateDailyReward/{id}', [DailyRewardController::class,'update'])->name('update.DailyReward');
     // Route::get('/admin/deleteDailyReward/{id}', [DailyRewardController::class,'destroy'])->name('removeDailyReward');
 
-    Route::get('/admin/viewRewardType', [RewardTypeController::class, 'index'])->name('RewardType');
-    Route::get('/admin/createRewardType', [RewardTypeController::class, 'create'])->name('createRewardType');
-    Route::post('/admin/createRewardType', [RewardTypeController::class, 'store'])->name('create.RewardType');
-    Route::get('/admin/editRewardType/{id}', [RewardTypeController::class, 'edit'])->name('editRewardType');
-    Route::post('/admin/updateRewardType/{id}', [RewardTypeController::class, 'update'])->name('update.RewardType');
-    Route::get('/admin/deleteRewardType/{id}', [RewardTypeController::class, 'destroy'])->name('removeRewardType');
-    Route::get('/admin/rewardStatus/{id}', [RewardTypeController::class, 'rewardStatus'])->name('rewardStatus');
+    Route::get('/admin/viewRewardType', [RewardTypesController::class, 'index'])->name('RewardType');
+    Route::get('/admin/createRewardType', [RewardTypesController::class, 'create'])->name('createRewardType');
+    Route::post('/admin/createRewardType', [RewardTypesController::class, 'store'])->name('create.RewardType');
+    Route::get('/admin/editRewardType/{id}', [RewardTypesController::class, 'edit'])->name('editRewardType');
+    Route::post('/admin/updateRewardType/{id}', [RewardTypesController::class, 'update'])->name('update.RewardType');
+    Route::get('/admin/deleteRewardType/{id}', [RewardTypesController::class, 'destroy'])->name('removeRewardType');
+    Route::get('/admin/rewardStatus/{id}', [RewardTypesController::class, 'rewardStatus'])->name('rewardStatus');
 
     // register user detail route
 

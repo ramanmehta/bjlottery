@@ -8,7 +8,7 @@ use App\Models\RewardType;
 use Validator;
 use DB;
 
-class RewardTypeController extends Controller
+class RewardTypesController extends Controller
 {
     /**
      * Display a listing of the resource.
