@@ -49,6 +49,9 @@ class LuckeyWinnerController extends Controller
         $mission = MissionSubmission::with('mission')
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
             ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.mission_id as status', 'mission_id','mission_submissions.id')
+            ->when(!is_null($id), function ($q) use ($id) {
+                $q->where('mission_submissions.id', $id);
+            })
             ->where('mission_submissions.user_id',auth()->id())
             ->where('mission_type', 'prize')
             ->where('mission_submissions.approval_status','approved')

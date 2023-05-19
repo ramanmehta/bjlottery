@@ -135,10 +135,10 @@
                                                     data-id="{{ $claim->id }}" {{ $claim->status == 1 ? 'selected' :
                                                     '' }} value="1">Claim
                                                 </option>
-                                                <option data-type="{{ $has ? 'lottery' : 'mission' }}"
+                                                {{-- <option data-type="{{ $has ? 'lottery' : 'mission' }}"
                                                     data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
                                                     '' }} value="2">Pending
-                                                </option>
+                                                </option> --}}
                                                 <option data-type="{{ $has ? 'lottery' : 'mission' }}"
                                                     data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :
                                                     '' }} value="3">Approved
