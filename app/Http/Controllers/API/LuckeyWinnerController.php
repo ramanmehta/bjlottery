@@ -21,7 +21,7 @@ class LuckeyWinnerController extends Controller
                 'lucky_draw_winners.prize_name',
                 'lucky_draw_winners.lottery_id',
                 'lucky_draw_winners.id',
-                'lucky_draw_winner_claims.status'
+                'lucky_draw_winner_claims.id as status'
             )
             ->when(!is_null($id), function ($q) use ($id) {
                 $q->where('lucky_draw_winners.lottery_id', $id);

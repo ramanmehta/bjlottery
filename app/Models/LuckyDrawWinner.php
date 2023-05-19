@@ -32,7 +32,14 @@ class LuckyDrawWinner extends Model
 
     public function getStatusAttribute($value)
     {
-        return status($value);
+        $lottery = LuckyDrawWinnerClaim::where('id',$value)
+        ->first();
+        
+        if (is_null($lottery)) {
+            return ucfirst('claim');
+        }else{
+            return ucfirst($lottery->status);
+        }
     }
 
     public function getTypeAttribute($val)
