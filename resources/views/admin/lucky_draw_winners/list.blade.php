@@ -137,7 +137,7 @@
                                                 </option> --}}
                                                 <option data-type="{{ $has ? 'lottery' : 'mission' }}"
                                                     data-id="{{ $claim->id }}" {{ $claim->status == 2 ? 'selected' :
-                                                    '' }} value="2">Submited
+                                                    '' }} value="2" disabled>Submited
                                                 </option>
                                                 <option data-type="{{ $has ? 'lottery' : 'mission' }}"
                                                     data-id="{{ $claim->id }}" {{ $claim->status == 3 ? 'selected' :

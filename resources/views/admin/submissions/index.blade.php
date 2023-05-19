@@ -108,7 +108,7 @@
                       <select class="form-control status" name="status">
                         <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'submit' ? 'selected'
                           : '' }}
-                          value="submit">Submit</option>
+                          value="submit" disabled>Submit</option>
                         <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'approved' ?
                           'selected' : ''
                           }} value="approved">Approve</option>
