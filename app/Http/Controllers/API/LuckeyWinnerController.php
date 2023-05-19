@@ -62,7 +62,7 @@ class LuckeyWinnerController extends Controller
                 'prize_image' => getImage($value1->prize_image),
                 'prize_name' => $value1->prize_name,
                 'type' => 'mission',
-                'id' => $value1->id,
+                'id' => $value1->mission_id,
                 'status' => ucfirst($value1->status),
                 'mission' => $value1->mission,
             ];
