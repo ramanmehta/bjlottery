@@ -18,7 +18,7 @@ function status($type)
             return 'Claim';
             break;
         case 2:
-            return 'Pending';
+            return 'Submit';
             break;
         case 3:
             return 'Approved';

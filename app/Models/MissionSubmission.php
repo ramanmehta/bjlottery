@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MissionSubmission extends Model
 {
     use HasFactory;
-    
+
     protected $table = 'mission_submissions';
 
     protected $fillable = [
@@ -37,14 +37,17 @@ class MissionSubmission extends Model
 
     public function getStatusAttribute($val)
     {
-        $mission = MissionPrizeClaim::where('user_id',auth()->id())
-        ->where('mission_id',$val)
-        ->first();
-        
-    if (is_null($mission)) {
-        return ucfirst('claim');
-    }else{
-        return status($mission->status);
-    }
+        $mission = MissionPrizeClaim::where('user_id', auth()->id())
+            ->where('mission_id', $val)
+            ->first();
+
+        if (is_null($mission)) {
+
+            return ucfirst('claim');
+
+        } else {
+            
+            return status($mission->status);
+        }
     }
 }

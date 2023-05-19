@@ -34,7 +34,7 @@ class LuckeyWinnerController extends Controller
             ->get();
 
         $data = [];
-        
+
         foreach ($winner as $key => $value) {
             $data[] = [
                 'prize_image' => $value->prize_image,
@@ -48,13 +48,13 @@ class LuckeyWinnerController extends Controller
 
         $mission = MissionSubmission::with('mission')
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
-            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.mission_id as status', 'mission_id','mission_submissions.id')
+            ->select('prize_name', 'prize_image', 'mission_submissions.id as type', 'mission_submissions.mission_id as status', 'mission_id', 'mission_submissions.id')
             ->when(!is_null($id), function ($q) use ($id) {
                 $q->where('mission_submissions.id', $id);
             })
-            ->where('mission_submissions.user_id',auth()->id())
+            ->where('mission_submissions.user_id', auth()->id())
             ->where('mission_type', 'prize')
-            ->where('mission_submissions.approval_status','approved')
+            ->where('mission_submissions.approval_status', 'approved')
             ->get();
 
         foreach ($mission as $key1 => $value1) {
@@ -114,46 +114,46 @@ class LuckeyWinnerController extends Controller
         $input = $validated->validated();
 
         if ($input['type'] == 'lottery') {
-            
+
             $winner = LuckyDrawWinner::find($input['id']);
-    
+
             if (LuckyDrawWinnerClaim::where('lucky_draw_winner_id', $winner->id)
                 ->where('lottery_id', $winner->lottery_id)
                 ->where('lucky_draw_id', $winner->lucky_draw_id)
                 ->where('ticket_no', $winner->ticket_no)
                 ->exists()
             ) {
-    
+
                 $response = [
                     'success' => false,
                     'status' => 404,
                     'message' => 'This Ticket not already been claimed'
                 ];
-    
+
                 return response()->json($response);
             }
-    
+
             LuckyDrawWinnerClaim::create([
                 'user_id' => auth()->id(),
                 'name' => $input['name'],
                 'address_1' => $input['address_1'],
                 'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
-                'status' => 1,
+                'status' => 2,
                 'lottery_id' => $winner->lottery_id,
                 'lucky_draw_id' => $winner->lucky_draw_id,
                 'lucky_draw_winner_id' => $winner->id,
                 'ticket_no' => $winner->ticket_no,
             ]);
-        }else{
+        } else {
 
-            $mission = MissionSubmission::where('mission_id',$input['id'])->where('user_id',auth()->id())->first();
+            $mission = MissionSubmission::where('mission_id', $input['id'])->where('user_id', auth()->id())->first();
 
             MissionPrizeClaim::create([
                 'user_id' => auth()->id(),
                 'name' => $input['name'],
                 'address_1' => $input['address_1'],
                 'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
-                'status' => 'Claim',
+                'status' => 2,
                 'mission_id' => $mission->mission_id,
                 'mission_submit_id' => $mission->id,
             ]);
