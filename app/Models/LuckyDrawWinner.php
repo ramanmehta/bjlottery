@@ -12,7 +12,9 @@ class LuckyDrawWinner extends Model
         'lucky_draw_id',
         'ticket_no',
         'prize_name',
-        'prize_image'
+        'prize_image',
+        'type',
+        'amount',
     ];
 
     public function lottery()
@@ -32,14 +34,14 @@ class LuckyDrawWinner extends Model
 
     public function getStatusAttribute($value)
     {
-        $lottery = LuckyDrawWinnerClaim::where('id',$value)
-                ->first();
-        
+        $lottery = LuckyDrawWinnerClaim::where('id', $value)
+            ->first();
+
         if (is_null($lottery)) {
-            
+
             return ucfirst('claim');
-        }else{
-            
+        } else {
+
             return status($lottery->status);
         }
     }

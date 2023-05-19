@@ -69,54 +69,29 @@
                                     Image :
                                 </div>
                                 <div class="col-md-4 text-left">
-                                    <img width="100" height="50" src="{{ getImage($data->game_image) }}"
+                                    <img width="100" height="50" src="{{ $data->game_image }}"
                                         alt="{{$data->game_title}}">
                                 </div>
                                 <div class="col-md-2 text-right">
-                                    <button id="add" class="btn btn-info btn-xs"><i class="fa fa-plus"></i>&nbsp; Add More</button>
+                                    <button id="add" class="btn btn-success btn-xs add_prize"><i class="fa fa-plus"></i>&nbsp; Add
+                                        Prize</button>
+                                    <button id="add" class="btn btn-info btn-xs add_cash"><i class="fa fa-plus"></i>&nbsp; Add
+                                        Cash</button>
                                 </div>
                             </div>
-                            
+
                             <hr>
 
                             <form action="{{ route('add.price.post') }}" method="post" enctype="multipart/form-data">
                                 <table id="example2" class="table table-bordered table-hover text-center">
-                                    <thead>
-                                        <tr>
-                                            <th>Ticket Number</th>
-                                            <th>Prize Name</th>
-                                            <th>Prize Image</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
                                     <input type="hidden" name="lottery_id" value="{{ $data->id }}">
                                     @csrf
                                     <tbody>
-                                        <tr class="form">
-                                            <td>
-                                                <select class="form-control" name="ticket_no[]">
-                                                    <option value="" selected>Select Ticket No</option>
-                                                    @foreach ($claims as $claim)
-                                                    <option value="{{ $claim->ticket_number }}">{{ $claim->ticket_number
-                                                        }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input class="form-control" type="text" name="prize_name[]">
-                                            </td>
-                                            <td>
-                                                <input class="form-control" type="file" name="prize_image[]">
-                                            </td>
-                                            <td>
-                                                <a class="remove btn btn-danger btn-xs" href="#"><i
-                                                        class='fas fa-trash-alt'></i>&nbsp;Remove</a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
+                                        <tr class="form"></tr>
+                                        <tr class="submit d-none">
                                             <td colspan="4">
-                                                <button type="submit" class="btn btn-success btn-sm">Submit Winner</button>
+                                                <button type="submit" class="btn btn-success btn-sm">Submit
+                                                    Winner</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -133,7 +108,7 @@
 
 @section('script')
 <script>
-    $('#add').click(function(){
+    $('.add_prize').click(function(){
         var html;
         var app = @json($claims);
         html += '<tr class="form">';
@@ -146,22 +121,52 @@
         html += '</select>';
         html += '</td>';
         html += '<td>';
-        html += '<input class="form-control" type="text" name="prize_name[]">';
+        html += '<input class="form-control" type="text" name="prize_name[]" placeholder="Prize Name">';
         html += '</td>';
         html += '<td>';
         html += '<input class="form-control" type="file" name="prize_image[]">';
+        html += '<input class="form-control" type="hidden" name="type[]" value="prize">';
         html += '</td>';
         html += '<td>';
         html += '<a class="remove btn btn-danger btn-xs" href="#"><i class="fas fa-trash-alt"></i>&nbsp;Remove</a>';
         html += '</td>';
         html += '</tr>';
 
+    $('.submit').removeClass('d-none');
+
     $('#example2').find('tbody').prepend(html)
-})
+});
+
+$('.add_cash').click(function(){
+        var html;
+        var app = @json($claims);
+        html += '<tr class="form">';
+        html += '<td>';
+        html += '<select class="form-control" name="ticket_no[]">';
+        html += '<option selected value="">Select Ticket No</option>';
+        $.each(app, function (index, val) {
+            html += '<option value="'+val.ticket_number+'">'+val.ticket_number+'</option>'
+        });
+        html += '</select>';
+        html += '</td>';
+        html += '<td colspan="2">';
+        html += '<input class="form-control" type="number" name="prize_name[]" placeholder="Enter Amount">';
+        html += '<input class="form-control" type="hidden" name="type[]" value="cash">';
+        html += '</td>';
+        html += '<td>';
+        html += '<a class="remove btn btn-danger btn-xs" href="#"><i class="fas fa-trash-alt"></i>&nbsp;Remove</a>';
+        html += '</td>';
+        html += '</tr>';
+
+        $('.submit').removeClass('d-none');
+        
+    $('#example2').find('tbody').prepend(html)
+});
 
 $('body').on('click','.remove',function(){
     $(this).parents('tr').remove()
-})
+});
+
 </script>
 @endsection
 @endsection

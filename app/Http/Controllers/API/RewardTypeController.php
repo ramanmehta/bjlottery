@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\CashTransaction;
 use App\Models\PointTransaction;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
 use App\Models\User;
 use App\Models\RewardPoint;
+use App\Models\UserBankDetails;
 use Illuminate\Support\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\DB;
@@ -78,7 +80,7 @@ class RewardTypeController extends Controller
         }
 
         if (isset($rewardTypesArr) && !empty($rewardTypesArr)) {
-            
+
             $response = [
                 'success' => true,
                 'status' => 200,
@@ -434,5 +436,109 @@ class RewardTypeController extends Controller
         ];
 
         return response()->json($resource);
+    }
+
+    public function cashTransaction(Request $request)
+    {
+        $res = CashTransaction::where('user_id', auth()->id())
+            ->when(isset($request->month), function ($q) use ($request) {
+                $q->whereMonth('created_at', $request->month);
+            })
+            ->when(isset($request->year), function ($q) use ($request) {
+                $q->whereYear('created_at', $request->year);
+            })
+            ->select(
+                'id',
+                'user_id',
+                'title',
+                'type',
+                'amount',
+                'status',
+                'created_at'
+            )
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $resource = [
+            'success' => true,
+            'message' => 'Cash transaction history list',
+            'data' => $res
+        ];
+
+        return response()->json($resource);
+    }
+
+    public function cashWithdrawal(Request $request)
+    {
+        $validated = \Validator::make($request->all(), [
+            'amount' => 'required|numeric',
+            'text' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => $validated->errors()
+            ];
+
+            return response()->json($response);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $validated = $validated->validated();
+
+            if (auth()->user()->total_cash_available < $validated['amount']) {
+
+                $response = [
+                    'success' => false,
+                    'status' => 404,
+                    'message' => 'Insufficient Balance'
+                ];
+
+                return response()->json($response);
+            }
+
+
+            User::where('id', auth()->id())->update(['total_cash_available' => DB::raw('total_cash_available - ' . $validated['amount'])]);
+
+            CashTransaction::create([
+                'user_id' => auth()->id(),
+                'title' => 'Withdrawal',
+                'type' => 'withdrawal',
+                'amount' => $validated['amount'],
+                'status' => 2,
+            ]);
+
+            UserBankDetails::create([
+                'user_id' => auth()->id(),
+                'amount' => $validated['amount'],
+                'text' => $validated['text'],
+                'status' => 1,
+            ]);
+
+            $da = User::where('id', auth()->id())->first();
+
+            $data['total_cash_available'] = $da->total_cash_available;
+
+            DB::commit();
+
+            $resource = [
+                'success' => true,
+                'message' => 'Withdrawal request successfully sent.',
+                'data' => $data
+            ];
+
+            return response()->json($resource);
+        } catch (\Throwable $th) {
+
+            DB::rollBack();
+
+            throw $th;
+        }
     }
 }

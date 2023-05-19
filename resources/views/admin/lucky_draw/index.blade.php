@@ -92,7 +92,7 @@
                   <tr>
                     {{-- <td>{{$luckyDraws->id}}</td> --}}
                     <td>{{$luckyDraws->game_title}}</td>
-                    <td>{{$luckyDraws->game_description}}</td>
+                    <td>{!! $luckyDraws->game_description !!}</td>
                     <td><img src="{{$luckyDraws->game_image}}" style="height: 50px;" alt="User Image"></td>
 
                     {{-- <td><img src="{{request()->getHttpHost()." /bjlottery".$luckyDraws->game_image}}"

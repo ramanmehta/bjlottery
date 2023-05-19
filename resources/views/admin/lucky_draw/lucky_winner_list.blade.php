@@ -64,7 +64,9 @@
                                         alt="{{$data->game_title}}">
                                 </div>
                                 <div class="col-md-2 text-right">
-                                    <a href="{{route('add.price.form',encrypt($data->id))}}"><button type="button" class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Prize</button></a>
+                                    <a href="{{route('add.price.form',encrypt($data->id))}}"><button type="button"
+                                            class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add
+                                            Prize</button></a>
                                 </div>
                             </div>
 
@@ -94,6 +96,7 @@
                                         <th>UserName</th>
                                         <th>Prize Name</th>
                                         <th>Prize Image</th>
+                                        <th>Amount</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -109,9 +112,14 @@
                                         <td>{{ $claim->user->username }}</td>
                                         <td>{{ $claim->prize_name }}</td>
                                         <td>
+                                            @if ($claim->prize_image)
                                             <img width="100" height="50" src="{{ $claim->prize_image }}"
                                                 alt="{{ $claim->prize_name }}">
+                                            @else
+                                            ---
+                                            @endif
                                         </td>
+                                        <td>{{ $claim->amount }}</td>
                                         <td>
                                             <a href="{{route('add.price.edit',[encrypt($claim->id)])}}">
                                                 <button type="button" class="btn btn-success btn-xs">

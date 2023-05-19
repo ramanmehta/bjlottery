@@ -119,7 +119,6 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('winner-user/claim', [LuckyDrawGamesController::class, 'winnerUserClaim'])->name('winner.user.claim');
     Route::post('edit-prize/update/{id}', [LuckyDrawGamesController::class, 'editPrizeUpdate'])->name('edit.prize.update');
 
-
     // Missions route
     Route::get('viewMission', [MissionsController::class, 'index'])->name('mission');
     Route::get('createMission', [MissionsController::class, 'create'])->name('createMission');

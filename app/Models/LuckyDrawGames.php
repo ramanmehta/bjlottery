@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class LuckyDrawGames extends Model
 {
@@ -19,10 +20,11 @@ class LuckyDrawGames extends Model
         'start_date_time',
         'end_date_time',
         'status',
+        // 'type'
     ];
 
     public function getGameImageAttribute($value)
     {
-        return \Storage::disk('public')->url('images'.$value);
+        return Storage::disk('public')->url('images'.$value);
     }
 }
