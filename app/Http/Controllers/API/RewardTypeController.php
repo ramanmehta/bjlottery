@@ -30,7 +30,7 @@ class RewardTypeController extends Controller
 
             if ($value->reward_type == 'weeklyreward') {
 
-                $exists = RewardPoint::where('user_id', $value->user_id)
+                $exists = RewardPoint::where('user_id', $userId)
                     ->where('reward_type_id', $reward_type_id)
                     ->whereDate('created_at', '>=', date('Y-m-d 00:00:00'))
                     ->whereDate('created_at', '<=', date('Y-m-d 23:59:59'))
