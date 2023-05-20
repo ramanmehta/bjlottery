@@ -12,6 +12,7 @@ use App\Http\Controllers\API\MissionController;
 use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ReferalsStatsController;
 use App\Http\Controllers\API\LuckeyWinnerController;
+use App\Http\Controllers\API\WithdrawalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use App\Http\Controllers\API\LuckeyWinnerController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -41,16 +42,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('mission/{id?}', [MissionController::class, 'list']);
     Route::post('mission/submit', [MissionController::class, 'missionSubmit']);
     Route::get('reward-transaction', [RewardTypeController::class, 'rewardTransaction']);
-    Route::get('cash-transaction',[RewardTypeController::class,'cashTransaction']);
-    Route::post('cash-withdrawal',[RewardTypeController::class,'cashWithdrawal']);
+    Route::get('cash-transaction',[WithdrawalController::class,'cashTransaction']);
+    Route::post('cash-withdrawal',[WithdrawalController::class,'cashWithdrawal']);
+    Route::get('withdrawal',[WithdrawalController::class,'withdrawal']);
 });
 
 // Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
-
 // Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
 // Route::middleware('auth:sanctum')->post('/passwordChange', [AuthController::class, 'passwordChange']);
-
 // Route::middleware('auth:sanctum')->post('/profile-update', [AuthController::class, 'updateUser']);
 
 Route::controller(AuthController::class)->group(function () {

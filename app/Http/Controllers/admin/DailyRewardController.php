@@ -36,11 +36,10 @@ class DailyRewardController extends Controller
             'reward_points' => 'bail|integer|required',
             'status' => 'required'
         ]);
+
         $role = DailyReward::create($request->all());
 
-        $success = "New reward created successfully";
-
-        return redirect('/admin/viewDailyRewards')->with('success', $success);
+        return redirect('DailyRewards')->with('success', "New reward created successfully");
     }
 
     /**
@@ -56,8 +55,8 @@ class DailyRewardController extends Controller
      */
     public function edit($id)
     {
-
         $rewardid = decrypt($id);
+
         $dailyReward = DailyReward::where('id', $rewardid)->first();
 
         return view('admin.daily_rewards.edit', ['dailyReward' => $dailyReward]);
@@ -80,8 +79,8 @@ class DailyRewardController extends Controller
         $dailyReward->reward_points = $request->reward_points;
         $dailyReward->status = $request->status;
         $dailyReward->save();
-        $success = "Reward updated successfully";
-        return redirect('/admin/viewDailyRewards')->with('success', $success);
+
+        return redirect('DailyRewards')->with('success', "Reward updated successfully");
     }
 
     /**
@@ -92,9 +91,9 @@ class DailyRewardController extends Controller
         $dailyRewardid = (int)decrypt($id);
 
         $deleteRole = DailyReward::where('id', $dailyRewardid)->first();
+
         $deleteRole->delete();
 
-        $error = "Reward removed successfully";
-        return redirect('/admin/viewDailyRewards')->with('error', $error);
+        return redirect('DailyRewards')->with('error', "Reward removed successfully");
     }
 }

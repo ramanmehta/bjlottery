@@ -28,3 +28,18 @@ function status($type)
             break;
     }
 }
+
+function withdrawalStatus($val)
+{
+    switch ($val) {
+        case 1:
+            return 'Withraw Requested';
+            break;
+        case 2:
+            return 'Admin Deposited';
+            break;
+        case 3:
+            return 'Admin Rejected';
+            break;
+    }
+}

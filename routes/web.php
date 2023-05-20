@@ -13,6 +13,8 @@ use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\ReferalsStatsController;
 use App\Http\Controllers\admin\MissionLevelController;
 use App\Http\Controllers\admin\MissionSubmissionController;
+use App\Http\Controllers\admin\WithdrawalController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,7 +65,6 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('deleteRoles/{id}', [RoleController::class, 'destroy'])->name('removeRole');
 
     // rewards  route
-
     // Route::get('viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
     // Route::get('createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
     // Route::post('createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
@@ -80,8 +81,6 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('rewardStatus/{id}', [RewardTypesController::class, 'rewardStatus'])->name('rewardStatus');
 
     // register user detail route
-
-
     Route::get('viewUser', [UsersController::class, 'index'])->name('admin.users');
     // Route::get('viewUser', [UsersController::class,'index'])->name('admin.users');
     // Route::get('createUser', [UsersController::class,'create']);
@@ -160,13 +159,14 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('deleteNotifications/{id}', [NotificationController::class, 'destroy'])->name('removeNotifications');
 
     // Referal status 
-
     Route::get('viewReferalstatus', [ReferalsStatsController::class, 'index'])->name('referalstatus');
     Route::get('createReferalstatus', [ReferalsStatsController::class, 'create'])->name('createReferalstatus');
     Route::post('createReferalstatus', [ReferalsStatsController::class, 'store'])->name('user.Referalstatus');
     Route::get('editReferalstatus/{id}', [ReferalsStatsController::class, 'edit'])->name('editReferalstatus');
     Route::post('updateReferalstatus/{id}', [ReferalsStatsController::class, 'update'])->name('update.Referalstatus');
     Route::get('deleteReferalstatus/{id}', [ReferalsStatsController::class, 'destroy'])->name('removeReferalstatus');
+
+    Route::get('withdraw', [WithdrawalController::class, 'withdraw'])->name('withdraw');
 });
 
 // test relationship
@@ -175,3 +175,4 @@ Route::get('/fortest/date', [\App\Http\Controllers\fortest\JoinController::class
 
 Route::post('status/update/winner/user', [LuckyDrawGamesController::class, 'statusUpdateWinnerUser'])->name('status.update.winner.user');
 Route::post('mission/submit/status/update', [LuckyDrawGamesController::class, 'missionSubmitStatusUpdate'])->name('mission.submit.status.update');
+Route::post('withdrawal-status', [WithdrawalController::class, 'withdrawalStatus'])->name('withdrawal.status');

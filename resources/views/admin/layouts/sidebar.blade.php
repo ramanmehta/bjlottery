@@ -51,6 +51,11 @@
             Luckey Winner Claimed
             </a>
           </li>
+          <li class="nav-item menu-open">
+            <a href="{{route('withdraw')}}" class="nav-link @if($currentRoute == 'withdraw') {{'active'}} @endif">
+              Withdraw
+            </a>
+          </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
