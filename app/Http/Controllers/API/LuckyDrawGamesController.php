@@ -103,8 +103,8 @@ class LuckyDrawGamesController extends Controller
 
     public function getNumber(Request $request)
     {
-
         $data = $request->all();
+
         $user_id = $request->user_id;
         $game_id = $request->game_id;
 
@@ -122,7 +122,7 @@ class LuckyDrawGamesController extends Controller
 
             if ($user_points >= $pointRequired) {
 
-                $randomNumber = rand(100, 9999);
+                $randomNumber = rand(1111, 9999);
 
                 $balancePoint = $user_points - $pointRequired;
 
