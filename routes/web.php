@@ -150,7 +150,6 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('deleteSetting/{id}', [SettingController::class, 'destroy'])->name('removeSetting');
 
     // Notifications route
-
     Route::get('viewNotifications', [NotificationController::class, 'index'])->name('notifications');
     Route::get('createNotifications', [NotificationController::class, 'create'])->name('createNotifications');
     Route::post('createNotifications', [NotificationController::class, 'store'])->name('user.Notifications');

@@ -13,6 +13,7 @@ use App\Models\MissionSubmission;
 use App\Models\PointTransaction;
 use App\Models\User;
 use App\Models\CashTransaction;
+use App\Models\Mission;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -310,17 +311,24 @@ class LuckyDrawGamesController extends Controller
                         'status' => 1,
                     ]);
 
+                    \App\Models\Notification::create([
+                        'user_id' => $data['user_id'],
+                        'title' => 'Lottery Cash price Winner!',
+                        'description' => 'Congratulation!, You win cash amount on ticket number ' . $data['ticket_no'] . ', You are selected as luckey cash price winner. Amount will be cresit in your wallet soon.',
+                        'status' => 0,
+                        'sent_at' => now(),
+                    ]);
+
                     $data['amount'] = $validated['prize_name'][$key];
                 }
 
                 LuckyDrawWinner::create($data);
             }
 
-            
-            DB::commit();
-            
-            return redirect()->route('add.price', encrypt($validated['lottery_id']))->with('success', 'Ticket Added successfully');
 
+            DB::commit();
+
+            return redirect()->route('add.price', encrypt($validated['lottery_id']))->with('success', 'Ticket Added successfully');
         } catch (\Throwable $th) {
 
             DB::rollBack();
@@ -383,17 +391,69 @@ class LuckyDrawGamesController extends Controller
     public function statusUpdateWinnerUser(Request $request)
     {
         if ($request->type == 'lottery') {
+
             LuckyDrawWinnerClaim::where('id', $request->id)
                 ->update([
                     'status' => $request->status
                 ]);
+
+            $res = LuckyDrawWinnerClaim::find($request->id);
+
+            if ($request->status == 3) {
+
+                \App\Models\Notification::create([
+                    'user_id' => $res->user_id,
+                    'title' => 'Lottery Prize Approved',
+                    'description' => 'Congratulation!, You ticket number no ' . $res->ticket_no . ' selected as luckey prize winner. Claim Your prize and collect.',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+            }
+
+            if ($request->status == 4) {
+
+                \App\Models\Notification::create([
+                    'user_id' => $res->user_id,
+                    'title' => 'Lottery Prize Rejected',
+                    'description' => 'Better Luck Next Time, You ticket number no ' . $res->ticket_no . ' not selected as luckey prize winner.',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+            }
         }
 
         if ($request->type == 'mission') {
+
             MissionPrizeClaim::where('id', $request->id)
                 ->update([
                     'status' => $request->status
                 ]);
+
+            $m = MissionPrizeClaim::find($request->id);
+
+            $mission = Mission::find($m->mission_id);
+
+            if ($request->status == 3) {
+
+                \App\Models\Notification::create([
+                    'user_id' => $res->user_id,
+                    'title' => 'Mission Prize Approved',
+                    'description' => 'Congratulation!, Your Prize On Mission ' . $mission->mission_title . ' successfully approved, Claim Your prize and collect.',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+            }
+
+            if ($request->status == 4) {
+
+                \App\Models\Notification::create([
+                    'user_id' => $res->user_id,
+                    'title' => 'Mission Prize Rejected',
+                    'description' => 'Better Luck Next Time, Your Prize On Mission ' . $mission->mission_title . ' not approved',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+            }
         }
 
         return response()->json('ok');

@@ -86,6 +86,14 @@ class WithdrawalController extends Controller
                 'status' => 1,
             ]);
 
+            \App\Models\Notification::create([
+                'user_id' => auth()->id(),
+                'title' => 'Cash Withdrawal Request',
+                'description' => 'Your cash withdrawal request has been successfully sent, Please wait 24 hours to accept the request from the department, Thanks for your patience',
+                'status' => 0,
+                'sent_at' => now(),
+            ]);
+
             DB::commit();
 
             $resource = [
@@ -95,7 +103,6 @@ class WithdrawalController extends Controller
             ];
 
             return response()->json($resource);
-
         } catch (\Throwable $th) {
 
             DB::rollBack();
@@ -106,7 +113,7 @@ class WithdrawalController extends Controller
 
     public function withdrawal(Request $request)
     {
-        $res = UserBankDetails::where('user_id',auth()->id())
+        $res = UserBankDetails::where('user_id', auth()->id())
             ->when(isset($request->month), function ($q) use ($request) {
                 $q->whereMonth('created_at', $request->month);
             })
@@ -120,7 +127,7 @@ class WithdrawalController extends Controller
                 'text',
                 'status',
             )
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->get();
 
         $resource = [

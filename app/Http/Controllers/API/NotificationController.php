@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Notification;
 
 class NotificationController extends Controller
@@ -13,78 +12,64 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        // dd("notification here");
-        $notification = Notification::all();
-        if ($notification->count() > 0) {
-            return response()->json([
-                'status' => 200,
-                'Notification' => $notification
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'Message' => 'No record found'
-            ], 404);
-        }
-    }
+        $notification = Notification::where('user_id', auth()->id())
+            ->select('id', 'title', 'description', 'status', 'sent_at')
+            ->orderBy('id', 'desc')
+            ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $resource = [
+            'success' => true,
+            'message' => 'Notification List',
+            'data' => $notification
+        ];
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        return response()->json($resource);
     }
 
     /**
      * Display the specified resource.
      */
+
     public function show($id)
     {
-        // dd("notification id");
-        $notification = Notification::find($id);
-        if ($notification) {
-            return response()->json([
-                'status' => 200,
-                'notification' => $notification,
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => 404,
-                'Message' => 'No record found'
-            ], 404);
-        }
+        $notification = Notification::select('id', 'title', 'description', 'status', 'sent_at')->find($id);
+
+        $resource = [
+            'success' => true,
+            'message' => 'Notification In Details',
+            'data' => $notification
+        ];
+
+        return response()->json($resource);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function readAll()
     {
-        //
+        Notification::where('user_id', auth()->id())
+            ->update([
+                'status' => 1
+            ]);
+
+        $resource = [
+            'success' => true,
+            'message' => 'All notifications marked read',
+            'data' => []
+        ];
+
+        return response()->json($resource);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy()
     {
-        //
-    }
+        Notification::where('user_id', auth()->id())
+            ->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $resource = [
+            'success' => true,
+            'message' => 'All Notification successfully deleted',
+            'data' => []
+        ];
+
+        return response()->json($resource);
     }
 }

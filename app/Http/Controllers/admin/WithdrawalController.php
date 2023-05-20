@@ -44,17 +44,38 @@ class WithdrawalController extends Controller
 
         $bank = UserBankDetails::find($request->id);
 
-        User::where('id', $bank->user_id)
-            ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
+        if ($request->status == 2) {
 
-        CashTransaction::create([
-            'user_id' => $bank->user_id,
-            'title' => 'Withdrawal',
-            'type' => 'withdrawal',
-            'amount' => $bank->amount,
-            'status' => 2,
-        ]);
+            User::where('id', $bank->user_id)
+                ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
+    
+            CashTransaction::create([
+                'user_id' => $bank->user_id,
+                'title' => 'Withdrawal',
+                'type' => 'withdrawal',
+                'amount' => $bank->amount,
+                'status' => 2,
+            ]);
 
+            \App\Models\Notification::create([
+                'user_id' => $bank->user_id,
+                'title' => 'Cash Withdrawal Request Approved',
+                'description' => 'Your cash withdrawal request successfully approved',
+                'status' => 0,
+                'sent_at' => now(),
+            ]);
+
+        }else{
+
+            \App\Models\Notification::create([
+                'user_id' => $bank->user_id,
+                'title' => 'Cash Withdrawal Request Reject',
+                'description' => 'Your cash withdrawal request rejected, Pls contact our support to know more',
+                'status' => 0,
+                'sent_at' => now(),
+            ]);
+        }
+        
         return response()->json('ok');
     }
 }

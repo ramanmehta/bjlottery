@@ -29,7 +29,7 @@ use App\Http\Controllers\API\WithdrawalController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -42,15 +42,16 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('mission/{id?}', [MissionController::class, 'list']);
     Route::post('mission/submit', [MissionController::class, 'missionSubmit']);
     Route::get('reward-transaction', [RewardTypeController::class, 'rewardTransaction']);
-    Route::get('cash-transaction',[WithdrawalController::class,'cashTransaction']);
-    Route::post('cash-withdrawal',[WithdrawalController::class,'cashWithdrawal']);
-    Route::get('withdrawal',[WithdrawalController::class,'withdrawal']);
-});
+    Route::get('cash-transaction', [WithdrawalController::class, 'cashTransaction']);
+    Route::post('cash-withdrawal', [WithdrawalController::class, 'cashWithdrawal']);
+    Route::get('withdrawal', [WithdrawalController::class, 'withdrawal']);
 
-// Route::middleware('auth:sanctum')->post('/user', [AuthController::class, 'user']);
-// Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-// Route::middleware('auth:sanctum')->post('/passwordChange', [AuthController::class, 'passwordChange']);
-// Route::middleware('auth:sanctum')->post('/profile-update', [AuthController::class, 'updateUser']);
+    // NOTIFICATION
+    Route::get('notification', [NotificationController::class, 'index']);
+    Route::get('notification/read-all', [NotificationController::class, 'readAll']);
+    Route::get('notification/destroy', [NotificationController::class, 'destroy']);
+    Route::get('notification/{id}', [NotificationController::class, 'show']);
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -63,7 +64,6 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::controller(RoleController::class)->group(function () {
-
     Route::get('roles', 'index');
     Route::get('role/{id}', 'show');
 });
@@ -109,13 +109,6 @@ Route::controller(MissionController::class)->group(function () {
     Route::get('', '');
     Route::post('', '');
     Route::post('userMission/{id}', 'userMission');
-});
-
-Route::controller(NotificationController::class)->group(function () {
-    Route::get('notification', 'index');
-    Route::get('notification/{id}', 'show');
-    Route::post('', '');
-    Route::get('', '');
 });
 
 Route::controller(ReferalsStatsController::class)->group(function () {
