@@ -53,7 +53,7 @@
                                 <div class="col-sm-6">
                                     <form action="{{ Request::fullUrl() }}" method="get">
                                         <div class="input-group">
-                                            <input type="search" class="form-control" placeholder="Search Ticket No"
+                                            <input type="search" class="form-control" placeholder="Search Anything"
                                                 aria-label="Search Lottery" aria-describedby="basic-addon2"
                                                 name="search" value="{{ request()->get('search') }}" id="search">
                                             &nbsp;
@@ -80,8 +80,8 @@
                                     @foreach ($banks as $key => $bank)
                                     <tr>
                                         <td>{{ ++$key }}</td>
-                                        <td>{{ $bank->user->name }}</td>
-                                        <td>{{ $bank->user->username }}</td>
+                                        <td>{{ $bank->name }}</td>
+                                        <td>{{ $bank->username }}</td>
                                         <td>{{ $bank->amount }}</td>
                                         <td>{{ $bank->text }}</td>
                                         <td style="width: 15%">

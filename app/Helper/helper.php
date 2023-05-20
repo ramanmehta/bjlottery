@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Storage;
 
+use function PHPUnit\Framework\returnSelf;
+
 function getImage($path)
 {
     if ($path == null) {
@@ -29,17 +31,34 @@ function status($type)
     }
 }
 
-function withdrawalStatus($val)
+function withdrawalStatus($val,$res=false)
 {
-    switch ($val) {
-        case 1:
-            return 'Withraw Requested';
-            break;
-        case 2:
-            return 'Admin Deposited';
-            break;
-        case 3:
-            return 'Admin Rejected';
-            break;
+    if ($res) {
+        
+        switch ($val) {
+            case str_contains('withraw requested', $val):
+                return 1;
+                break;
+            case str_contains('admin deposited', $val):
+                return 2;
+                break;
+            case str_contains('admin rejected', $val):
+                return 3;
+                break;
+            default:
+                return $val;
+        }
+    }else{
+        switch ($val) {
+            case 1:
+                return 'Withraw Requested';
+                break;
+            case 2:
+                return 'Admin Deposited';
+                break;
+            case 3:
+                return 'Admin Rejected';
+                break;
+        }
     }
 }
