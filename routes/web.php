@@ -27,36 +27,27 @@ use App\Http\Controllers\admin\WithdrawalController;
 */
 
 Route::get('/', function () {
-
     return view('admin/login');
 });
-
-
-Route::get('/webapp/login', function () {
+Route::get('webapp/login', function () {
     return view('webapp.login');
 });
-Route::get('/webapp/register', function () {
+Route::get('webapp/register', function () {
     return view('webapp.register');
 });
-
-// Route::get('/webapp/registration',function(){
-//     return view('webapp.registration');
-// });
-
-Route::controller(AuthController::class)->group(function () {
-    Route::get('/admin', 'index');
-    Route::post('/admin/login', 'login')->name('admin.auth');
+Route::get('webapp/registration', function () {
+    return view('webapp.registration');
 });
 
-
-// Group middleware
+Route::get('admin', [AuthController::class, 'index']);
+Route::post('admin/login', [AuthController::class, 'login'])->name('admin.auth');
 
 Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
 
     Route::get('dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('logout', [AuthController::class, 'logout'])->name('admin.logout');
 
-    // roles route
+    // ROLES ROUTE
     Route::get('viewRoles', [RoleController::class, 'index'])->name('viewRoles');
     Route::get('createRoles', [RoleController::class, 'create'])->name('createRoles');
     Route::post('createRoles', [RoleController::class, 'store'])->name('user.role');
@@ -64,7 +55,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::post('updateRoles/{id}', [RoleController::class, 'update'])->name('update.role');
     Route::get('deleteRoles/{id}', [RoleController::class, 'destroy'])->name('removeRole');
 
-    // rewards  route
+    // REWARDS  ROUTE
     // Route::get('viewDailyRewards', [DailyRewardController::class,'index'])->name('DailyRewards');
     // Route::get('createDailyRewards', [DailyRewardController::class,'create'])->name('createDailyRewards');
     // Route::post('createDailyRewards', [DailyRewardController::class,'store'])->name('user.DailyReward');
@@ -80,7 +71,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('deleteRewardType/{id}', [RewardTypesController::class, 'destroy'])->name('removeRewardType');
     Route::get('rewardStatus/{id}', [RewardTypesController::class, 'rewardStatus'])->name('rewardStatus');
 
-    // register user detail route
+    // REGISTER USER DETAIL ROUTE
     Route::get('viewUser', [UsersController::class, 'index'])->name('admin.users');
     // Route::get('viewUser', [UsersController::class,'index'])->name('admin.users');
     // Route::get('createUser', [UsersController::class,'create']);
@@ -96,12 +87,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('cPassword/{id}', [UsersController::class, 'changePassword'])->name('cPassword');
     Route::post('passwordReset/{id}', [UsersController::class, 'passwordReset'])->name('passwordReset');
 
-    // Route::controller(UsersController::class)->group(function(){
-    //     Route::get('userStatus/{id}', 'userStatus')->name('userStatus');
-    // });
-
-    // lucky_draw_games route
-
+    // LUCKY DRAW GAMES ROUTE
     Route::get('viewLuckyDraw', [LuckyDrawGamesController::class, 'index'])->name('luckyDraw');
     Route::get('createLuckyDraw', [LuckyDrawGamesController::class, 'create'])->name('createLuckyDraw');
     Route::post('createLuckyDraw', [LuckyDrawGamesController::class, 'store'])->name('user.LuckyDraw');
@@ -118,7 +104,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('winner-user/claim', [LuckyDrawGamesController::class, 'winnerUserClaim'])->name('winner.user.claim');
     Route::post('edit-prize/update/{id}', [LuckyDrawGamesController::class, 'editPrizeUpdate'])->name('edit.prize.update');
 
-    // Missions route
+    // MISSIONS ROUTE
     Route::get('viewMission', [MissionsController::class, 'index'])->name('mission');
     Route::get('createMission', [MissionsController::class, 'create'])->name('createMission');
     Route::post('createMission', [MissionsController::class, 'store'])->name('user.Mission');
@@ -127,21 +113,19 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::get('deleteMission/{id}', [MissionsController::class, 'destroy'])->name('removeMission');
     Route::get('missionStatus/{id}', [MissionsController::class, 'missionStatus'])->name('missionStatus');
 
-    // levels route    
+    // LEVELS ROUTE
     Route::get('levels/{id}', [MissionLevelController::class, 'index'])->name('levels');
-
     Route::get('createLevels', [MissionLevelController::class, 'create'])->name('createlevels');
     Route::post('createLevels', [MissionLevelController::class, 'store'])->name('createlevels.store');
     Route::get('deleteLevelMission/{id}/{mission_id}', [MissionLevelController::class, 'destroy'])->name('removeLevelMission');
     Route::get('editMissionLevel/{id}', [MissionLevelController::class, 'edit'])->name('editMissionLevel');
     Route::post('updateMissionLevel/{id}', [MissionLevelController::class, 'update'])->name('editMissionLevel.id');
 
-    // Mission Submissions 
-
+    // MISSION SUBMISSIONS 
     Route::get('mission-submissions/{id?}', [MissionSubmissionController::class, 'index'])->name('mission-submissions.index');
     Route::get('mission-submissions-show/{id}', [MissionSubmissionController::class, 'show'])->name('missionsubmissions.show');
-    // Settings route
 
+    // SETTINGS ROUTE
     Route::get('viewSetting', [SettingController::class, 'index'])->name('settings');
     Route::get('createSetting', [SettingController::class, 'create'])->name('createSetting');
     Route::post('createSetting', [SettingController::class, 'store'])->name('adminSetting');
@@ -149,7 +133,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::post('updateSetting/{id}', [SettingController::class, 'update'])->name('update.Setting');
     Route::get('deleteSetting/{id}', [SettingController::class, 'destroy'])->name('removeSetting');
 
-    // Notifications route
+    // NOTIFICATIONS ROUTE
     Route::get('viewNotifications', [NotificationController::class, 'index'])->name('notifications');
     Route::get('createNotifications', [NotificationController::class, 'create'])->name('createNotifications');
     Route::post('createNotifications', [NotificationController::class, 'store'])->name('user.Notifications');
@@ -157,7 +141,7 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
     Route::post('updateNotifications/{id}', [NotificationController::class, 'update'])->name('update.Notifications');
     Route::get('deleteNotifications/{id}', [NotificationController::class, 'destroy'])->name('removeNotifications');
 
-    // Referal status 
+    // REFERAL STATUS 
     Route::get('viewReferalstatus', [ReferalsStatsController::class, 'index'])->name('referalstatus');
     Route::get('createReferalstatus', [ReferalsStatsController::class, 'create'])->name('createReferalstatus');
     Route::post('createReferalstatus', [ReferalsStatsController::class, 'store'])->name('user.Referalstatus');
@@ -167,10 +151,6 @@ Route::group(['middleware' => 'admin_auth', 'prefix' => 'admin'], function () {
 
     Route::get('withdraw', [WithdrawalController::class, 'withdraw'])->name('withdraw');
 });
-
-// test relationship
-Route::get('/fortest/join', [\App\Http\Controllers\fortest\JoinController::class, 'referalPoints']);
-Route::get('/fortest/date', [\App\Http\Controllers\fortest\JoinController::class, 'datetimeOnly']);
 
 Route::post('status/update/winner/user', [LuckyDrawGamesController::class, 'statusUpdateWinnerUser'])->name('status.update.winner.user');
 Route::post('mission/submit/status/update', [LuckyDrawGamesController::class, 'missionSubmitStatusUpdate'])->name('mission.submit.status.update');

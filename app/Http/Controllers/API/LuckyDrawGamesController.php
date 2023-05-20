@@ -227,7 +227,7 @@ class LuckyDrawGamesController extends Controller
 
         $totalParticipant = $participant->count();
         if ($totalParticipant > 0) {
-            // $user = User::with(['luckydraw'])->find($participant)   ;
+            // $user = User::with(['luckydraw'])->find($participant);
             $userLottery = DB::table('users')
                 ->select('users.username', 'users.logo')
                 ->join('lucky_draws', 'lucky_draws.user_id', '=', 'users.id')
