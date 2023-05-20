@@ -30,7 +30,13 @@ class RewardTypeController extends Controller
 
             if ($value->reward_type == 'weeklyreward') {
 
-                if (date('l', time()) == 'Saturday') {
+                $exists = RewardPoint::where('user_id', $userId)
+                    ->where('reward_type_id', $reward_type_id)
+                    ->whereDate('created_at', '>=', date('Y-m-d 00:00:00'))
+                    ->whereDate('created_at', '<=', date('Y-m-d 23:59:59'))
+                    ->exists();
+
+                if (date('l', time()) == 'Saturday' && ! $exists) {
 
                     $value->claimed = 0;
                 } else {
