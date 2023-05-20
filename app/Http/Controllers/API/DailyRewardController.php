@@ -97,7 +97,8 @@ class DailyRewardController extends Controller
 
     // daily reward function start
 
-    public function dailyRewardPoints(Request $request){
+    public function dailyRewardPoints(Request $request)
+    {
         $getData = $request->all();
 
         $users = User::find($request->user_id);
@@ -134,13 +135,15 @@ class DailyRewardController extends Controller
                 $parsedToday = Carbon::parse($todayTime);
                 $parseUserDate = Carbon::parse($dailyrewardDate);
 
-                if($parseUserDate->isToday()    ){
+                if($parseUserDate->isToday()){
+
                     $response = [
                         'satus' => 400,
                         'message' => 'Today Daily Reward already claimed'
                     ];
                     
                     return response()->json($response);
+                    
                 }else{
                     
                     $getRewardPint = $rewardUser->daily_reward_point;
@@ -157,9 +160,6 @@ class DailyRewardController extends Controller
 
                     return response()->json($response);
                 }
-                
-                
-
             }
             
         }else{
@@ -171,11 +171,10 @@ class DailyRewardController extends Controller
            
             return response()->json($response);
         }
-
     }
 
-
-    public function weeklyRewardPoints(Request $request){
+    public function weeklyRewardPoints(Request $request)
+    {
         $getData = $request->all();
 
         $users = User::find($request->user_id);
