@@ -144,9 +144,12 @@ class LuckeyWinnerController extends Controller
                 'lucky_draw_winner_id' => $winner->id,
                 'ticket_no' => $winner->ticket_no,
             ]);
+
         } else {
 
-            $mission = MissionSubmission::where('mission_id', $input['id'])->where('user_id', auth()->id())->first();
+            $mission = MissionSubmission::where('mission_id', $input['id'])
+                ->where('user_id', auth()->id())
+                ->first();
 
             MissionPrizeClaim::create([
                 'user_id' => auth()->id(),

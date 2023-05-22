@@ -284,6 +284,8 @@ class LuckyDrawGamesController extends Controller
                 $data = [];
                 $draw  = LuckyDraw::where('ticket_number', $value)->where('lucky_draw_games_id', $validated['lottery_id'])->first();
 
+                $lottery = LuckyDrawGames::find($validated['lottery_id']);
+
                 $data['type'] = $validated['type'][$key];
                 $data['user_id'] = $draw->user_id;
                 $data['lottery_id'] = $validated['lottery_id'];
@@ -296,6 +298,15 @@ class LuckyDrawGamesController extends Controller
                     $data['prize_image'] = 'luckey_winner/' . rand() . $validated['prize_image'][$i]->getClientOriginalName();
                     $validated['prize_image'][$i]->storeAs('public/images', $data['prize_image']);
                     ++$i;
+
+                    \App\Models\Notification::create([
+                        'user_id' => $data['user_id'],
+                        'title' => 'Prize Won By lottery Ticket',
+                        'description' => "Congratulations! You won ".$data['prize_name']." from lottery ".$lottery->game_title." on Ticket no ".$value,
+                        'status' => 0,
+                        'sent_at' => now(),
+                    ]);
+
                 } else {
 
                     User::where('id', $data['user_id'])->update(['total_cash_available' => DB::raw('total_cash_available + ' . $validated['prize_name'][$key])]);
@@ -308,20 +319,19 @@ class LuckyDrawGamesController extends Controller
                         'status' => 1,
                     ]);
 
+                    $data['amount'] = $validated['prize_name'][$key];
+
                     \App\Models\Notification::create([
                         'user_id' => $data['user_id'],
-                        'title' => 'Lottery Cash price Winner!',
-                        'description' => 'Congratulation!, You win cash amount on ticket number ' . $data['ticket_no'] . ', You are selected as luckey cash price winner. Amount will be cresit in your wallet soon.',
+                        'title' => 'Cash Won By lottery Ticket',
+                        'description' => "Congratulations! You won ".$data['amount']." Cash from lottery ".$lottery->game_title." on Ticket no ".$value,
                         'status' => 0,
                         'sent_at' => now(),
                     ]);
-
-                    $data['amount'] = $validated['prize_name'][$key];
                 }
 
                 LuckyDrawWinner::create($data);
             }
-
 
             DB::commit();
 
@@ -400,10 +410,11 @@ class LuckyDrawGamesController extends Controller
 
             if ($request->status == 3) {
 
+                
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
-                    'title' => 'Lottery Prize Approved',
-                    'description' => 'Congrats , Your prize ' . $prize->prize_name . ' shipped to your address.',
+                    'title' => 'Prize Claim',
+                    'description' => "Congratulations! Your prize ".$prize->prize_name." shipped to your address. You will get email soon for shipping tracking Id",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -413,8 +424,8 @@ class LuckyDrawGamesController extends Controller
 
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
-                    'title' => 'Lottery Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your claim on prize ' . $prize->prize_name . ' rejected, contact our support to know more about.',
+                    'title' => 'Prize Claim Rejected',
+                    'description' => "Sorry! Your prize ".$prize->prize_name." shipping request declined",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -436,8 +447,8 @@ class LuckyDrawGamesController extends Controller
 
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
-                    'title' => 'Mission Prize Approved',
-                    'description' => 'Congrats , Your prize' . $mission->prize_name . ' shipped to your address.',
+                    'title' => 'Prize Claim',
+                    'description' => "Congratulations! Your prize ".$mission->prize_name." shipped to your address. You will get email soon for shipping tracking Id",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -447,8 +458,8 @@ class LuckyDrawGamesController extends Controller
 
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
-                    'title' => 'Mission Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your claim on prize ' . $prize->prize_name . ' rejected, contact our support to know more about.',
+                    'title' => 'Prize Claim Rejected',
+                    'description' => "Sorry! Your prize ".$mission->prize_name." shipping request declined",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -504,7 +515,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $mission->user_id,
                     'title' => 'Mission Approved',
-                    'description' => 'Congrats!, Your mission ' . $mission->mission_title . ' successfully approved, you will receive ' . $mission->enter_earn_affliated_points . ' affliated points in your wallet.',
+                    'description' => "Congratulations! ".$mission->mission_title." mission Submission approved. ".$mission->enter_earn_affliated_points." Afflliate point credited to your wallet.",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -527,7 +538,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $mission->user_id,
                     'title' => 'Mission Rejected',
-                    'description' => 'Better Luck Next Time!, Your affliated points on mission ' . $mission->mission_title . ' rejected by admin.',
+                    'description' => "Sorry! ".$mission->mission_title." mission Submission declined",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -542,7 +553,7 @@ class LuckyDrawGamesController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $mission->user_id,
                 'title' => 'Mission Approved',
-                'description' => 'Congrats , Your prize on mission ' . $mission->mission_title . ' shipped to your address.',
+                'description' => "Congratulations! ".$mission->mission_title." mission Submission approved. Your prize ".$mission->prize_name." can redeem from your my winnings section",
                 'status' => 0,
                 'sent_at' => now(),
             ]);
@@ -553,7 +564,7 @@ class LuckyDrawGamesController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $mission->user_id,
                 'title' => 'Mission Rejected',
-                'description' => 'Better Luck Next Time!, Your prize request on mission ' . $mission->mission_title . ' rejected by admin.',
+                'description' => "Sorry! ".$mission->mission_title." mission Submission declined",
                 'status' => 0,
                 'sent_at' => now(),
             ]);
