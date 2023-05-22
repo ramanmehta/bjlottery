@@ -399,12 +399,14 @@ class LuckyDrawGamesController extends Controller
 
             $res = LuckyDrawWinnerClaim::find($request->id);
 
+            $prize = LuckyDrawWinner::where('id', $res->lucky_draw_winner_id)->first();
+
             if ($request->status == 3) {
 
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Approved',
-                    'description' => 'Congratulation!, You ticket number ' . $res->ticket_no . ' selected as luckey prize winner. claim your prize and collect.',
+                    'description' => 'Congrats , Your ' . $prize->prize_name . ' shipped to your address.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -415,7 +417,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Rejected',
-                    'description' => 'Better Luck Next Time, You ticket number ' . $res->ticket_no . ' not selected as luckey prize winner.',
+                    'description' => 'Better Luck Next Time, Your prize request on ticket number ' . $res->ticket_no . ' rejected by admin, Contact our support to know more about.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -438,7 +440,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Approved',
-                    'description' => 'Congratulation!, Your prize on mission ' . $mission->mission_title . ' successfully approved, claim your prize and collect.',
+                    'description' => 'Congrats , Your ' . $mission->prize_name . ' shipped to your address.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
