@@ -30,7 +30,7 @@
         </li>
         <li class="nav-item menu-open">
           <a href="{{route('luckyDraw')}}"
-            class="nav-link {{ in_array($currentRoute,['luckyDraw','createLuckyDraw','user.LuckyDraw','editLuckyDraw','update.LuckyDraw','removeLuckyDraw','luckyDrawsStatus']) ? 'active' : '' }}">
+            class="nav-link {{ in_array($currentRoute,['add.price','add.price.form','luckyDraw','createLuckyDraw','user.LuckyDraw','editLuckyDraw','update.LuckyDraw','removeLuckyDraw','luckyDrawsStatus']) ? 'active' : '' }}">
             Lottery List
           </a>
         </li>
