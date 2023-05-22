@@ -4,8 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -14,10 +14,9 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $role = Role::all();
-        // dd($role);
+        $role = Role::get();
 
-        return view('admin.roles.index', ['role' => $role]);
+        return view('admin.roles.index', compact('role'));
     }
 
     /**
@@ -25,7 +24,6 @@ class RoleController extends Controller
      */
     public function create(Request $request)
     {
-        // dd("here");
         return view('admin.roles.create');
     }
 
@@ -39,9 +37,9 @@ class RoleController extends Controller
             'status' => 'required'
         ]);
 
-        $role = Role::create($request->all());
+        Role::create($request->all());
 
-        return redirect('/admin/viewRoles');
+        return redirect()->route('viewRoles');
     }
 
     /**
@@ -57,11 +55,11 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-
         $roleid = decrypt($id);
+
         $role = Role::where('id', $roleid)->first();
 
-        return view('admin.roles.edit', ['role' => $role]);
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**
@@ -70,16 +68,19 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $roleid = decrypt($id);
+
         $request->validate([
             // 'role_title' => 'bail|string|required|max:255',
             'status' => 'required'
         ]);
+
         $role = Role::where('id', $roleid)->first();
         // $role->role_title = $request->role_title;
         $role->status = $request->status;
+
         $role->save();
-        $success = "Role updated successfully";
-        return redirect('/admin/viewRoles')->with('success', $success);
+
+        return redirect()->route('viewRoles')->with('success', "Role updated successfully");
     }
 
     /**
@@ -87,12 +88,10 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $roleid = (int)decrypt($id);
+        $roleId = (int) decrypt($id);
 
-        $deleteRole = Role::where('id', $roleid)->first();
-        $deleteRole->delete();
+        Role::where('id', $roleId)->delete();
 
-        $error = "Role removed successfully";
-        return redirect('/admin/viewRoles')->with('error', $error);
+        return redirect('viewRoles')->with('error', "Role removed successfully");
     }
 }

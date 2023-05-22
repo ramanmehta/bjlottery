@@ -94,30 +94,25 @@ class LuckyDrawGamesController extends Controller
     public function lotteryStatus(Request $request, $id)
     {
         $lottery_id = decrypt($id);
+
         $lottery = LuckyDrawGames::find($lottery_id);
-        $status = $lottery->status;
 
-        if ($status == 1) {
+        if ($lottery->status == 1) {
 
-            $deactivate = $lottery->status = '0';
+            LuckyDrawGames::where('id', $lottery_id)
+                ->update([
+                    'status' => 0
+                ]);
 
-            $lottery->save();
-
-            $lotteryStatus = LuckyDrawGames::where('id', $lottery_id)->update([
-                'status' => $deactivate
-            ]);
-            $success = "Lucky Draw game deactivated successfully";
-            return redirect('/admin/viewLuckyDraw')->with('success', $success);
+            return redirect()->route('luckyDraw')->with('success', "Lucky Draw game deactivated successfully");
         } else {
-            $activated = $lottery->status = '1';
 
-            $lottery->save();
+            LuckyDrawGames::where('id', $lottery_id)
+                ->update([
+                    'status' => 1
+                ]);
 
-            $lotteryStatus = LuckyDrawGames::where('id', $lottery_id)->update([
-                'status' => $activated
-            ]);
-            $success = "Lucky Draw activated successfully";
-            return redirect('/admin/viewLuckyDraw')->with('success', $success);
+            return redirect()->route('luckyDraw')->with('success', "Lucky Draw activated successfully");
         }
     }
 
@@ -417,7 +412,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your claim on prize '.$prize->prize_name.' rejected, contact our support to know more about.',
+                    'description' => 'Better Luck Next Time, Your claim on prize ' . $prize->prize_name . ' rejected, contact our support to know more about.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -451,7 +446,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your claim on prize '.$prize->prize_name.' rejected, contact our support to know more about.',
+                    'description' => 'Better Luck Next Time, Your claim on prize ' . $prize->prize_name . ' rejected, contact our support to know more about.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);

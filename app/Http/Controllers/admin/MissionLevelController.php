@@ -148,7 +148,6 @@ class MissionLevelController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $id = decrypt($id);
         $mission_level = MissionLevel::findOrFail($id);
         $requiredData['mission_id'] = 'integer|required';
@@ -225,9 +224,11 @@ class MissionLevelController extends Controller
     public function destroy($id, $mission_id)
     {
         $id = decrypt($id);
+
         $mission_level = MissionLevel::findOrFail($id);
+        
         $mission_level->delete();
-        $success = "Mission level deleted successfully";
-        return redirect()->route('levels', ['id' => $mission_id])->with('success', $success);
+        
+        return redirect()->route('levels', ['id' => $mission_id])->with('success', "Mission level deleted successfully");
     }
 }
