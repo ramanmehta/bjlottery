@@ -224,12 +224,10 @@ class LuckyDrawGamesController extends Controller
     public function destroy($id)
     {
         $luckyDrawid = decrypt($id);
-        // dd($luckyDrawid);
-        $deleteLuckyDraw  = LuckyDrawGames::findOrFail($luckyDrawid);
-        $deleteLuckyDraw->delete();
 
-        $error = "Luck Draw removed successfully";
-        return redirect('/admin/viewLuckyDraw')->with('error', $error);
+        LuckyDrawGames::destroy($luckyDrawid);
+        
+        return redirect('/admin/viewLuckyDraw')->with('error', "Luck Draw removed successfully");
     }
 
     public function luckyWinnerList(Request $request, $id)

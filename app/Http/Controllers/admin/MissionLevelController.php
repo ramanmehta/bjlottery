@@ -115,7 +115,7 @@ class MissionLevelController extends Controller
                     $error = "Mission level not added";
                     return redirect('/admin/levels/' . encrypt($request->all()['mission_id']))->with('error', $error);
                 }
-            } catch (ValidationException $e) {
+            } catch (\ValidationException $e) {
                 $error = $e->errors();
                 return redirect('/admin/levels/' . encrypt($request->all()['mission_id']))->with('error', $error);
             }
@@ -201,7 +201,7 @@ class MissionLevelController extends Controller
                     $error = "Mission level not added";
                     return redirect('/admin/levels/' . encrypt($request->all()['mission_id']))->with('error', $error);
                 }
-            } catch (ValidationException $e) {
+            } catch (\ValidationException $e) {
                 $error = $e->errors();
                 return redirect('/admin/levels/' . encrypt($request->all()['mission_id']))->with('error', $error);
             }
@@ -225,9 +225,7 @@ class MissionLevelController extends Controller
     {
         $id = decrypt($id);
 
-        $mission_level = MissionLevel::findOrFail($id);
-        
-        $mission_level->delete();
+        MissionLevel::destroy($id);
         
         return redirect()->route('levels', ['id' => $mission_id])->with('success', "Mission level deleted successfully");
     }

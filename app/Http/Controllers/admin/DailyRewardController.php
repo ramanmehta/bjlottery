@@ -90,9 +90,7 @@ class DailyRewardController extends Controller
     {
         $dailyRewardid = (int)decrypt($id);
 
-        $deleteRole = DailyReward::where('id', $dailyRewardid)->first();
-
-        $deleteRole->delete();
+        $deleteRole = DailyReward::where('id', $dailyRewardid)->delete();
 
         return redirect('DailyRewards')->with('error', "Reward removed successfully");
     }
