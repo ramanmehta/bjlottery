@@ -132,7 +132,9 @@ class LuckyDrawGamesController extends Controller
         $luckyDrawid = decrypt($id);
 
         $luckyDraw = LuckyDrawGames::findOrFail($luckyDrawid);
+
         $imgPath = $this->fileurl();
+
         $startDate = $luckyDraw->start_date_time;
         $endDate = $luckyDraw->end_date_time;
 
@@ -160,8 +162,8 @@ class LuckyDrawGamesController extends Controller
         $validArr = [
             'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games,game_title,' . $luckyDrawid,
             'game_description' => 'bail|string|required',
-            'winning_prize_amount' => 'required|numeric',
-            'minimum_prize_amount' => 'required|numeric',
+            'winning_prize_amount' => 'bail|nullable|integer|min:0',
+            'minimum_prize_amount' => 'bail|nullable|integer|min:0',
             'points_per_ticket' => 'integer|required',
             'daterange' => 'required',
         ];
@@ -234,7 +236,7 @@ class LuckyDrawGamesController extends Controller
     {
         $luckyDrawid = decrypt($id);
 
-        $data  = LuckyDrawGames::findOrFail($luckyDrawid);
+        $data  = LuckyDrawGames::withTrashed()->findOrFail($luckyDrawid);
 
         // LuckyDrawWinner::truncate();
         // dd('ok');
@@ -375,7 +377,7 @@ class LuckyDrawGamesController extends Controller
                 $q->where('mission_id', 'like', "%{$request->search}%");
             })
             ->get();
-            
+
         $claims = collect($claims->merge($mission))->sortByDesc('created_at');
         $claims = $this->paginate($claims);
         $claims->setPath('/admin/winner-user/claim');

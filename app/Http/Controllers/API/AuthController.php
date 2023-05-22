@@ -680,14 +680,19 @@ class AuthController extends Controller
 
             $image = $request->file('logo');
 
-            $user->logo = rand() . $image->getClientOriginalName();
+            $logo = 'usersimage/'.rand() . $image->getClientOriginalName();
+            
+            $image->storeAs('public/images', $logo);
 
-            $image->storeAs('public/images/usersimage', $user->logo);
+            User::where('id',auth()->id())
+            ->update([
+                'logo' => $logo
+            ]);
         }
 
         $user->save();
 
-        $success['user'] = auth()->user();
+        $success['user'] = User::where('id',auth()->user()->id)->first();
         $success['user']['referral_count'] = User::where('id',auth()->user()->id)->count();
 
         $response = [

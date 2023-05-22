@@ -166,11 +166,11 @@ class MissionsController extends Controller
     public function destroy($id)
     {
         $missionid = decrypt($id);
-        // dd($luckyDrawid);
-        $mission = Mission::findOrFail($missionid);
-        $mission->delete();
+        
+        Mission::destroy($missionid);
+        
         MissionSubmission::where('mission_id', $missionid)->delete();
-        $error = "Mission removed successfully";
-        return redirect()->route('mission')->with('error', $error);
+
+        return redirect()->route('mission')->with('error', "Mission removed successfully");
     }
 }

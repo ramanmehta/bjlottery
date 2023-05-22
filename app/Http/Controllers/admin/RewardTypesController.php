@@ -133,11 +133,6 @@ class RewardTypesController extends Controller
     {
         $reward_id = (int) decrypt($id);
 
-        if (RewardPoint::where('reward_type_id', $reward_id)->exists()) {
-
-            return redirect()->route('RewardType')->with('error', "Reward can't remove");
-        }
-
         RewardType::where('id', $reward_id)->delete();
 
         return redirect()->route('RewardType')->with('success', "Reward removed successfully");

@@ -18,17 +18,17 @@ class MissionPrizeClaim extends Model
 
     public function mission()
     {
-        return $this->belongsTo(Mission::class,'mission_id','id');
+        return $this->belongsTo(Mission::class, 'mission_id', 'id')->withTrashed();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
-    
+
     public function mission_submission()
     {
-        return $this->belongsTo(MissionSubmission::class,'mission_submit_id','id');
+        return $this->belongsTo(MissionSubmission::class, 'mission_submit_id', 'id');
     }
 
     public function getStatusAttribute($val)

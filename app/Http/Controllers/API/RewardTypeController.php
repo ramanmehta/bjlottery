@@ -229,7 +229,7 @@ class RewardTypeController extends Controller
 
                 PointTransaction::create([
                     'user_id' => $user_id,
-                    'title' => $reward->reward_type,
+                    'title' => $reward->reward_title,
                     'type' => $reward->reward_type,
                     'points' => $rewardPoint + $extraPoints,
                     'status' => 1,

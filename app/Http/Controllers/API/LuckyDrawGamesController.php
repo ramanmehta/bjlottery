@@ -226,6 +226,7 @@ class LuckyDrawGamesController extends Controller
         $participant = LuckyDraw::where('id', $lotteryId)->distinct()->get('user_id');
 
         $totalParticipant = $participant->count();
+
         if ($totalParticipant > 0) {
             // $user = User::with(['luckydraw'])->find($participant);
             $userLottery = DB::table('users')
@@ -238,18 +239,37 @@ class LuckyDrawGamesController extends Controller
 
             // dd($userLottery);
             $username = [];
+            
             foreach ($userLottery as $data) {
+
                 $user_name = $data->username;
-                $length = strlen($user_name); // Calculate length of email
-                if ($length > 5) {
-                    $first_two = substr($user_name, 0, 2); // Get first two characters
-                    $last_six = substr($user_name, -3); // Get last six characters
-                } else {
+
+                $length = strlen($user_name); // CALCULATE LENGTH OF EMAIL
+                
+                if ($length == 4) {
+
+                    $first_two = substr($user_name, 0, 2);
+                    $last_six = substr($user_name, -2);
+                } 
+                elseif ($length == 5) {
+
+                    $first_two = substr($user_name, 0, 3);
+                    $last_six = substr($user_name, -2);
+                } 
+                elseif ($length > 5) {
+
+                    $first_two = substr($user_name, 0, 3);
+                    $last_six = substr($user_name, -3);
+                } 
+                else {
                     $first_two = substr($user_name, 0, 1);
                     $last_six = substr($user_name, -1);
                 }
+
                 $midCharacter = "*******";
+
                 $fullname = $first_two . $midCharacter . $last_six;
+
                 $user_image_url = asset('storage/app/public/images');
 
                 $username[] = ['user_image' => $user_image_url . $data->logo, 'username' => $fullname];
@@ -260,8 +280,11 @@ class LuckyDrawGamesController extends Controller
                 'status' => 200,
                 'data' => $username
             ];
+            
             return response()->json($response);
+
         } else {
+
             $response = [
                 'success' => false,
                 'status' => 404,

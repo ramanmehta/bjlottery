@@ -19,7 +19,7 @@ class LuckyDrawWinner extends Model
 
     public function lottery()
     {
-        return $this->hasOne(LuckyDrawGames::class, 'id', 'lottery_id');
+        return $this->hasOne(LuckyDrawGames::class, 'id', 'lottery_id')->withTrashed();
     }
 
     public function getPrizeImageAttribute($value)
@@ -29,7 +29,7 @@ class LuckyDrawWinner extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function getStatusAttribute($value)

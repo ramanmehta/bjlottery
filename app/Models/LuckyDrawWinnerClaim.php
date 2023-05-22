@@ -20,12 +20,12 @@ class LuckyDrawWinnerClaim extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     public function lottery()
     {
-        return $this->hasOne(LuckyDrawGames::class,'id','lottery_id');
+        return $this->hasOne(LuckyDrawGames::class,'id','lottery_id')->withTrashed();
     }
 
     public function prize()

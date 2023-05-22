@@ -158,11 +158,10 @@ class UsersController extends Controller
     public function destroy($id)
     {
         $userid = (int)decrypt($id);
-        $deleteUser = User::findOrFail($userid);
-        $deleteUser->delete();
 
-        $error = "User removed successfully";
-        return redirect('/admin/viewUser')->with('error', $error);
+        User::destroy($userid);
+        
+        return redirect('/admin/viewUser')->with('error', "User removed successfully");
     }
 
     public function userAppoint(Request $request, $id)
