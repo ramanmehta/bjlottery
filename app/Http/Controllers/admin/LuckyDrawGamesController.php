@@ -417,7 +417,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your prize request on ticket number ' . $res->ticket_no . ' rejected by admin, Contact our support to know more about.',
+                    'description' => 'Better Luck Next Time, Your claim on prize '.$prize->prize_name.' rejected, contact our support to know more about.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -451,7 +451,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your prize on mission ' . $mission->mission_title . ' not approved.',
+                    'description' => 'Better Luck Next Time, Your claim on prize '.$prize->prize_name.' rejected, contact our support to know more about.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
