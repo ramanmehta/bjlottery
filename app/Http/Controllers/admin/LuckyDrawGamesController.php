@@ -404,7 +404,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Approved',
-                    'description' => 'Congratulation!, You ticket number no ' . $res->ticket_no . ' selected as luckey prize winner. Claim Your prize and collect.',
+                    'description' => 'Congratulation!, You ticket number ' . $res->ticket_no . ' selected as luckey prize winner. claim your prize and collect.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -415,7 +415,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Rejected',
-                    'description' => 'Better Luck Next Time, You ticket number no ' . $res->ticket_no . ' not selected as luckey prize winner.',
+                    'description' => 'Better Luck Next Time, You ticket number ' . $res->ticket_no . ' not selected as luckey prize winner.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -438,7 +438,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Approved',
-                    'description' => 'Congratulation!, Your Prize On Mission ' . $mission->mission_title . ' successfully approved, Claim Your prize and collect.',
+                    'description' => 'Congratulation!, Your prize on mission ' . $mission->mission_title . ' successfully approved, claim your prize and collect.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -449,7 +449,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Rejected',
-                    'description' => 'Better Luck Next Time, Your Prize On Mission ' . $mission->mission_title . ' not approved',
+                    'description' => 'Better Luck Next Time, Your prize on mission ' . $mission->mission_title . ' not approved.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -479,57 +479,43 @@ class LuckyDrawGamesController extends Controller
 
     public function missionSubmitStatusUpdate(Request $request)
     {
-        MissionSubmission::where('id', $request->id)->update(['approval_status' => $request->status]);
+        MissionSubmission::where('id', $request->id)
+            ->update(['approval_status' => $request->status]);
 
-        // MissionPrizeClaim::where('id',$request->id)->update(['approval_status' => $request->status]);
         $mission = MissionSubmission::where('mission_submissions.id', $request->id)
             ->join('missions', 'missions.id', '=', 'mission_submissions.mission_id')
             ->first();
 
-        if ($mission->mission_type == 'affliated_points' && $request->status == 'approved') {
+        if ($mission->mission_type == 'affliated_points') {
 
-            User::where('id', $mission->user_id)
-                ->update(['total_point_available' => DB::raw('total_point_available + ' . $mission->enter_earn_affliated_points)]);
+            if ($request->status == 'approved') {
+
+                User::where('id', $mission->user_id)
+                    ->update(['total_point_available' => DB::raw('total_point_available + ' . $mission->enter_earn_affliated_points)]);
 
 
-            PointTransaction::create([
-                'user_id' => $mission->user_id,
-                'title' => 'Mission',
-                'type' => $mission->mission_title,
-                'points' => $mission->enter_earn_affliated_points,
-                'status' => 1,
-            ]);
+                PointTransaction::create([
+                    'user_id' => $mission->user_id,
+                    'title' => 'Mission',
+                    'type' => $mission->mission_title,
+                    'points' => $mission->enter_earn_affliated_points,
+                    'status' => 1,
+                ]);
 
-            // $reward = RewardType::where('reward_type','mission')->first();
+                \App\Models\Notification::create([
+                    'user_id' => $mission->user_id,
+                    'title' => 'Mission Approved',
+                    'description' => 'Congrats!, Your mission ' . $mission->mission_title . ' successfully approved, you will receive ' . $mission->enter_earn_affliated_points . ' affliated points in your wallet.',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+            }
 
-            // if (is_null($reward)) {
+            $points = PointTransaction::where('user_id', $mission->user_id)
+                ->where('type', $mission->mission_title)
+                ->first();
 
-            //     RewardType::create([
-            //         'reward_type' => 'mission',
-            //         'reward_title' => 'Mission Point',
-            //         'reward_description' => 'Mission Complete Reward',
-            //         'reward_points' => 100,
-            //         'status' => 1,
-            //     ]);
-
-            //     $reward = RewardType::where('reward_type','mission')->first();
-            // }
-
-            // $data = [
-            //     'user_id' => $mission->user_id,
-            //     'reward_type_id' => $reward->id,
-            //     'reward_type' => $reward->reward_type,
-            //     'reward_points' => $mission->enter_earn_affliated_points,
-            //     'status' => '1',
-            //     'referal_type' => 'mission'
-            // ];
-
-            // RewardPoint::create($data);
-        } else {
-
-            $points = PointTransaction::where('user_id', $mission->user_id)->where('type', $mission->mission_title)->first();
-
-            if ($mission->mission_type == 'affliated_points' && $request->status == 'reject' && !is_null($points)) {
+            if ($request->status == 'reject' && !is_null($points)) {
 
                 PointTransaction::create([
                     'user_id' => $mission->user_id,
@@ -539,8 +525,39 @@ class LuckyDrawGamesController extends Controller
                     'status' => 2,
                 ]);
 
-                User::where('id', $mission->user_id)->update(['total_point_available' => DB::raw('total_point_available - ' . $mission->enter_earn_affliated_points)]);
+                \App\Models\Notification::create([
+                    'user_id' => $mission->user_id,
+                    'title' => 'Mission Rejected',
+                    'description' => 'Better Luck Next Time!, Your affliated points on mission ' . $mission->mission_title . ' rejected by admin.',
+                    'status' => 0,
+                    'sent_at' => now(),
+                ]);
+
+                User::where('id', $mission->user_id)
+                    ->update(['total_point_available' => DB::raw('total_point_available - ' . $mission->enter_earn_affliated_points)]);
             }
+        }
+
+        if ($mission->mission_type == 'prize' && $request->status == 'approved') {
+
+            \App\Models\Notification::create([
+                'user_id' => $mission->user_id,
+                'title' => 'Mission Approved',
+                'description' => 'Congrats , Your prize on mission ' . $mission->mission_title . ' shipped to your address.',
+                'status' => 0,
+                'sent_at' => now(),
+            ]);
+        }
+
+        if ($mission->mission_type == 'prize' && $request->status == 'reject') {
+
+            \App\Models\Notification::create([
+                'user_id' => $mission->user_id,
+                'title' => 'Mission Rejected',
+                'description' => 'Better Luck Next Time!, Your prize request on mission ' . $mission->mission_title . ' rejected by admin.',
+                'status' => 0,
+                'sent_at' => now(),
+            ]);
         }
 
         return response()->json('ok');
