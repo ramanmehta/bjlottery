@@ -32,11 +32,10 @@ class RewardTypeController extends Controller
 
                 $exists = RewardPoint::where('user_id', $userId)
                     ->where('reward_type_id', $reward_type_id)
-                    ->whereDate('created_at', '>=', date('Y-m-d 00:00:00'))
-                    ->whereDate('created_at', '<=', date('Y-m-d 23:59:59'))
+                    ->whereDate('created_at', date('Y-m-d', strtotime("last Saturday")))
                     ->exists();
 
-                if (date('l', time()) == 'Saturday' && ! $exists) {
+                if (date('l', time()) == 'Saturday' && !$exists) {
 
                     $value->claimed = 0;
                 } else {
@@ -48,6 +47,7 @@ class RewardTypeController extends Controller
                 $getReward  = DB::table('reward_points')
                     ->where('user_id', $userId)
                     ->where('reward_type_id', $reward_type_id)
+                    ->whereBetween('created_at', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
                     ->exists();
 
                 if ($getReward) {
