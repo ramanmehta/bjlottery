@@ -33,7 +33,7 @@
          
           <li class="nav-item menu-open">
             <a href="{{route('RewardType')}}" class="nav-link @if($currentRoute == 'RewardType') {{'active'}} @endif">
-            Reward Type
+                Daily Rewards
             </a>
           </li>
           <li class="nav-item menu-open">
@@ -43,12 +43,12 @@
           </li>
           <li class="nav-item menu-open">
             <a href="{{route('mission-submissions.index')}}" class="nav-link @if($currentRoute == 'mission-submissions.index') {{'active'}} @endif">
-            Missions Submission
+              All Mission Submission
             </a>
           </li>
           <li class="nav-item menu-open">
             <a href="{{route('winner.user.claim')}}" class="nav-link @if($currentRoute == 'winner.user.claim') {{'active'}} @endif">
-            Luckey Winner Claimed
+              Prize Claim List
             </a>
           </li>
           <li class="nav-item menu-open">

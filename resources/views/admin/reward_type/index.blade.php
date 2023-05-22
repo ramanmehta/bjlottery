@@ -105,9 +105,11 @@
                       <a href="{{route('editRewardType',[encrypt($rewardTypes->id)])}}"><button type="button"
                           class="btn btn-success btn-sm"><i class='fas fa-edit'></i>&nbsp;Edit</button></a> </a>
                       &nbsp;&nbsp;
-                      <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')"
-                        href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button type="button"
+                      @if (! in_array($rewardTypes->reward_type,['dailyreward','weeklyreward']))
+                        <a onclick="return confirm('Are you sure remove reward :  {{$rewardTypes->reward_type}} ?')"
+                          href="{{route('removeRewardType',[encrypt($rewardTypes->id)])}}"><button type="button"
                           class="btn btn-danger btn-sm"><i class='fas fa-trash-alt'></i>&nbsp;Remove</button></a>
+                      @endif
                     </td>
                   </tr>
                   @endforeach

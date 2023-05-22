@@ -9,12 +9,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Lucky Draw Price</h1>
+                    <h1>Winner Ticket List</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item active">Lucky Draw Price List</li>
+                        <li class="breadcrumb-item active">Winner Ticket List</li>
                     </ol>
                 </div>
             </div>
@@ -65,8 +65,7 @@
                                 </div>
                                 <div class="col-md-2 text-right">
                                     <a href="{{route('add.price.form',encrypt($data->id))}}"><button type="button"
-                                            class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add
-                                            Prize</button></a>
+                                            class="btn btn-primary float-right"><i class='fas fa-plus-circle'></i> Add Winner Tickets</button></a>
                                 </div>
                             </div>
 

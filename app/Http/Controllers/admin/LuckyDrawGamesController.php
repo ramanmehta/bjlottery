@@ -406,7 +406,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Lottery Prize Approved',
-                    'description' => 'Congrats , Your ' . $prize->prize_name . ' shipped to your address.',
+                    'description' => 'Congrats , Your prize ' . $prize->prize_name . ' shipped to your address.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -440,7 +440,7 @@ class LuckyDrawGamesController extends Controller
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Mission Prize Approved',
-                    'description' => 'Congrats , Your ' . $mission->prize_name . ' shipped to your address.',
+                    'description' => 'Congrats , Your prize' . $mission->prize_name . ' shipped to your address.',
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
