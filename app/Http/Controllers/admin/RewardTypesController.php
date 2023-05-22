@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\RewardPoint;
 use Illuminate\Http\Request;
 use App\Models\RewardType;
 
@@ -53,52 +54,41 @@ class RewardTypesController extends Controller
         $reward = strtolower(trim($request->reward_type));
         $reward_type = str_replace(' ', '', $reward);
 
-        $data = [
+        RewardType::create([
             'reward_title' => $reward_title,
             'reward_type' => $reward_type,
             'reward_description' => $request->reward_description,
             'reward_points' => $request->reward_points,
             'status' => $request->status
-        ];
+        ]);
 
-        $newRewardType = RewardType::create($data);
-
-        $success = "New reward created successfully";
-
-        return redirect('/admin/viewRewardType')->with('success', $success);
+        return redirect()->route('RewardType')->with('success', "New reward created successfully");
     }
 
     public function rewardStatus(Request $request, $id)
     {
-
         $reward_id = decrypt($id);
+
         $reward = RewardType::find($reward_id);
-        $status = $reward->status;
 
-        if ($status == 1) {
+        if ($reward->status == 1) {
 
-            $deactivate = $reward->status = '0';
+            RewardType::where('id', $reward_id)
+                ->update([
+                    'status' => 0
+                ]);
 
-            $reward->save();
-
-            $rewardStatus = RewardType::where('id', $reward_id)->update([
-                'status' => $deactivate
-            ]);
-            $success = "Rewad deactivated successfully";
-            return redirect('/admin/viewRewardType')->with('success', $success);
+            return redirect()->route('RewardType')->with('success', 'Rewad deactivated successfully');
         } else {
-            $activated = $reward->status = '1';
 
-            $reward->save();
+            RewardType::where('id', $reward_id)
+                ->update([
+                    'status' => 1
+                ]);
 
-            $rewardStatus = RewardType::where('id', $reward_id)->update([
-                'status' => $activated
-            ]);
-            $success = "Reward activated successfully";
-            return redirect('/admin/viewRewardType')->with('success', $success);
+            return redirect()->route('RewardType')->with('success', 'Reward activated successfully');
         }
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -106,6 +96,7 @@ class RewardTypesController extends Controller
     public function edit($id)
     {
         $reward_id = decrypt($id);
+
         $rewardType = RewardType::where('id', $reward_id)->first();
 
         return view('admin.reward_type.edit', ['rewardType' => $rewardType]);
@@ -116,7 +107,6 @@ class RewardTypesController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $reward_id = decrypt($id);
 
         $request->validate([
@@ -125,14 +115,15 @@ class RewardTypesController extends Controller
             'reward_description' => 'bail|string|required',
             'reward_points' => 'bail|integer|required|min:1',
         ]);
+
         $rewardType = RewardType::where('id', $reward_id)->first();
         $rewardType->reward_type = $request->reward_type;
         $rewardType->reward_title = $request->reward_title;
         $rewardType->reward_description = $request->reward_description;
         $rewardType->reward_points = $request->reward_points;
         $rewardType->save();
-        $success = "Reward updated successfully";
-        return redirect('/admin/viewRewardType')->with('success', $success);
+
+        return redirect()->route('RewardType')->with('success', "Reward updated successfully");
     }
 
     /**
@@ -140,12 +131,15 @@ class RewardTypesController extends Controller
      */
     public function destroy(string $id)
     {
-        $reward_id = (int)decrypt($id);
+        $reward_id = (int) decrypt($id);
 
-        $deleteReward = RewardType::where('id', $reward_id)->first();
-        $deleteReward->delete();
+        if (RewardPoint::where('reward_type_id', $reward_id)->exists()) {
 
-        $success = "Reward removed successfully";
-        return redirect('/admin/viewRewardType')->with('success', $success);
+            return redirect()->route('RewardType')->with('error', "Reward can't remove");
+        }
+
+        RewardType::where('id', $reward_id)->delete();
+
+        return redirect()->route('RewardType')->with('success', "Reward removed successfully");
     }
 }

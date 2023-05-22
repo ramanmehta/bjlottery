@@ -65,8 +65,8 @@
                       <input type="search" class="form-control" placeholder="Search here" aria-label="Search Lottery"
                         aria-describedby="basic-addon2" name="search" value="{{ request()->get('search') }}"
                         id="search">
-                        &nbsp;
-                        &nbsp;
+                      &nbsp;
+                      &nbsp;
                       <input class="btn btn-outline-secondary" type="submit" value="Search">
 
                     </div>
