@@ -375,7 +375,7 @@ class LuckyDrawGamesController extends Controller
                 $q->where('mission_id', 'like', "%{$request->search}%");
             })
             ->get();
-
+            
         $claims = collect($claims->merge($mission))->sortByDesc('created_at');
         $claims = $this->paginate($claims);
         $claims->setPath('/admin/winner-user/claim');
