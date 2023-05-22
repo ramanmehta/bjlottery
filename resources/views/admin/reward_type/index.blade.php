@@ -63,7 +63,6 @@
                         id="search">
                       &nbsp;
                       &nbsp;
-                      &nbsp;
                       <input class="btn btn-outline-secondary" type="submit" value="Search">
 
                     </div>
