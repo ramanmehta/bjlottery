@@ -446,7 +446,7 @@ class LuckyDrawGamesController extends Controller
             if ($request->status == 3) {
 
                 \App\Models\Notification::create([
-                    'user_id' => $res->user_id,
+                    'user_id' => $m->user_id,
                     'title' => 'Prize Claim',
                     'description' => "Congratulations! Your prize ".$mission->prize_name." shipped to your address. You will get email soon for shipping tracking Id",
                     'status' => 0,
@@ -457,7 +457,7 @@ class LuckyDrawGamesController extends Controller
             if ($request->status == 4) {
 
                 \App\Models\Notification::create([
-                    'user_id' => $res->user_id,
+                    'user_id' => $m->user_id,
                     'title' => 'Prize Claim Rejected',
                     'description' => "Sorry! Your prize ".$mission->prize_name." shipping request declined",
                     'status' => 0,
