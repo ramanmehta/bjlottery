@@ -229,7 +229,7 @@ class LuckyDrawGamesController extends Controller
         if ($participant > 0) {
 
             $userLottery = DB::table('users')
-                ->select('users.username', 'users.logo')
+                ->select('users.username', 'users.logo','email')
                 ->join('lucky_draws', 'lucky_draws.user_id', '=', 'users.id')
                 ->where('lucky_draws.lucky_draw_games_id', $request->lottery_id)
                 ->distinct()
@@ -240,6 +240,11 @@ class LuckyDrawGamesController extends Controller
             foreach ($userLottery as $data) {
 
                 $user_name = $data->username;
+                
+                if (is_null($user_name)) {
+                    
+                    $user_name = $data->email;
+                }
 
                 $length = strlen($user_name); // CALCULATE LENGTH OF EMAIL
 
