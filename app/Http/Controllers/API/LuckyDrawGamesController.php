@@ -126,7 +126,7 @@ class LuckyDrawGamesController extends Controller
 
                 $balancePoint = $user_points - $pointRequired;
 
-                $updateUserPoint = User::where('id', $user_id)->update([
+                User::where('id', $user_id)->update([
                     'total_point_available' => $balancePoint
                 ]);
 
@@ -175,45 +175,36 @@ class LuckyDrawGamesController extends Controller
 
     public function userNumber(Request $request)
     {
-        // dd("here");
-        $user_id = $request->user_id;
-        $game_id = $request->game_id;
+        $allNumber = LuckyDraw::where('lucky_draw_games_id', $request->game_id)
+            ->where('user_id', $request->user_id)
+            ->get();
 
+        if ($allNumber->isNotEmpty()) {
 
-        $allNumber = LuckyDraw::where('lucky_draw_games_id', '=', $game_id)->where('user_id', '=', $user_id)->get();
-        // $allNumber = LuckyDraw::where('lucky_draw_games_id', '=', $game_id)->where('user_id', '=', $user_id)->paginate(10);
-        // $allNumber = LuckyDraw::where('lucky_draw_games_id',$game_id)->where('user_id',$user_id)->get();
-        $countNumber = LuckyDraw::where('lucky_draw_games_id', $game_id)->where('user_id', $user_id)->count();
-
-        if ($countNumber > 0) {
             $resource = [
                 'success' => true,
                 'status' => 200,
                 'data' => $allNumber
             ];
-
-            return response()->json($resource);
         } else {
             $resource = [
                 'success' => false,
                 'status' => 404,
-                'message' => 'no record found'
+                'message' => 'No record found'
             ];
-
-            return response()->json($resource);
         }
+
+        return response()->json($resource);
     }
 
     public function totalParticipant()
     {
-
-        $participant = LuckyDraw::distinct()->get(['user_id']);
-        $totalParticipant = $participant->count();
+        $participant = LuckyDraw::distinct()->count();
 
         $response = [
             'success' => true,
             'status' => 200,
-            'data' => $totalParticipant
+            'data' => $participant
         ];
 
         return response()->json($response);
@@ -229,7 +220,7 @@ class LuckyDrawGamesController extends Controller
         if ($participant > 0) {
 
             $userLottery = DB::table('users')
-                ->select('users.username', 'users.logo','email')
+                ->select('users.username', 'users.logo', 'email')
                 ->join('lucky_draws', 'lucky_draws.user_id', '=', 'users.id')
                 ->where('lucky_draws.lucky_draw_games_id', $request->lottery_id)
                 ->distinct()
@@ -240,9 +231,9 @@ class LuckyDrawGamesController extends Controller
             foreach ($userLottery as $data) {
 
                 $user_name = $data->username;
-                
+
                 if (is_null($user_name)) {
-                    
+
                     $user_name = $data->email;
                 }
 

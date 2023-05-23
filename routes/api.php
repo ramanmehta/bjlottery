@@ -85,8 +85,8 @@ Route::controller(RewardTypeController::class)->group(function () {
     Route::post('', '');
 
     // get reward point
-    ROute::post('dailyRewardPoints', 'dailyRewardPoints');
-    ROute::post('weeklyRewardPoints', 'weeklyRewardPoints');
+    Route::post('dailyRewardPoints', 'dailyRewardPoints');
+    Route::post('weeklyRewardPoints', 'weeklyRewardPoints');
 });
 
 // Route::post('dailyRewardPoints',[DailyRewardController::class,'dailyRewardPoints']);

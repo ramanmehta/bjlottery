@@ -27,4 +27,9 @@ class LuckyDrawGames extends Model
     {
         return Storage::disk('public')->url('images'.$value);
     }
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
+    ];
 }

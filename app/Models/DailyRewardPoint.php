@@ -16,4 +16,9 @@ class DailyRewardPoint extends Model
         'weekly_reward_time',
         'bonus_reward_points',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
+    ];
 }
