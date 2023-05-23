@@ -361,7 +361,7 @@ class LuckyDrawGamesController extends Controller
             return redirect()->route('add.price', encrypt($lId))->with('error', 'You can not delete this ticket, Claimed');
         }
 
-        $res = \DB::table('lucky_draw_winners')->find($id);
+        $res = DB::table('lucky_draw_winners')->find($id);
 
         if ($res->type == 'cash') {
             

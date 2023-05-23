@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Http\Traits;
 
-
 trait CommonTrait {
+
     public function filepath() {
         // Fetch all the students from the 'student' table.
         // $filePath = [

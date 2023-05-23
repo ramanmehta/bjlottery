@@ -1,19 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\admin\AuthController;
-use App\Http\Controllers\admin\RoleController;
-use App\Http\Controllers\admin\DailyRewardController;
-use App\Http\Controllers\admin\RewardTypesController;
-use App\Http\Controllers\admin\UsersController;
-use App\Http\Controllers\admin\LuckyDrawGamesController;
-use App\Http\Controllers\admin\MissionsController;
-use App\Http\Controllers\admin\NotificationController;
-use App\Http\Controllers\admin\SettingController;
-use App\Http\Controllers\admin\ReferalsStatsController;
-use App\Http\Controllers\admin\MissionLevelController;
-use App\Http\Controllers\admin\MissionSubmissionController;
-use App\Http\Controllers\admin\WithdrawalController;
+
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\RewardTypesController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\LuckyDrawGamesController;
+use App\Http\Controllers\Admin\MissionsController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ReferalsStatsController;
+use App\Http\Controllers\Admin\MissionLevelController;
+use App\Http\Controllers\Admin\MissionSubmissionController;
+use App\Http\Controllers\Admin\WithdrawalController;
 
 /*
 |--------------------------------------------------------------------------
