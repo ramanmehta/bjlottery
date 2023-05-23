@@ -51,6 +51,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('notification/read-all', [NotificationController::class, 'readAll']);
     Route::get('notification/destroy', [NotificationController::class, 'destroy']);
     Route::get('notification/{id}', [NotificationController::class, 'show']);
+
+    // REFERRAL
+    Route::get('referral-count',[AuthController::class,'referral']);
 });
 
 Route::controller(AuthController::class)->group(function () {

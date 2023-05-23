@@ -704,4 +704,18 @@ class AuthController extends Controller
 
         return response()->json($response);
     }
+
+    public function referral()
+    {
+        $count['referral_count'] = User::where('refered_by',auth()->id())->count();
+
+        $response = [
+            'suceess' => true,
+            'status' => 200,
+            'data' => $count,
+            'message' => 'Referral count of logged in user'
+        ];
+
+        return response()->json($response);
+    }
 }

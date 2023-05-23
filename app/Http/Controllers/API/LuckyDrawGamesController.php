@@ -221,47 +221,41 @@ class LuckyDrawGamesController extends Controller
 
     public function participantUsername(Request $request)
     {
-        $lotteryId = $request->lottery_id;
-        // dd($lotteryId);
-        $participant = LuckyDraw::where('id', $lotteryId)->distinct()->get('user_id');
+        $participant = LuckyDraw::query()
+            ->where('lucky_draw_games_id', $request->lottery_id)
+            ->distinct()
+            ->count();
 
-        $totalParticipant = $participant->count();
+        if ($participant > 0) {
 
-        if ($totalParticipant > 0) {
-            // $user = User::with(['luckydraw'])->find($participant);
             $userLottery = DB::table('users')
                 ->select('users.username', 'users.logo')
                 ->join('lucky_draws', 'lucky_draws.user_id', '=', 'users.id')
-                ->where('lucky_draws.lucky_draw_games_id', $lotteryId)
+                ->where('lucky_draws.lucky_draw_games_id', $request->lottery_id)
                 ->distinct()
-                // ->groupBy('lucky_draws.user_id')
-                ->get('user_id'); // 
+                ->get('user_id');
 
-            // dd($userLottery);
             $username = [];
-            
+
             foreach ($userLottery as $data) {
 
                 $user_name = $data->username;
 
                 $length = strlen($user_name); // CALCULATE LENGTH OF EMAIL
-                
+
                 if ($length == 4) {
 
                     $first_two = substr($user_name, 0, 2);
                     $last_six = substr($user_name, -2);
-                } 
-                elseif ($length == 5) {
+                } elseif ($length == 5) {
 
                     $first_two = substr($user_name, 0, 3);
                     $last_six = substr($user_name, -2);
-                } 
-                elseif ($length > 5) {
+                } elseif ($length > 5) {
 
                     $first_two = substr($user_name, 0, 3);
                     $last_six = substr($user_name, -3);
-                } 
-                else {
+                } else {
                     $first_two = substr($user_name, 0, 1);
                     $last_six = substr($user_name, -1);
                 }
@@ -280,9 +274,8 @@ class LuckyDrawGamesController extends Controller
                 'status' => 200,
                 'data' => $username
             ];
-            
-            return response()->json($response);
 
+            return response()->json($response);
         } else {
 
             $response = [
