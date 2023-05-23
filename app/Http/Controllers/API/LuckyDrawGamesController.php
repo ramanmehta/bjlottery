@@ -264,9 +264,7 @@ class LuckyDrawGamesController extends Controller
 
                 $fullname = $first_two . $midCharacter . $last_six;
 
-                $user_image_url = asset('storage/app/public/images');
-
-                $username[] = ['user_image' => $user_image_url . $data->logo, 'username' => $fullname];
+                $username[] = ['user_image' => getImage($data->logo), 'username' => $fullname];
             }
 
             $response = [
