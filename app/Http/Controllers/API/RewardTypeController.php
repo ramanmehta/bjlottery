@@ -50,6 +50,10 @@ class RewardTypeController extends Controller
                     ->whereBetween('created_at', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
                     ->exists();
 
+                $extraPoints = User::where('refered_by', $userId)->count();
+
+                $value->reward_points = $value->reward_points + $extraPoints;
+                
                 if ($getReward) {
 
                     // $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
@@ -57,14 +61,12 @@ class RewardTypeController extends Controller
 
                     //$userIds = User::where('refered_by', $userId)->pluck('id')->toArray();
 
-                    $extraPoints = User::where('refered_by', $userId)->count();
-
+                    
                     // $extraPoints = RewardPoint::whereIn('user_id', $userIds)
                     //     ->where('reward_type', 'dailyreward')
                     //     ->whereBetween('created_at', [$start, $end])
                     //     ->count();
 
-                    $value->reward_points = $value->reward_points + $extraPoints;
 
                     $value->claimed = 1;
                 } else {
