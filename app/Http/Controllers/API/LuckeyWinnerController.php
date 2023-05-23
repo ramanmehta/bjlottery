@@ -29,6 +29,7 @@ class LuckeyWinnerController extends Controller
             ->when($request->has('ticket_no'), function ($q) use ($request) {
                 $q->where('lucky_draw_winners.ticket_no', 'like', "%{$request->ticket_no}%");
             })
+            ->where('lucky_draw_winners.type','prize')
             ->where('lucky_draw_winners.user_id', auth()->id())
             ->leftjoin('lucky_draw_winner_claims', 'lucky_draw_winner_claims.lucky_draw_winner_id', '=', 'lucky_draw_winners.id')
             ->get();
