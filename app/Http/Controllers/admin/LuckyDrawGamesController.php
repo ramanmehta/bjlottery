@@ -366,7 +366,7 @@ class LuckyDrawGamesController extends Controller
         if ($res->type == 'cash') {
             
             User::where('id', $res->user_id)
-                ->update(['total_cash_available' => DB::raw('total_cash_available + ' . $res->amount)]);
+                ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $res->amount)]);
 
             CashTransaction::create([
                 'user_id' => $res->user_id,
