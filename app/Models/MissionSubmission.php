@@ -39,6 +39,7 @@ class MissionSubmission extends Model
     {
         $mission = MissionPrizeClaim::where('user_id', auth()->id())
             ->where('mission_id', $val)
+            ->where('status','!=',4)
             ->first();
 
         if (is_null($mission)) {
