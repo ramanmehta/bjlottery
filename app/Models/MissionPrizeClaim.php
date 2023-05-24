@@ -13,7 +13,8 @@ class MissionPrizeClaim extends Model
         'address_2',
         'status',
         'mission_id',
-        'mission_submit_id'
+        'mission_submit_id',
+        'count'
     ];
 
     public function mission()

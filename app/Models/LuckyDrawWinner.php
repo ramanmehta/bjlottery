@@ -35,7 +35,7 @@ class LuckyDrawWinner extends Model
     public function getStatusAttribute($value)
     {
         $lottery = LuckyDrawWinnerClaim::where('id', $value)
-            ->where('status','!=',4)
+            // ->where('status','!=',4)
             ->first();
 
         if (is_null($lottery)) {

@@ -17,7 +17,8 @@ class MissionSubmission extends Model
         'proof',
         'created_at',
         'updated_at',
-        'approval_status'
+        'approval_status',
+        'count'
     ];
 
     public function mission()
@@ -39,7 +40,7 @@ class MissionSubmission extends Model
     {
         $mission = MissionPrizeClaim::where('user_id', auth()->id())
             ->where('mission_id', $val)
-            ->where('status','!=',4)
+            // ->where('status','!=',4)
             ->first();
 
         if (is_null($mission)) {

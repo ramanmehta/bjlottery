@@ -77,6 +77,7 @@
                     <th scope="col">User Name</th>
                     <th scope="col">Proof</th>
                     <th scope="col">Submitted At</th>
+                    <th scope="col">Attempt</th>
                     <th scope="col">Actions</th>
                   </tr>
                 </thead>
@@ -104,6 +105,7 @@
                       </a>
                     </td>
                     <td>{{ $submission->created_at }}</td>
+                    <td>{{ $submission->count }}</td>
                     <td>
                       <select class="form-control status" name="status">
                         <option data-id="{{ $submission->id }}" {{ $submission->approval_status == 'submit' ? 'selected'

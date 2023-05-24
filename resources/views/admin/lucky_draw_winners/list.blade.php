@@ -76,6 +76,7 @@
                                         <th>Prize Image</th>
                                         <th>Address 1</th>
                                         <th>Address 2</th>
+                                        <th>Attempt</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -128,6 +129,13 @@
                                         </td>
                                         <td>
                                             {{ $claim->address_2 }}
+                                        </td>
+                                        <td>
+                                            @if ($has)
+                                            {{ $claim->count }}
+                                            @else
+                                            {{ $claim->count }}
+                                            @endif
                                         </td>
                                         <td>
                                             <select class="status form-control">

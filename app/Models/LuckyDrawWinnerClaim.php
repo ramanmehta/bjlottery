@@ -16,6 +16,7 @@ class LuckyDrawWinnerClaim extends Model
         'lucky_draw_id',
         'lucky_draw_winner_id',
         'ticket_no',
+        'count'
     ];
 
     public function user()

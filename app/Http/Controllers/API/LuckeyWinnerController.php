@@ -29,7 +29,7 @@ class LuckeyWinnerController extends Controller
             ->when($request->has('ticket_no'), function ($q) use ($request) {
                 $q->where('lucky_draw_winners.ticket_no', 'like', "%{$request->ticket_no}%");
             })
-            ->where('lucky_draw_winners.type','prize')
+            ->where('lucky_draw_winners.type', 'prize')
             ->where('lucky_draw_winners.user_id', auth()->id())
             ->leftjoin('lucky_draw_winner_claims', 'lucky_draw_winner_claims.lucky_draw_winner_id', '=', 'lucky_draw_winners.id')
             ->get();
@@ -125,42 +125,80 @@ class LuckeyWinnerController extends Controller
                 ->exists()
             ) {
 
-                $response = [
-                    'success' => false,
-                    'status' => 404,
-                    'message' => 'This Ticket not already been claimed'
-                ];
+                LuckyDrawWinnerClaim::where('lucky_draw_winner_id', $winner->id)
+                    ->where('lottery_id', $winner->lottery_id)
+                    ->where('lucky_draw_id', $winner->lucky_draw_id)
+                    ->where('ticket_no', $winner->ticket_no)
+                    ->update([
+                        'name' => $input['name'],
+                        'address_1' => $input['address_1'],
+                        'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
+                        'status' => 2,
+                    ]);
 
-                return response()->json($response);
+                LuckyDrawWinnerClaim::where('lucky_draw_winner_id', $winner->id)
+                    ->where('lottery_id', $winner->lottery_id)
+                    ->where('lucky_draw_id', $winner->lucky_draw_id)
+                    ->where('ticket_no', $winner->ticket_no)
+                    ->increment('count', 1);
+
+                // $response = [
+                //     'success' => false,
+                //     'status' => 404,
+                //     'message' => 'This Ticket not already been claimed'
+                // ];
+
+                // return response()->json($response);
+            } else {
+
+                LuckyDrawWinnerClaim::create([
+                    'user_id' => auth()->id(),
+                    'name' => $input['name'],
+                    'address_1' => $input['address_1'],
+                    'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
+                    'status' => 2,
+                    'lottery_id' => $winner->lottery_id,
+                    'lucky_draw_id' => $winner->lucky_draw_id,
+                    'lucky_draw_winner_id' => $winner->id,
+                    'ticket_no' => $winner->ticket_no,
+                    'count' => 1
+                ]);
             }
-
-            LuckyDrawWinnerClaim::create([
-                'user_id' => auth()->id(),
-                'name' => $input['name'],
-                'address_1' => $input['address_1'],
-                'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
-                'status' => 2,
-                'lottery_id' => $winner->lottery_id,
-                'lucky_draw_id' => $winner->lucky_draw_id,
-                'lucky_draw_winner_id' => $winner->id,
-                'ticket_no' => $winner->ticket_no,
-            ]);
-
         } else {
 
             $mission = MissionSubmission::where('mission_id', $input['id'])
                 ->where('user_id', auth()->id())
                 ->first();
 
-            MissionPrizeClaim::create([
-                'user_id' => auth()->id(),
-                'name' => $input['name'],
-                'address_1' => $input['address_1'],
-                'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
-                'status' => 2,
-                'mission_id' => $mission->mission_id,
-                'mission_submit_id' => $mission->id,
-            ]);
+            if (MissionPrizeClaim::where('user_id', auth()->id())->where('mission_id', $mission->mission_id)->where('mission_submit_id', $mission->id)->exists()) {
+
+                MissionPrizeClaim::where('user_id', auth()->id())
+                    ->where('mission_id', $mission->mission_id)
+                    ->where('mission_submit_id', $mission->id)
+                    ->update([
+                        'name' => $input['name'],
+                        'address_1' => $input['address_1'],
+                        'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
+                        'status' => 2,
+                    ]);
+
+                MissionPrizeClaim::where('user_id', auth()->id())
+                    ->where('mission_id', $mission->mission_id)
+                    ->where('mission_submit_id', $mission->id)
+                    ->increment('count', 1);
+            }else{
+
+                MissionPrizeClaim::create([
+                    'user_id' => auth()->id(),
+                    'name' => $input['name'],
+                    'address_1' => $input['address_1'],
+                    'address_2' => isset($input['address_2']) ? $input['address_2'] : null,
+                    'status' => 2,
+                    'mission_id' => $mission->mission_id,
+                    'mission_submit_id' => $mission->id,
+                    'count' => 1
+                ]);
+            }
         }
 
         $response = [

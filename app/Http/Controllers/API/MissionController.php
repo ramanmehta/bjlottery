@@ -167,12 +167,33 @@ class MissionController extends Controller
             $request->video->storeAs('public/images', $data['proof']);
         }
 
-        MissionSubmission::create([
-            'mission_id' => $input['mission_id'],
-            'proof' => $data['proof'],
-            'user_id' => auth()->id(),
-            'approval_status' => 'submit'
-        ]);
+        $res = MissionSubmission::where('mission_id',$input['mission_id'])
+            ->where('user_id',auth()->id())
+            ->exists();
+        
+        if ($res) {
+            
+            MissionSubmission::where('mission_id',$input['mission_id'])
+                ->where('user_id',auth()->id())
+                ->update([
+                    'proof' => $data['proof'],
+                    'approval_status' => 'submit',
+                ]);
+
+            MissionSubmission::where('mission_id',$input['mission_id'])
+                ->where('user_id',auth()->id())
+                ->increment('count',1);
+
+        }else{
+
+            MissionSubmission::create([
+                'mission_id' => $input['mission_id'],
+                'proof' => $data['proof'],
+                'user_id' => auth()->id(),
+                'approval_status' => 'submit',
+                'count' => 1
+            ]);
+        }
 
         return response()->json([
             'status' => 200,
