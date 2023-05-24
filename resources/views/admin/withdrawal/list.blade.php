@@ -90,11 +90,11 @@
                                         <td>{{ $bank->text }}</td>
                                         <td>{{ $bank->created_at }}</td>
                                         <td style="width: 15%">
-                                            @if (in_array($bank->statuss,[2,3]))
+                                            {{-- @if (in_array($bank->statuss,[2,3]))
                                             {!! $bank->statuss == 2 ? '<span class="btn btn-success btn-xs">Admin
                                                 Deposited</span>' : '<span class="btn btn-danger btn-xs">Admin
                                                 Rejected</span>' !!}
-                                            @else
+                                            @else --}}
                                             <select class="status form-control">
                                                 <option disabled data-id="{{ $bank->id }}" {{ $bank->statuss == 1 ?
                                                     'selected' : '' }} value="1">Withdrawal Requested</option>
@@ -103,7 +103,7 @@
                                                 <option data-id="{{ $bank->id }}" {{ $bank->statuss == 3 ? 'selected' :
                                                     '' }} value="3">Admin Rejected</option>
                                             </select>
-                                            @endif
+                                            {{-- @endif --}}
                                         </td>
                                     </tr>
                                     @endforeach
