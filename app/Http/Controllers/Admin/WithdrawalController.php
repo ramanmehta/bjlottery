@@ -41,6 +41,8 @@ class WithdrawalController extends Controller
 
     public function withdrawalStatus(Request $request)
     {
+        $get = UserBankDetails::where('id', $request->id)->first();
+
         UserBankDetails::where('id', $request->id)
             ->update([
                 'status' => $request->status
@@ -50,16 +52,19 @@ class WithdrawalController extends Controller
 
         if ($request->status == 2) {
 
-            // User::where('id', $bank->user_id)
-            //     ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
+            if ($get->status == 3) {
 
-            // CashTransaction::create([
-            //     'user_id' => $bank->user_id,
-            //     'title' => 'Withdrawal',
-            //     'type' => 'withdrawal',
-            //     'amount' => $bank->amount,
-            //     'status' => 2,
-            // ]);
+                User::where('id', $bank->user_id)
+                    ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
+    
+                CashTransaction::create([
+                    'user_id' => $bank->user_id,
+                    'title' => 'Withdrawal',
+                    'type' => 'withdrawal',
+                    'amount' => $bank->amount,
+                    'status' => 2,
+                ]);
+            }
 
             \App\Models\Notification::create([
                 'user_id' => $bank->user_id,
