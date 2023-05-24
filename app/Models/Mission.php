@@ -50,6 +50,7 @@ class Mission extends Model
     {
         $mission = MissionSubmission::where('user_id',auth()->id())
             ->where('mission_id',$val)
+            ->where('approval_status','!=','reject')
             ->first();
         
         if (is_null($mission)) {
