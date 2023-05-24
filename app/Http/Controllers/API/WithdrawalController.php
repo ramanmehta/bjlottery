@@ -79,6 +79,17 @@ class WithdrawalController extends Controller
                 return response()->json($response);
             }
 
+            User::where('id', auth()->id())
+                ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $validated['amount'])]);
+    
+            CashTransaction::create([
+                'user_id' => auth()->id(),
+                'title' => 'Withdrawal',
+                'type' => 'withdrawal',
+                'amount' => $validated['amount'],
+                'status' => 2,
+            ]);
+
             UserBankDetails::create([
                 'user_id' => auth()->id(),
                 'amount' => $validated['amount'],

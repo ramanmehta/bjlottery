@@ -14,6 +14,7 @@ class ReferalsStatsController extends Controller
     public function index()
     {
         $referalstatus = ReferalsStats::all();
+
         return view('admin.referals_stats.index', compact('referalstatus'));
     }
 
@@ -22,7 +23,6 @@ class ReferalsStatsController extends Controller
      */
     public function create()
     {
-
         return view('admin.referals_stats.create');
     }
 
@@ -31,18 +31,15 @@ class ReferalsStatsController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'reward_types' => 'bail|required|unique:referals_stats',
             'reward_points' => 'integer|required',
             'status' => 'required'
         ]);
-        // dd($request->all());
-        $referalstatus = ReferalsStats::create($request->all());
-        // $referals_stats = ReferalsStats::create($request->all());
 
-        $success = "New Referal Created successfully";
-        return redirect()->route('referalstatus')->with('success', $success);
+        ReferalsStats::create($request->all());
+
+        return redirect()->route('referalstatus')->with('success', "New Referal Created successfully.");
     }
 
     /**
@@ -58,9 +55,10 @@ class ReferalsStatsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-
         $referalstatusid = decrypt($id);
+
         $referalstatus = ReferalsStats::findOrFail($referalstatusid);
+
         return view('admin.referals_stats.edit', compact('referalstatus'));
     }
 
@@ -69,21 +67,20 @@ class ReferalsStatsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // dd($request->all());
         $request->validate([
-            // 'reward_types' => 'bail|required|unique: referals_stats',
             'reward_points' => 'integer|required',
             'status' => 'required'
         ]);
+
         $referalstatusid = decrypt($id);
+
         $referalstatus = ReferalsStats::findOrFail($referalstatusid);
 
         $referalstatus->reward_points = $request->reward_points;
         $referalstatus->status = $request->status;
         $referalstatus->save();
-
-        $success = "Referal Status updated successfully";
-        return redirect()->route('referalstatus')->with('success', $success);
+        
+        return redirect()->route('referalstatus')->with('success', "Referal Status updated successfully");
     }
 
     /**
@@ -92,10 +89,9 @@ class ReferalsStatsController extends Controller
     public function destroy(string $id)
     {
         $referalstatusid = decrypt($id);
-        $referalstatus = ReferalsStats::findOrFail($referalstatusid);
-        $referalstatus->delete();
 
-        $error = "Referal removed successfully";
-        return redirect()->route('referalstatus')->with('error', $error);
+        ReferalsStats::destroy($referalstatusid);
+        
+        return redirect()->route('referalstatus')->with('error', "Referal removed successfully");
     }
 }

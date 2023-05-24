@@ -38,7 +38,6 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'user_id' => 'bail|required|exists:users,id',
             'title' => 'required',
@@ -46,11 +45,10 @@ class NotificationController extends Controller
             'sent_at' => 'required',
             'status' => 'required'
         ]);
-        // dd($request->all());
-        $notification = Notification::create($request->all());
 
-        $success = "New Notification created successfully";
-        return redirect()->route('notifications')->with('success', $success);
+        Notification::create($request->all());
+        
+        return redirect()->route('notifications')->with('success', "New Notification created successfully");
     }
 
     /**
@@ -66,9 +64,10 @@ class NotificationController extends Controller
      */
     public function edit($id)
     {
-        // dd($id);
         $notificationid = decrypt($id);
+
         $notification = Notification::findOrFail($notificationid);
+
         return view('admin.notifications.edit', compact('notification'));
     }
 
@@ -77,7 +76,6 @@ class NotificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($id);
         $request->validate([
             'user_id' => 'bail|required|exists:users,id',
             'title' => 'required',
@@ -85,7 +83,7 @@ class NotificationController extends Controller
             'sent_at' => 'required',
             'status' => 'required'
         ]);
-        // dd($request->all());
+        
         $notificationid = decrypt($id);
         $notification = Notification::findOrFail($notificationid);
         $notification->user_id = $request->user_id;
@@ -95,18 +93,21 @@ class NotificationController extends Controller
         $notification->status = $request->status;
 
         $notification->save();
-        $success = "Notification updated successfully";
-        return redirect()->route('notifications')->with('success', $success);
+        
+        return redirect()->route('notifications')->with('success', "Notification updated successfully.");
     }
-
+    
     /**
      * Remove the specified resource from storage.
-     */
+    */
     public function destroy($id)
     {
-        // dd($id);
         $notificationid = decrypt($id);
-        $notification = Notification::findOrFail($notificationid);
-        $notification->delete();
+
+        Notification::destroy($notificationid);
+        
+        return redirect()
+            ->route('notifications')
+            ->with('error', "Notification deleted successfully!.");
     }
 }

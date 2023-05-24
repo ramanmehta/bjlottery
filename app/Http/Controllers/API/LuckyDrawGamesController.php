@@ -20,20 +20,27 @@ class LuckyDrawGamesController extends Controller
     public function index()
     {
         $luckydraw = LuckyDrawGames::all();
+
         if ($luckydraw->count() > 0) {
+
             $imagePath = asset('storage/app/public/images/luckydraw/');
+
             $response = [
                 'success' => true,
                 'status' => 200,
                 'imagePath' => $imagePath,
                 'luckydraw' => $luckydraw,
             ];
+
             return response()->json($response);
+
         } else {
+
             return response()->json([
                 'status' => 404,
                 'message' => 'No record found'
             ], 404);
+            
         }
     }
 
@@ -58,7 +65,6 @@ class LuckyDrawGamesController extends Controller
      */
     public function show($id)
     {
-
         $luckydraw = LuckyDrawGames::find($id);
         $imagePath = asset('storage/app/public/images/');
         $response = [
@@ -67,9 +73,13 @@ class LuckyDrawGamesController extends Controller
             'imagePath' => $imagePath,
             'luckydraw' => $luckydraw,
         ];
+
         if ($luckydraw) {
+
             return response()->json($response);
+
         } else {
+
             return response()->json([
                 'status' => 404,
                 'message' => 'No record found'
