@@ -19,7 +19,8 @@ class WithdrawalController extends Controller
             'text',
             'user_bank_details.status as statuss',
             'name',
-            'username'
+            'username',
+            'user_bank_details.created_at'
         )
             ->join('users', 'users.id', '=', 'user_bank_details.user_id')
             ->when(isset($request->search), function ($q) use ($request) {
@@ -28,6 +29,9 @@ class WithdrawalController extends Controller
                 $q->OrWhere('amount', 'like', "%{$request->search}%");
                 $q->OrWhere('text', 'like', "%{$request->search}%");
                 $q->OrWhere('user_bank_details.status', withdrawalStatus($request->search, true));
+            })
+            ->when(isset($request->date), function ($q) use ($request) {
+                $q->whereDate('user_bank_details.created_at', $request->date);
             })
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -48,7 +52,7 @@ class WithdrawalController extends Controller
 
             // User::where('id', $bank->user_id)
             //     ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
-    
+
             // CashTransaction::create([
             //     'user_id' => $bank->user_id,
             //     'title' => 'Withdrawal',
@@ -64,8 +68,7 @@ class WithdrawalController extends Controller
                 'status' => 0,
                 'sent_at' => now(),
             ]);
-
-        }else{
+        } else {
 
             \App\Models\Notification::create([
                 'user_id' => $bank->user_id,
@@ -77,7 +80,7 @@ class WithdrawalController extends Controller
 
             User::where('id', $bank->user_id)
                 ->update(['total_cash_available' => DB::raw('total_cash_available + ' . $bank->amount)]);
-    
+
             CashTransaction::create([
                 'user_id' => $bank->user_id,
                 'title' => 'Withdrawal',
@@ -86,7 +89,7 @@ class WithdrawalController extends Controller
                 'status' => 1,
             ]);
         }
-        
+
         return response()->json('ok');
     }
 }

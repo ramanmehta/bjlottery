@@ -48,10 +48,13 @@
                             </div>
                             @endif
 
-                            <div class="row pt-3">
-                                <div class="col-sm-6"></div>
-                                <div class="col-sm-6">
-                                    <form action="{{ Request::fullUrl() }}" method="get">
+                            <form action="{{ Request::fullUrl() }}" method="get">
+                                <div class="row pt-3">
+                                    <div class="col-sm-6">
+                                        <input class="form-control" name="date" type="date"
+                                            value="{{ request()->get('date') }}">
+                                    </div>
+                                    <div class="col-sm-6">
                                         <div class="input-group">
                                             <input type="search" class="form-control" placeholder="Search Anything"
                                                 aria-label="Search Lottery" aria-describedby="basic-addon2"
@@ -60,9 +63,9 @@
                                             &nbsp;
                                             <input class="btn btn-outline-secondary" type="submit" value="Search">
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                             <hr>
 
                             <table id="example2" class="table table-bordered table-hover text-center">
@@ -73,6 +76,7 @@
                                         <th>UserName</th>
                                         <th>Amount</th>
                                         <th>Details</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -84,15 +88,21 @@
                                         <td>{{ $bank->username }}</td>
                                         <td>{{ $bank->amount }}</td>
                                         <td>{{ $bank->text }}</td>
+                                        <td>{{ $bank->created_at }}</td>
                                         <td style="width: 15%">
                                             @if (in_array($bank->statuss,[2,3]))
-                                                {!! $bank->statuss == 2 ? '<span class="btn btn-success btn-xs">Admin Deposited</span>' : '<span class="btn btn-danger btn-xs">Admin Rejected</span>' !!}
+                                            {!! $bank->statuss == 2 ? '<span class="btn btn-success btn-xs">Admin
+                                                Deposited</span>' : '<span class="btn btn-danger btn-xs">Admin
+                                                Rejected</span>' !!}
                                             @else
-                                                <select class="status form-control">
-                                                    <option disabled data-id="{{ $bank->id }}" {{ $bank->statuss == 1 ? 'selected' : '' }} value="1">Withdrawal Requested</option>
-                                                    <option data-id="{{ $bank->id }}" {{ $bank->statuss == 2 ? 'selected' : '' }} value="2">Admin Deposited</option>
-                                                    <option data-id="{{ $bank->id }}" {{ $bank->statuss == 3 ? 'selected' : '' }} value="3">Admin Rejected</option>
-                                                </select>
+                                            <select class="status form-control">
+                                                <option disabled data-id="{{ $bank->id }}" {{ $bank->statuss == 1 ?
+                                                    'selected' : '' }} value="1">Withdrawal Requested</option>
+                                                <option data-id="{{ $bank->id }}" {{ $bank->statuss == 2 ? 'selected' :
+                                                    '' }} value="2">Admin Deposited</option>
+                                                <option data-id="{{ $bank->id }}" {{ $bank->statuss == 3 ? 'selected' :
+                                                    '' }} value="3">Admin Rejected</option>
+                                            </select>
                                             @endif
                                         </td>
                                     </tr>
