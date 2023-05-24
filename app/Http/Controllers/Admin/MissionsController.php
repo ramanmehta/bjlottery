@@ -51,18 +51,18 @@ class MissionsController extends Controller
 
         if ($request->file('prize_image')) {
 
-            $validated['prize_image'] = 'missions/' . time() . '.' . $request->prize_image->extension();
+            $validated['prize_image'] = 'missions/' . rand(111111111,999999999) . '.' . $request->prize_image->extension();
 
             $request->prize_image->storeAs('public/images', $validated['prize_image']);
         } else {
 
             unset($validated['prize_image'], $validated['prize_name']);
         }
-
-        $validated['banner_image'] = 'missions/' . time() . '.' . $request->banner_image->extension();
+        
+        $validated['banner_image'] = 'missions/' . rand(111111111,999999999) . '.' . $request->banner_image->extension();
 
         $request->banner_image->storeAs('public/images', $validated['banner_image']);
-
+        
         Mission::create($validated);
 
         return redirect()->route('mission')->with('success', 'Mission created successfully!');
@@ -137,7 +137,7 @@ class MissionsController extends Controller
 
         if ($request->file('prize_image')) {
 
-            $validated['prize_image'] = 'missions/' . time() . '.' . $request->prize_image->extension();
+            $validated['prize_image'] = 'missions/' . rand(111111111,999999999) . '.' . $request->prize_image->extension();
 
             $request->prize_image->storeAs('public/images', $validated['prize_image']);
         } else {
@@ -147,7 +147,7 @@ class MissionsController extends Controller
 
         if ($request->file('banner_image')) {
 
-            $validated['banner_image'] = 'missions/' . time() . '.' . $request->banner_image->extension();
+            $validated['banner_image'] = 'missions/' . rand(111111111,999999999) . '.' . $request->banner_image->extension();
 
             $request->banner_image->storeAs('public/images', $validated['banner_image']);
         } else {

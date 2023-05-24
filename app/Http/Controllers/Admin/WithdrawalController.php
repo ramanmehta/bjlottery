@@ -51,8 +51,8 @@ class WithdrawalController extends Controller
         $bank = UserBankDetails::find($request->id);
 
         if ($request->status == 2) {
-
-            if ($get->status == 3) {
+            
+            if ($get->status == 'Admin Rejected') {
 
                 User::where('id', $bank->user_id)
                     ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $bank->amount)]);
@@ -69,7 +69,7 @@ class WithdrawalController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $bank->user_id,
                 'title' => 'Cash Withdrawal Request Approved',
-                'description' => 'Your cash withdrawal request successfully approved',
+                'description' => 'Your cash withdrawal request successfully approved , It will credit to your bank in 2 days',
                 'status' => 0,
                 'sent_at' => now(),
             ]);

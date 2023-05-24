@@ -99,7 +99,7 @@
                                             {{ $claim->name }}
                                         </td>
                                         <td>
-                                            {{ $claim->username }}
+                                            {{ $claim->user->username }}
                                         </td>
                                         <td>
                                             @if ($has)

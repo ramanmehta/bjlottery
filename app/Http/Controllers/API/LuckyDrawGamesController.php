@@ -142,8 +142,8 @@ class LuckyDrawGamesController extends Controller
 
                 PointTransaction::create([
                     'user_id' => $user_id,
-                    'title' => 'Ticket',
-                    'type' => 'ticket',
+                    'title' => 'Ticket Purchase',
+                    'type' => 'ticket_purchase',
                     'points' => $pointRequired,
                     'status' => 2,
                 ]);
