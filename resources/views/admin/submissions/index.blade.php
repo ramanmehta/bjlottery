@@ -153,7 +153,10 @@
 
 @section('script')
 <script>
-  $('.status').change(function(){
+$('.status').change(function(){
+  if ($(this).val() == 'reject') {
+    confirm('Are you sure!, You want to reject user mission request.');
+  }
   $.ajax({
     type: "POST",
     url: "{{route('mission.submit.status.update')}}",

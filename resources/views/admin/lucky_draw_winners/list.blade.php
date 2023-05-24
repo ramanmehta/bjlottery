@@ -174,6 +174,9 @@
 <script>
     $('.status').change(function (e) { 
     e.preventDefault();
+    if ($(this).val() == 4) {
+        confirm('Are you sure!, You want to reject user prize claim request.');
+    }
     $.ajax({
         type: "post",
         url: "{{ route('status.update.winner.user') }}",
