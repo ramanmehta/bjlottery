@@ -141,6 +141,7 @@ class MissionController extends Controller
 
         $res = MissionSubmission::where('user_id', auth()->id())
             ->where('mission_id', $input['mission_id'])
+            ->where('approval_status','!=','reject')
             ->exists();
 
         if ($res) {
