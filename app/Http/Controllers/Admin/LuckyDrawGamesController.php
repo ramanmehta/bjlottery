@@ -65,6 +65,7 @@ class LuckyDrawGamesController extends Controller
             'daterange' => 'required',
             'game_image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:5000|dimensions:min_width=10,min_height=10,max_width=3000,max_height=3000',
             'status' => 'required',
+            'max_ticket_purchase' => 'required'
         ]);
 
         if ($request->has('game_image')) {
@@ -84,6 +85,7 @@ class LuckyDrawGamesController extends Controller
             'end_date_time' => substr($request->daterange, strpos($request->daterange, "-", 19) + 1),
             'status' => $request->status,
             'game_image' => $request->has('game_image') ? '/luckydraw/' . $imageName : null,
+            'max_ticket_purchase' => $request->max_ticket_purchase
         ];
 
         LuckyDrawGames::create($luckyDrawData);
@@ -162,9 +164,9 @@ class LuckyDrawGamesController extends Controller
         $validArr = [
             'game_title' => 'bail|string|required|max:255|unique:lucky_draw_games,game_title,' . $luckyDrawid,
             'game_description' => 'bail|string|required',
-            'winning_prize_amount' => 'bail|nullable|integer|min:0',
-            'minimum_prize_amount' => 'bail|nullable|integer|min:0',
-            'points_per_ticket' => 'integer|required',
+            'winning_prize_amount' => 'bail|nullable|numeric|min:0',
+            'minimum_prize_amount' => 'bail|nullable|numeric|min:0',
+            'points_per_ticket' => 'numeric|required',
             'daterange' => 'required',
         ];
 
@@ -209,13 +211,16 @@ class LuckyDrawGamesController extends Controller
         $luckyDraw->points_per_ticket = $request->points_per_ticket;
         $luckyDraw->start_date_time = $startdate;
         $luckyDraw->end_date_time = $enddate;
+        $luckyDraw->max_ticket_purchase = $request->max_ticket_purchase;
+
         if ($image != null) {
+
             $luckyDraw->game_image = '/luckydraw/' . $imageName;
         }
 
         $luckyDraw->save();
-        $success = "Lucky draw updated successfully";
-        return redirect('/admin/viewLuckyDraw')->with('success', $success);
+
+        return redirect('/admin/viewLuckyDraw')->with('success', "Lucky draw updated successfully");
     }
 
     /**
@@ -298,11 +303,10 @@ class LuckyDrawGamesController extends Controller
                     $data['prize_image'] = 'luckey_winner/' . rand() . $validated['prize_image'][$i]->getClientOriginalName();
                     $validated['prize_image'][$i]->storeAs('public/images', $data['prize_image']);
                     ++$i;
-
                     \App\Models\Notification::create([
                         'user_id' => $data['user_id'],
                         'title' => 'Prize Won By lottery Ticket',
-                        'description' => "Congratulations! You won " . $data['prize_name'] . " from lottery " . $lottery->game_title . " on Ticket no " . $value,
+                        'description' => "Congratulations! You won “" . $data['prize_name'] . "” from “" . $lottery->game_title . "” for ticket No." . $value . ". Please go to “My Winning Prize” to submit claim.",
                         'status' => 0,
                         'sent_at' => now(),
                     ]);
@@ -323,7 +327,7 @@ class LuckyDrawGamesController extends Controller
                     \App\Models\Notification::create([
                         'user_id' => $data['user_id'],
                         'title' => 'Cash Won By lottery Ticket',
-                        'description' => "Congratulations! You won " . $data['amount'] . " Cash from lottery " . $lottery->game_title . " on Ticket no " . $value,
+                        'description' => "Congratulations! You won “" . $data['amount'] . "” Cash from “" . $lottery->game_title . "” for ticket No." . $value . ". Please go to “My Winning Prize” to submit claim.",
                         'status' => 0,
                         'sent_at' => now(),
                     ]);
@@ -364,7 +368,7 @@ class LuckyDrawGamesController extends Controller
         $res = DB::table('lucky_draw_winners')->find($id);
 
         if ($res->type == 'cash') {
-            
+
             User::where('id', $res->user_id)
                 ->update(['total_cash_available' => DB::raw('total_cash_available - ' . $res->amount)]);
 
@@ -425,22 +429,20 @@ class LuckyDrawGamesController extends Controller
 
             if ($request->status == 3) {
 
-
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Prize Claim',
-                    'description' => "Congratulations! Your prize " . $prize->prize_name . " shipped to your address. You will get email soon for shipping tracking Id",
+                    'description' => "Your Prize of “" . $prize->prize_name . "” has been processed for shipping. Check your email for the tracking number in the next few hours!",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
             }
 
             if ($request->status == 4) {
-
                 \App\Models\Notification::create([
                     'user_id' => $res->user_id,
                     'title' => 'Prize Claim Rejected',
-                    'description' => "Sorry! Your prize " . $prize->prize_name . " shipping request declined",
+                    'description' => "Sorry! Your prize “" . $prize->prize_name . "” shipping request has been declined. Our representative will contact you soon or you may submit another request.",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -459,22 +461,20 @@ class LuckyDrawGamesController extends Controller
             $mission = Mission::find($m->mission_id);
 
             if ($request->status == 3) {
-
                 \App\Models\Notification::create([
                     'user_id' => $m->user_id,
                     'title' => 'Prize Claim',
-                    'description' => "Congratulations! Your prize " . $mission->prize_name . " shipped to your address. You will get email soon for shipping tracking Id",
+                    'description' => "Your Prize of “" . $mission->prize_name . "” has been processed for shipping. Check your email for the tracking number in the next few hours!",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
             }
 
             if ($request->status == 4) {
-
                 \App\Models\Notification::create([
                     'user_id' => $m->user_id,
                     'title' => 'Prize Claim Rejected',
-                    'description' => "Sorry! Your prize " . $mission->prize_name . " shipping request declined",
+                    'description' => "Sorry! Your prize “" . $mission->prize_name . "” shipping request has been declined. Our representative will contact you soon or you may submit another request.",
                     'status' => 0,
                     'sent_at' => now(),
                 ]);
@@ -486,18 +486,30 @@ class LuckyDrawGamesController extends Controller
 
     public function editPrizeUpdate(Request $request, $id)
     {
-        if ($request->has('prize_image') && $request->file('prize_image')) {
+        $winner = LuckyDrawWinner::find($id);
 
-            $data['prize_image'] = 'luckey_winner/' . rand() . $request->prize_image->getClientOriginalName();
+        if (is_null($winner->prize_name)) {
 
-            $request->prize_image->storeAs('public/images', $data['prize_image']);
+            LuckyDrawWinner::where('id', $id)->update([
+                'amount' => $request->prize_name
+            ]);
+
+            $res = LuckyDrawWinner::where('id', $id)->first();
+        } else {
+
+            if ($request->has('prize_image') && $request->file('prize_image')) {
+
+                $data['prize_image'] = 'luckey_winner/' . rand() . $request->prize_image->getClientOriginalName();
+
+                $request->prize_image->storeAs('public/images', $data['prize_image']);
+            }
+
+            $data['prize_name'] = $request->prize_name;
+
+            LuckyDrawWinner::where('id', $id)->update($data);
+
+            $res = LuckyDrawWinner::where('id', $id)->first();
         }
-
-        $data['prize_name'] = $request->prize_name;
-
-        LuckyDrawWinner::where('id', $id)->update($data);
-
-        $res = LuckyDrawWinner::where('id', $id)->first();
 
         return redirect()->route('add.price', encrypt($res->lottery_id))->with('succes', 'Ticket updated successfully');
     }

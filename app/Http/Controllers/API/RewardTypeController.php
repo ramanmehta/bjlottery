@@ -42,31 +42,28 @@ class RewardTypeController extends Controller
 
                     $value->claimed = 1;
                 }
+
             } else if ($value->reward_type == 'dailyreward') {
 
-                $getReward  = DB::table('reward_points')
+                $getReward = DB::table('reward_points')
                     ->where('user_id', $userId)
                     ->where('reward_type_id', $reward_type_id)
                     ->whereBetween('created_at', [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')])
                     ->exists();
+                
+                $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
+                $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
 
-                $extraPoints = User::where('refered_by', $userId)->count();
+                $userIds = User::where('refered_by', $userId)->pluck('id')->toArray();
+                
+                $extraPoints = RewardPoint::whereIn('user_id', $userIds)
+                    ->where('reward_type', 'dailyreward')
+                    ->whereBetween('created_at', [$start, $end])
+                    ->count();
 
                 $value->reward_points = $value->reward_points + $extraPoints;
                 
                 if ($getReward) {
-
-                    // $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
-                    // $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
-
-                    //$userIds = User::where('refered_by', $userId)->pluck('id')->toArray();
-
-                    
-                    // $extraPoints = RewardPoint::whereIn('user_id', $userIds)
-                    //     ->where('reward_type', 'dailyreward')
-                    //     ->whereBetween('created_at', [$start, $end])
-                    //     ->count();
-
 
                     $value->claimed = 1;
                 } else {
@@ -193,17 +190,17 @@ class RewardTypeController extends Controller
 
         if ($reward->reward_type == 'dailyreward') {
 
-            // $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
-            // $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
+            $start = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 00:00:00');
+            $end = \Carbon\Carbon::now()->addDays(-1)->format('Y-m-d 23:59:59');
 
-            // $userIds = User::where('refered_by', $user_id)->pluck('id')->toArray();
+            $userIds = User::where('refered_by', $user_id)->pluck('id')->toArray();
 
-            $extraPoints = User::where('refered_by', $user_id)->count();
+            // $extraPoints = User::where('refered_by', $user_id)->count();
 
-            // $extraPoints = RewardPoint::whereIn('user_id', $userIds)
-            //     ->where('reward_type', 'dailyreward')
-            //     ->whereBetween('created_at', [$start, $end])
-            //     ->count();
+            $extraPoints = RewardPoint::whereIn('user_id', $userIds)
+                ->where('reward_type', 'dailyreward')
+                ->whereBetween('created_at', [$start, $end])
+                ->count();
         }
 
         if ($users && $reward) {

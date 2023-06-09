@@ -100,7 +100,7 @@ class WithdrawalController extends Controller
             \App\Models\Notification::create([
                 'user_id' => auth()->id(),
                 'title' => 'Cash Withdrawal Request',
-                'description' => 'Your cash withdrawal request has been successfully sent, Please wait 24 hours to accept the request from the department, Thanks for your patience',
+                'description' => "Your cash withdrawal request has been submitted. Kindly allow 2 working days for processing. Thank you.",
                 'status' => 0,
                 'sent_at' => now(),
             ]);

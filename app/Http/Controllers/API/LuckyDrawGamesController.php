@@ -124,6 +124,19 @@ class LuckyDrawGamesController extends Controller
 
         $game = LuckyDrawGames::where('id', $game_id)->where('end_date_time', '<', $currentDate)->first();
 
+        $count = LuckyDraw::where('lucky_draw_games_id',$game_id)->where('user_id',$user_id)->count();
+
+        if (($count + 1) > $game->max_ticket_purchase) {
+            
+            $response = [
+                'success' => false,
+                'status' => 404,
+                'message' => "You exceeded your lottery purchase limit"
+            ];
+
+            return response()->json($response);
+        }
+
         if ($user && $game) {
 
             $user_points = $user->total_point_available;
@@ -162,8 +175,11 @@ class LuckyDrawGamesController extends Controller
                     'data' => $getNumber,
 
                 ];
+
                 return response()->json($response);
+
             } else {
+
                 $response = [
                     'success' => false,
                     'status' => 404,

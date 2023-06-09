@@ -126,6 +126,11 @@ dd($user);
                   </div>
 
                   <div class="form-group col-md-6">
+                    <label for="max_ticket_purchase">Max Tickets To Purchase: <strong class="text-red">*</strong></label>
+                    <input type="number" class="form-control" id="max_ticket_purchase" placeholder="Max Tickets To Purchase" name="max_ticket_purchase" min="1" value="1" required>
+                  </div>
+
+                  <div class="form-group col-md-6">
                     <label for="winning_prize_amount">Game Image: <strong class="text-red">*</strong></label>
                     <input type="file" class="form-control" name="game_image" id="game_image">
                   </div>

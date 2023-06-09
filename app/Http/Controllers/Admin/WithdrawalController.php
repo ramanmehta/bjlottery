@@ -69,7 +69,7 @@ class WithdrawalController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $bank->user_id,
                 'title' => 'Cash Withdrawal Request Approved',
-                'description' => 'Your cash withdrawal request successfully approved',
+                'description' => "Your cash withdrawal request has been approved. It will processed in your provided account in 2 working days.",
                 'status' => 0,
                 'sent_at' => now(),
             ]);
@@ -78,7 +78,7 @@ class WithdrawalController extends Controller
             \App\Models\Notification::create([
                 'user_id' => $bank->user_id,
                 'title' => 'Cash Withdrawal Request Reject',
-                'description' => 'Your cash withdrawal request rejected, Pls contact our support to know more',
+                'description' => "Your cash withdrawal request has been rejected and refunded. Please contact us to know more.",
                 'status' => 0,
                 'sent_at' => now(),
             ]);

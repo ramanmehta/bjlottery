@@ -108,6 +108,11 @@ dd($luckyDraw);
                       placeholder="Enter points for one ticket" name="points_per_ticket"
                       value="{{$luckyDraw->points_per_ticket}}" min="0" required>
                   </div>
+                  
+                  <div class="form-group col-md-6">
+                    <label for="max_ticket_purchase">Max Tickets To Purchase: <strong class="text-red">*</strong></label>
+                    <input type="number" class="form-control" id="max_ticket_purchase" placeholder="Max Tickets To Purchase" name="max_ticket_purchase" min="1" value="{{$luckyDraw->max_ticket_purchase}}" required>
+                  </div>
 
                   {{-- <div class="form-group col-md-6">
                     <div class="form-group">
@@ -119,6 +124,11 @@ dd($luckyDraw);
                       </select>
                     </div>
                   </div> --}}
+
+                  <div class="form-group col-md-6">
+                    <label for="winning_prize_amount">Game Image: <strong class="text-danger">*</strong></label>
+                    <input type="file" class="form-control" name="game_image" id="game_image">
+                  </div>
                 </div>
 
                 {{-- date input --}}
@@ -140,13 +150,6 @@ dd($luckyDraw);
                   </div>
                 </div> --}}
                 {{-- end date input --}}
-
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="winning_prize_amount">Game Image: <strong class="text-danger">*</strong></label>
-                    <input type="file" class="form-control" name="game_image" id="game_image">
-                  </div>
-                </div>
                 @if($luckyDraw->game_image != "")
                 <div class="form-group col-md-12">
                   <img src="{{$luckyDraw->game_image}}" style="height: 50px;">

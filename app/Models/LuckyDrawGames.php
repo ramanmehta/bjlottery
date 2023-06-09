@@ -21,6 +21,7 @@ class LuckyDrawGames extends Model
         'end_date_time',
         'status',
         // 'type'
+        'max_ticket_purchase'
     ];
 
     public function getGameImageAttribute($value)
